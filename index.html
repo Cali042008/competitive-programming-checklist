@@ -5,6 +5,7 @@
   <title>Competitive Programming Checklist</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
+    /* Base styles */
     * { box-sizing: border-box; }
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
@@ -256,9 +257,40 @@
     .notification.show {
       transform: translateX(0);
     }
+
+    /* Loading Spinner Styles */
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #667eea;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
+  <!-- Loading indicator; hidden once Firebase data is loaded -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+  </div>
+
   <div class="container">
     <h1>🚀 Competitive Programming Checklist</h1>
     
@@ -335,7 +367,7 @@
     <!-- ──────────────── Level 1 ──────────────── -->
     <div class="section level-1" id="level1-comb">
       <div class="section-header" onclick="toggleSection('level1-comb')">
-        <h2 class="section-title">🟨 Level 1: GCD/LCM & Combinatorics</h2>
+        <h2 class="section-title">🟨 Level 1: GCD/LCM &amp; Combinatorics</h2>
         <div class="section-progress" id="progress-level1-comb">0/6</div>
         <span class="collapse-icon">▼</span>
       </div>
@@ -528,10 +560,36 @@
       appId: "1:794233613344:web:11fcb7366748a72641e045",
       measurementId: "G-VS8NZFC0SE"
     };
-    
+
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const dbRef = ref(db, 'checklistProgress');
+
+    // Load local progress (if any) immediately so the UI is not empty
+    function loadLocalProgress() {
+      const localData = localStorage.getItem('checklistProgress');
+      if (localData) {
+        const data = JSON.parse(localData);
+        document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+          cb.checked = !!data[cb.id];
+          if (cb.checked) {
+            cb.parentElement.classList.add('completed');
+          } else {
+            cb.parentElement.classList.remove('completed');
+          }
+        });
+        updateStats();
+      }
+    }
+
+    // Save current progress state to localStorage
+    function saveLocalProgress() {
+      const progress = {};
+      document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+        progress[cb.id] = cb.checked;
+      });
+      localStorage.setItem('checklistProgress', JSON.stringify(progress));
+    }
 
     // Global functions
     window.toggleSection = function(sectionId) {
@@ -557,8 +615,8 @@
           cb.checked = false;
           cb.parentElement.classList.remove('completed');
         });
-        // Reset progress on Firebase as well
         update(dbRef, {});
+        saveLocalProgress();
         updateStats();
         showNotification('Progress reset successfully!', 'info');
       }
@@ -584,7 +642,7 @@
       document.getElementById('progress-percent').textContent = percentage + '%';
       document.getElementById('progress-fill').style.width = percentage + '%';
 
-      // Update section progress info for every section
+      // Update section progress
       document.querySelectorAll('.section').forEach(section => {
         const sectionCheckboxes = section.querySelectorAll('input[type=checkbox]');
         const sectionCompleted = Array.from(sectionCheckboxes).filter(cb => cb.checked).length;
@@ -611,8 +669,13 @@
       });
     }
 
-    // Firebase sync: Fetch data from database and update checklist accordingly
+    // Start by loading local cached progress
+    loadLocalProgress();
+
+    // Firebase sync: update checklist when data is received.
     onValue(dbRef, snapshot => {
+      // Hide the loading spinner as soon as we get data
+      document.getElementById('loading').style.display = 'none';
       const data = snapshot.val() || {};
       document.querySelectorAll('input[type=checkbox]').forEach(cb => {
         cb.checked = !!data[cb.id];
@@ -623,9 +686,11 @@
         }
       });
       updateStats();
+      // Refresh our local cache so the local version stays in sync
+      saveLocalProgress();
     });
 
-    // Checkbox change handlers: update Firebase and UI on change
+    // Checkbox change handlers: update both Firebase and localStorage on change
     document.querySelectorAll('input[type=checkbox]').forEach(cb => {
       cb.addEventListener('change', function() {
         if (this.checked) {
@@ -636,10 +701,11 @@
         }
         update(dbRef, { [this.id]: this.checked });
         updateStats();
+        saveLocalProgress();
       });
     });
 
-    // Initialize the search functionality and progress stats on page load.
+    // Initialize search and stats on page load.
     setupSearch();
     updateStats();
   </script>
