@@ -12,19 +12,19 @@
    https://infoarena.ro/problema/euler 
 
 ### 2) 1D Dynamic Programming  
-4. [x] AtCoder dp_a – Frog 1 
+4. [] AtCoder dp_a – Frog 1 
    https://atcoder.jp/contests/dp/tasks/dp_a 
-5. [x] AtCoder dp_b – Frog 2 
+5. [] AtCoder dp_b – Frog 2 
    https://atcoder.jp/contests/dp/tasks/dp_b 
-6. [x] CSES – Minimizing Coins 
+6. [] CSES – Minimizing Coins 
    https://cses.fi/problemset/task/1634/ 
-7. [x] CSES – Coin Combinations I  
+7. [] CSES – Coin Combinations I  
    https://cses.fi/problemset/task/1635/ 
-8. [x] Maximum Subarray Sum (Kadane) 
+8. [] Maximum Subarray Sum (Kadane) 
    e.g. https://leetcode.com/problems/maximum-subarray/ 
-9. [x] Leetcode – House Robber 
+9. [] Leetcode – House Robber 
    https://leetcode.com/problems/house-robber/ 
-10. [x] CSES – Staircase 
+10. [] CSES – Staircase 
     https://cses.fi/problemset/task/1637/ 
 
 ### 3) Simple Implementation / Ad-Hoc  
@@ -49,9 +49,9 @@
    https://kilonova.ro/problem/1983 
    
 ### 2) 2D Dynamic Programming (Grid & Basic String)  
-7. [x] CSES – Grid Paths 
+7. [] CSES – Grid Paths 
    https://cses.fi/problemset/task/1638/ 
-8. [x] CSES – Grid Paths with Obstacles 
+8. [] CSES – Grid Paths with Obstacles 
    https://cses.fi/problemset/task/1733/ 
 9. [ ] Longest Common Substring 
    (e.g. https://leetcode.com/problems/longest-common-substring/) 
@@ -59,9 +59,9 @@
     https://atcoder.jp/contests/dp/tasks/dp_f 
 11. [ ] AtCoder dp_d – 0/1 Knapsack 
     https://atcoder.jp/contests/dp/tasks/dp_d 
-12. [x] Subset Sum 
+12. [] Subset Sum 
     (e.g. https://cses.fi/problemset/task/1745/) 
-13. [x] Leetcode – Partition Equal Subset Sum 
+13. [] Leetcode – Partition Equal Subset Sum 
     https://leetcode.com/problems/partition-equal-subset-sum/ 
 14. [ ] CSES – Edit Distance 
     https://cses.fi/problemset/task/1724/ 
