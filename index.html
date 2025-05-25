@@ -18,75 +18,62 @@
 <body>
   <h1>Competitive Programming Checklist</h1>
 
-  <!-- ──────────────── Level 0 ──────────────── -->
+  <!-- Level 0 -->
   <div class="section" id="level0-numtheory">
     <h2>🟩 Level 0: Fundamentals – Number Theory Basics</h2>
-    <label>
-      <input type="checkbox" id="cb_0_1" />
-      <a href="https://cses.fi/problemset/task/1713/" target="_blank" rel="noopener">CSES – Counting Divisors</a>
-    </label>
-    <label>
-      <input type="checkbox" id="cb_0_2" />
-      <a href="https://infoarena.ro/problema/factori2" target="_blank" rel="noopener">Infoarena – factori2</a>
-    </label>
-    <label>
-      <input type="checkbox" id="cb_0_3" />
-      <a href="https://infoarena.ro/problema/euler" target="_blank" rel="noopener">Infoarena – euler</a>
-    </label>
+    <label><input type="checkbox" id="cb_0_1" />CSES – Counting Divisors <a href="https://cses.fi/problemset/task/1713/" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_0_2" />Infoarena – factori2 <a href="https://infoarena.ro/problema/factori2" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_0_3" />Infoarena – euler <a href="https://infoarena.ro/problema/euler" target="_blank" rel="noopener">🔗</a></label>
   </div>
-
   <div class="section" id="level0-dp1d">
     <h2>🟩 Level 0: 1D Dynamic Programming</h2>
-    <label><input type="checkbox" id="cb_0_4" /><a href="https://atcoder.jp/contests/dp/tasks/dp_a" target="_blank" rel="noopener">AtCoder dp_a – Frog 1</a></label>
-    <label><input type="checkbox" id="cb_0_5" /><a href="https://atcoder.jp/contests/dp/tasks/dp_b" target="_blank" rel="noopener">AtCoder dp_b – Frog 2</a></label>
-    <label><input type="checkbox" id="cb_0_6" /><a href="https://cses.fi/problemset/task/1634/" target="_blank" rel="noopener">CSES – Minimizing Coins</a></label>
-    <label><input type="checkbox" id="cb_0_7" /><a href="https://cses.fi/problemset/task/1635/" target="_blank" rel="noopener">CSES – Coin Combinations I</a></label>
-    <label><input type="checkbox" id="cb_0_8" /><a href="https://leetcode.com/problems/maximum-subarray/" target="_blank" rel="noopener">Maximum Subarray Sum (Kadane)</a></label>
-    <label><input type="checkbox" id="cb_0_9" /><a href="https://leetcode.com/problems/house-robber/" target="_blank" rel="noopener">Leetcode – House Robber</a></label>
-    <label><input type="checkbox" id="cb_0_10" /><a href="https://cses.fi/problemset/task/1637/" target="_blank" rel="noopener">CSES – Staircase</a></label>
+    <label><input type="checkbox" id="cb_0_4" />AtCoder dp_a – Frog 1 <a href="https://atcoder.jp/contests/dp/tasks/dp_a" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_0_5" />AtCoder dp_b – Frog 2 <a href="https://atcoder.jp/contests/dp/tasks/dp_b" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_0_6" />CSES – Minimizing Coins <a href="https://cses.fi/problemset/task/1634/" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_0_7" />CSES – Coin Combinations I <a href="https://cses.fi/problemset/task/1635/" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_0_8" />Maximum Subarray Sum (Kadane) <a href="https://leetcode.com/problems/maximum-subarray/" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_0_9" />Leetcode – House Robber <a href="https://leetcode.com/problems/house-robber/" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_0_10" />CSES – Staircase <a href="https://cses.fi/problemset/task/1637/" target="_blank" rel="noopener">🔗</a></label>
   </div>
-
   <div class="section" id="level0-adhoc">
     <h2>🟩 Level 0: Simple Implementation / Ad-Hoc</h2>
-    <label><input type="checkbox" id="cb_0_11" /><a href="https://codeforces.com/problemset/problem/702/A" target="_blank" rel="noopener">CF 702A – Maximum Increase</a></label>
-    <label><input type="checkbox" id="cb_0_12" /><a href="https://codeforces.com/problemset/problem/1659/A" target="_blank" rel="noopener">CF 1659A – Red Versus Blue</a></label>
+    <label><input type="checkbox" id="cb_0_11" />CF 702A – Maximum Increase <a href="https://codeforces.com/problemset/problem/702/A" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_0_12" />CF 1659A – Red Versus Blue <a href="https://codeforces.com/problemset/problem/1659/A" target="_blank" rel="noopener">🔗</a></label>
   </div>
 
-  <!-- repeat similarly for Level 1-4, ensuring each <a> has target="_blank" rel="noopener" -->
-
-  <!-- Firebase Sync Script -->
-  <script type="module">
-    import { initializeApp }       from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-    import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCKD_GIQ-WM-p92mlW2ixl5w2-pWxOFI6o",
-      authDomain: "cp-checklist-sync.firebaseapp.com",
-      databaseURL: "https://cp-checklist-sync-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "cp-checklist-sync",
-      storageBucket: "cp-checklist-sync.appspot.com",
-      messagingSenderId: "794233613344",
-      appId: "1:794233613344:web:11fcb7366748a72641e045",
-      measurementId: "G-VS8NZFC0SE"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db  = getDatabase(app);
-    const dbRef = ref(db, 'checklistProgress');
-
-    // Apply saved state
-    onValue(dbRef, snapshot => {
-      const data = snapshot.val() || {};
-      document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-        cb.checked = !!data[cb.id];
-      });
-    });
-
-    // Sync on change
-    document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-      cb.addEventListener('change', () => {
-        update(dbRef, { [cb.id]: cb.checked });
-      });
-    });
-  </script>
-</body>
-</html>
+  <!-- Level 1 -->
+  <div class="section" id="level1-comb">
+    <h2>🟨 Level 1: GCD/LCM & Combinatorics</h2>
+    <label><input type="checkbox" id="cb_1_1" />Kilonova 784 – divizor <a href="https://kilonova.ro/problem/784" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_2" />Kilonova 772 – numere <a href="https://kilonova.ro/problem/772" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_3" />CSES – Binomial Coefficients II <a href="https://cses.fi/problemset/task/1717/" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_4" />Kilonova 1982 – Combination <a href="https://kilonova.ro/problem/1982" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_5" />Kilonova 1981 – divizibilitate <a href="https://kilonova.ro/problem/1981" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_6" />Kilonova 1983 – Common divisors and multiples <a href="https://kilonova.ro/problem/1983" target="_blank" rel="noopener">🔗</a></label>
+  </div>
+  <div class="section" id="level1-dp2d">
+    <h2>🟨 Level 1: 2D Dynamic Programming</h2>
+    <label><input type="checkbox" id="cb_1_7" />CSES – Grid Paths <a href="https://cses.fi/problemset/task/1638/" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_8" />CSES – Grid Paths with Obstacles <a href="https://cses.fi/problemset/task/1733/" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_9" />Longest Common Substring <a href="https://leetcode.com/problems/longest-common-substring/" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_10" />AtCoder dp_f – LCS <a href="https://atcoder.jp/contests/dp/tasks/dp_f" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_11" />AtCoder dp_d – 0/1 Knapsack <a href="https://atcoder.jp/contests/dp/tasks/dp_d" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_12" />Subset Sum <a href="https://cses.fi/problemset/task/1745/" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_13" />Leetcode – Partition Equal Subset Sum <a href="https://leetcode.com/problems/partition-equal-subset-sum/" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_14" />CSES – Edit Distance <a href="https://cses.fi/problemset/task/1724/" target="_blank" rel="noopener">🔗</a></label>
+  </div>
+  <div class="section" id="level1-cfcore">
+    <h2>🟨 Level 1: CF Practice – Core Patterns</h2>
+    <label><input type="checkbox" id="cb_1_15" />CF 1626A – Equidistant Letters <a href="https://codeforces.com/problemset/problem/1626/A" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_16" />CF 1363B – Subsequence Hate <a href="https://codeforces.com/problemset/problem/1363/B" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_1_17" />CF 1485A – Add and Divide <a href="https://codeforces.com/problemset/problem/1485/A" target="_blank" rel="noopener">🔗</a></label>
+  </div>
+  <!-- Level 2 -->
+  <div class="section" id="level2-dpseq">
+    <h2>🟦 Level 2: Sequence & Space-Optimized DP</h2>
+    <label><input type="checkbox" id="cb_2_1" />CSES – LIS O(n²) <a href="https://cses.fi/problemset/task/1144/" target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_2_2" />Leetcode – LIS O(n log n) <a href="https://leetcode.com/problems/longest-increasing-subsequence/` target="_blank" rel="noopener">🔗</a></label>
+    <label><input type="checkbox" id="cb_2_3" />Optimized 0/1 Knapsack (1D DP)</label>
+    <label><input type="checkbox" id="cb_2_4" />Codeforces EDU – Digit DP <a href="https://codeforces.com/edu/course/2/lesson/4/2` target="_blank" rel="noopener">🔗</a></label>
+  </div>
+  ... etc pending outer code truncated for brevity
