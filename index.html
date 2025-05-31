@@ -287,13 +287,13 @@
   <script type="module">
     // Import SDK-urile necesare
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+    // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js"; // Comentat pentru performanță
     import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     // Configurația proiectului Firebase
     const firebaseConfig = {
-      apiKey: "AIzaSyCKD_GIQ-WM-p92mlW2ixl5w2-pWxOFI6o",
+      apiKey: "AIzaSyCKD_GIQ-WM-p92mlW2ixl5w2-pWxOFI6o", // ATENȚIE: Cheia API este vizibilă în codul client. Pentru producție, se recomandă reguli de securitate stricte.
       authDomain: "cp-checklist-sync.firebaseapp.com",
       databaseURL: "https://cp-checklist-sync-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "cp-checklist-sync",
@@ -305,11 +305,13 @@
 
     // Inițializare Firebase
     const appFirebase = initializeApp(firebaseConfig);
+    /* // Comentat pentru performanță
     try {
         const analytics = getAnalytics(appFirebase);
     } catch (e) {
         console.warn("Firebase Analytics nu a putut fi inițializat:", e.message);
     }
+    */
     const auth = getAuth(appFirebase);
     const db = getFirestore(appFirebase);
 
@@ -324,8 +326,6 @@
     const confirmOkButton = document.getElementById('custom-confirm-ok');
     const confirmCancelButton = document.getElementById('custom-confirm-cancel');
     const sectionsContainer = document.getElementById('sections-container');
-
-    // Am eliminat elementele DOM și variabilele pentru Focus Timer
 
     // Mapping lecții RoAlgo
     const roAlgoLessons = {
@@ -431,7 +431,7 @@
     function showLoading() { if (loadingIndicator) loadingIndicator.style.display = 'flex'; }
     function hideLoading() { if (loadingIndicator) loadingIndicator.style.display = 'none'; }
 
-    showLoading(); // Afișează indicatorul de încărcare la început
+    showLoading();
 
     function showCustomConfirm(message, onConfirm) {
       if (confirmModal && confirmMessageEl) {
@@ -461,15 +461,14 @@
       if (localData) {
         try {
             const data = JSON.parse(localData);
-            document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-              cb.checked = !!data[cb.id];
-              cb.parentElement.classList.toggle('completed', cb.checked);
-            });
+            // Aplicarea progresului se va face după generarea checkbox-urilor
+            return data;
         } catch (e) {
             console.error("Eroare la parsarea progresului local:", e);
-            localStorage.removeItem('checklistProgress'); // Elimină datele corupte
+            localStorage.removeItem('checklistProgress');
         }
       }
+      return {};
     }
     function saveLocalProgress(progressData) {
       localStorage.setItem('checklistProgress', JSON.stringify(progressData));
@@ -493,18 +492,18 @@
           cb.parentElement.classList.remove('completed');
         });
         const emptyProgress = {};
-        if (userDocRef) { // Dacă există o referință la documentul utilizatorului (Firebase autentificat)
+        if (userDocRef) {
             try {
-                await setDoc(userDocRef, { progress: emptyProgress }); // Salvează un obiect gol în Firestore
-                saveLocalProgress(emptyProgress); // Actualizează și localStorage
+                await setDoc(userDocRef, { progress: emptyProgress });
+                saveLocalProgress(emptyProgress);
                 updateStats();
                 showNotification('Progres resetat cu succes!', 'info');
             } catch (error) {
                 showNotification('Resetarea progresului în cloud a eșuat: ' + error.message, 'error');
-                saveLocalProgress(emptyProgress); // Resetează local chiar dacă cloud eșuează
+                saveLocalProgress(emptyProgress);
                 updateStats();
             }
-        } else { // Dacă Firebase nu este autentificat, resetează doar local
+        } else {
              saveLocalProgress(emptyProgress);
              updateStats();
              showNotification('Progres resetat local. Sincronizarea Firebase nu este activă.', 'info');
@@ -516,11 +515,10 @@
       const notification = document.getElementById('notification');
       if (notification) {
         notification.textContent = message;
-        notification.className = 'notification show'; // Tailwind classes are managed by style block
+        notification.className = 'notification show';
         if (type === 'error') notification.classList.add('error');
         else if (type === 'info') notification.classList.add('info');
-        else notification.classList.remove('error', 'info'); // Elimină clasele de eroare/info dacă nu sunt specificate
-
+        else notification.classList.remove('error', 'info');
 
         setTimeout(() => { notification.classList.remove('show'); }, 3000);
       }
@@ -542,7 +540,6 @@
       if(progressPercentEl) progressPercentEl.textContent = percentage + '%';
       if(progressFillEl) progressFillEl.style.width = percentage + '%';
 
-      // Actualizează progresul pentru fiecare secțiune
       document.querySelectorAll('.section').forEach(section => {
         const sectionCheckboxes = section.querySelectorAll('input[type=checkbox]');
         const sectionCompleted = Array.from(sectionCheckboxes).filter(cb => cb.checked).length;
@@ -568,7 +565,7 @@
 
             const isMatch = query === '' || textToSearch.includes(query);
             section.classList.toggle('hidden', !isMatch);
-            if (isMatch && query !== '') { // Extinde secțiunile care se potrivesc cu căutarea
+            if (isMatch && query !== '') {
                  section.classList.remove('collapsed');
             }
           });
@@ -579,36 +576,35 @@
     function normalizeText(text) {
         if (!text) return "";
         return text.toLowerCase()
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Elimină diacriticele
-            .replace(/\(.*\)/g, '') // Elimină textul din paranteze
-            .replace(/[^\w\s]/gi, '') // Elimină punctuația cu excepția spațiilor și caracterelor alfanumerice
-            .replace(/\s+/g, ' ').trim(); // Normalizează spațiile multiple
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .replace(/\(.*\)/g, '')
+            .replace(/[^\w\s]/gi, '')
+            .replace(/\s+/g, ' ').trim();
     }
 
 
     function parseAndGenerateSections(problemText) {
         const lines = problemText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+        let allSectionsHtml = ''; // Acumulator pentru tot HTML-ul secțiunilor
         let currentSectionTitle = null;
         let problemsHtml = '';
         let sectionIndex = 0;
         let problemIndexInSection = 0;
-        const levelColors = ['level-0', 'level-1', 'level-2', 'level-3', 'level-4']; // Tailwind classes for border
+        const levelColors = ['level-0', 'level-1', 'level-2', 'level-3', 'level-4'];
         let problemCountInSection = 0;
 
         function finalizeSection() {
             if (currentSectionTitle && problemsHtml) {
                 const sectionId = `topic-${sectionIndex}`;
                 const levelClass = levelColors[sectionIndex % levelColors.length];
-
                 let theoryLinkHTML = '';
                 const normalizedCurrentSectionTitle = normalizeText(currentSectionTitle);
                 let bestMatchUrl = null;
                 let bestMatchKeyLength = 0;
 
-                // Căutare exactă sau parțială a titlului normalizat în cheile normalizate din roAlgoLessons
                 for (const [key, url] of Object.entries(roAlgoLessons)) {
                     const normalizedKey = normalizeText(key);
-                    if (normalizedKey && url) { // Asigură-te că cheia și url-ul sunt valide
+                    if (normalizedKey && url) {
                         if (normalizedCurrentSectionTitle.includes(normalizedKey) && normalizedKey.length > 3) {
                             if (normalizedKey.length > bestMatchKeyLength) {
                                 bestMatchUrl = url;
@@ -622,7 +618,6 @@
                         }
                     }
                 }
-
 
                  if (bestMatchUrl) {
                     theoryLinkHTML = `<a href="${bestMatchUrl}" target="_blank" class="btn btn-theory py-1 px-2 text-xs" title="Vezi teoria pe edu.roalgo.ro">📖 Teorie</a>`;
@@ -640,7 +635,7 @@
                         </div>
                     </div>`;
                 const sectionContent = `<div class="section-content p-3 space-y-2">${problemsHtml}</div>`;
-                sectionsContainer.innerHTML += `<div class="section ${levelClass} collapsed" id="${sectionId}">${sectionHeader}${sectionContent}</div>`;
+                allSectionsHtml += `<div class="section ${levelClass} collapsed" id="${sectionId}">${sectionHeader}${sectionContent}</div>`; // Adaugă la string-ul acumulator
 
                 sectionIndex++;
                 problemsHtml = '';
@@ -649,14 +644,14 @@
         }
 
         function getEmojiForLevel(level) {
-            const emojis = ['🟩', '🟨', '🟦', '🟥', '🟪']; // Green, Yellow, Blue, Red, Purple
+            const emojis = ['🟩', '🟨', '🟦', '🟥', '🟪'];
             return emojis[level % emojis.length];
         }
         let potentialTitleBuffer = "";
 
         for (const line of lines) {
             if (line.startsWith('<ul>')) {
-                 if (potentialTitleBuffer) { // Finalizează secțiunea dacă un titlu era în buffer
+                 if (potentialTitleBuffer) {
                     finalizeSection();
                     currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
                     potentialTitleBuffer = "";
@@ -666,17 +661,15 @@
             } else if (line.startsWith('</ul>')) {
                 continue;
             } else if (line.startsWith('<li><a href="')) {
-                 if (potentialTitleBuffer && !currentSectionTitle) { // Dacă avem un titlu în buffer și nu e setat currentSectionTitle
-                    finalizeSection(); // Finalizează secțiunea anterioară dacă există
+                 if (potentialTitleBuffer && !currentSectionTitle) {
+                    finalizeSection();
                     currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
                     potentialTitleBuffer = "";
                  } else if (potentialTitleBuffer && currentSectionTitle && problemsHtml === '') {
-                    // Avem un titlu în buffer, un currentSectionTitle, dar încă nu am adăugat probleme la el
-                    finalizeSection(); // Finalizează secțiunea pentru currentSectionTitle (care va fi goală)
-                    currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim(); // Setează noul titlu
+                    finalizeSection();
+                    currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
                     potentialTitleBuffer = "";
                  }
-
 
                 const match = line.match(/<li><a href="([^"]+)">([^<]+)<\/a>(?:.*?)<\/li>/i);
                 if (match) {
@@ -691,9 +684,9 @@
                     problemIndexInSection++;
                     problemCountInSection++;
                 }
-            } else if (!line.startsWith('<') && line.length > 1) { // Linie de text, potențial titlu
-                if (currentSectionTitle && problemsHtml) { // Dacă avem o secțiune activă cu probleme
-                    finalizeSection(); // O finalizăm
+            } else if (!line.startsWith('<') && line.length > 1) {
+                if (currentSectionTitle && problemsHtml) {
+                    finalizeSection();
                 }
                  potentialTitleBuffer = line;
                  if (line.endsWith(':')) {
@@ -703,16 +696,17 @@
                  }
             }
         }
-        if (potentialTitleBuffer) { // Procesează orice titlu rămas în buffer la final
+        if (potentialTitleBuffer) {
             finalizeSection();
             currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
         }
-        finalizeSection(); // Asigură-te că ultima secțiune este finalizată
+        finalizeSection();
+
+        if (sectionsContainer) {
+            sectionsContainer.innerHTML = allSectionsHtml; // Setează innerHTML o singură dată
+        }
     }
 
-    // Am eliminat funcțiile pentru Focus Timer
-
-    // Conținutul din `Materie completa(exercitii).txt`
     const problemDataText = `
 Operatii pe biti :
 
@@ -1761,64 +1755,67 @@ Componente biconexe:
     // Inițializare principală
     document.addEventListener('DOMContentLoaded', () => {
         parseAndGenerateSections(problemDataText);
-        loadLocalProgress(); // Încarcă progresul local înainte de a încerca Firebase
+        const localProgress = loadLocalProgress();
+
+        // Aplică progresul local la checkbox-uri
+        document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+            cb.checked = !!localProgress[cb.id];
+            cb.parentElement.classList.toggle('completed', cb.checked);
+        });
+
         setupSearch();
-        updateStats(); // Calculează statisticile inițiale pe baza datelor locale
+        updateStats();
 
-        // Sincronizare cu Firebase
         onAuthStateChanged(auth, (user) => {
-            if (user) { // Utilizator autentificat (anonim sau altfel)
+            if (user) {
                 const uid = user.uid;
-                userDocRef = doc(db, 'userProgress', uid); // Calea către documentul utilizatorului
+                userDocRef = doc(db, 'userProgress', uid);
 
-                // Curăță listener-ul anterior dacă există
                 if (unsubscribeSnapshot) {
                     unsubscribeSnapshot();
                 }
 
-                // Sincronizează cu Firestore
                 unsubscribeSnapshot = onSnapshot(userDocRef, (docSnap) => {
-                    hideLoading(); // Ascunde indicatorul de încărcare după ce datele (sau lipsa lor) sunt primite
+                    hideLoading();
                     const cloudData = docSnap.exists() ? docSnap.data().progress || {} : {};
                     let cloudDataChanged = false;
 
+                    // Sincronizează starea checkbox-urilor cu datele din cloud
+                    // Doar dacă datele din cloud sunt diferite de cele deja aplicate (din local sau modificări)
                     document.querySelectorAll('input[type=checkbox]').forEach(cb => {
                         const cloudValue = !!cloudData[cb.id];
                         if (cb.checked !== cloudValue) {
                             cb.checked = cloudValue;
+                            cb.parentElement.classList.toggle('completed', cb.checked);
                             cloudDataChanged = true;
                         }
-                        cb.parentElement.classList.toggle('completed', cb.checked);
                     });
 
                     if (cloudDataChanged) {
                         showNotification('Progres sincronizat din cloud.', 'info');
                     }
                     updateStats();
-                    saveLocalProgress(cloudData); // Salvează datele din cloud și local
+                    saveLocalProgress(cloudData); // Suprascrie local cu datele din cloud
                 }, (error) => {
                     console.error("Eroare Firestore onSnapshot:", error);
                     hideLoading();
                     showNotification('Nu s-a putut sincroniza cu cloud. Se folosesc datele locale.', 'error');
-                    updateStats(); // Asigură-te că statisticile sunt actualizate chiar dacă onSnapshot eșuează
+                    updateStats();
                 });
-            } else { // Niciun utilizator autentificat
+            } else {
                 hideLoading();
                 console.log("Niciun utilizator autentificat. Progresul va fi doar local.");
-                updateStats();
+                updateStats(); // Asigură-te că statisticile sunt pe baza datelor locale
             }
         });
 
-        // Încearcă autentificare anonimă
         signInAnonymously(auth).catch((error) => {
             console.error("Autentificare anonimă eșuată:", error);
-            hideLoading(); // Ascunde indicatorul de încărcare dacă autentificarea eșuează
+            hideLoading();
             showNotification('Autentificarea Firebase a eșuat. Progresul va fi doar local.', 'error');
-            updateStats(); // Asigură-te că statisticile sunt actualizate
+            updateStats();
         });
 
-
-        // Adaugă event listeners la checkbox-uri DUPĂ ce au fost generate
         document.querySelectorAll('input[type=checkbox]').forEach(cb => {
           cb.addEventListener('change', async function() {
             this.parentElement.classList.toggle('completed', this.checked);
@@ -1830,21 +1827,21 @@ Componente biconexe:
                 currentProgress[box.id] = box.checked;
             });
 
+            saveLocalProgress(currentProgress); // Salvează imediat local
+            updateStats();
+
             if (userDocRef) {
                 try {
-                    await setDoc(userDocRef, { progress: currentProgress }, { merge: true }); // Folosește merge: true pentru a nu suprascrie alte câmpuri
+                    await setDoc(userDocRef, { progress: currentProgress }, { merge: true });
                 } catch (err) {
                     showNotification('Salvarea în cloud a eșuat: ' + err.message, 'error');
+                    // Datele rămân salvate local
                 }
             }
-            updateStats();
-            saveLocalProgress(currentProgress);
           });
         });
 
-        collapseAll(); // Restrânge toate secțiunile la încărcare
-        // Asigură-te că loading-ul este ascuns dacă nu există autentificare sau date inițiale
-        // Acest lucru este gestionat în callback-urile onAuthStateChanged și signInAnonymously
+        collapseAll();
     });
   </script>
 </body>
