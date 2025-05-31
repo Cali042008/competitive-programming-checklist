@@ -7,34 +7,40 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Stiluri de Bază Tailwind Customizate */
+    /* Stiluri de Bază */
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: #1f2937; /* gray-800 */
+      transition: background-color 0.3s, color 0.3s;
     }
     .container {
       background: white;
       border-radius: 12px; /* rounded-xl */
       box-shadow: 0 20px 40px rgba(0,0,0,0.1); /* shadow-2xl */
+      transition: background-color 0.3s;
     }
     h1 {
       color: #111827; /* gray-900 */
       text-align: center;
+      transition: color 0.3s;
     }
     .stats-bar {
       background: #f9fafb; /* gray-50 */
       border-radius: 8px; /* rounded-lg */
+      transition: background-color 0.3s;
     }
     .stat-number {
       color: #6366f1; /* indigo-600 */
     }
     .stat-label {
       color: #4b5563; /* gray-600 */
+      transition: color 0.3s;
     }
     .progress-bar {
       background: #e5e7eb; /* gray-200 */
       border-radius: 9999px; /* rounded-full */
+      transition: background-color 0.3s;
     }
     .progress-fill {
       background: linear-gradient(90deg, #6366f1, #8b5cf6); /* indigo-600 to purple-500 */
@@ -62,7 +68,12 @@
       background-color: #4b5563; /* gray-600 */
       transform: translateY(-1px);
     }
-    .btn-theory { /* Am readăugat stilul pentru butonul de teorie */
+     .btn-theme-toggle { /* Stil pentru butonul de temă */
+      background-color: #e5e7eb; /* gray-200 */
+      color: #4b5563; /* gray-600 */
+      border: 1px solid #d1d5db; /* gray-300 */
+    }
+    .btn-theory { 
       background-color: #e5e7eb; /* gray-200 */
       color: #4f46e5; /* indigo-700 */
       border: 1px solid #d1d5db; /* gray-300 */
@@ -77,7 +88,7 @@
     .search-box {
       border: 2px solid #e5e7eb; /* gray-200 */
       border-radius: 6px; /* rounded-md */
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, background-color 0.3s, color 0.3s;
     }
     .search-box:focus {
       outline: none;
@@ -87,47 +98,69 @@
       border: 2px solid #e5e7eb; /* gray-200 */
       border-radius: 8px; /* rounded-lg */
       overflow: hidden;
+      transition: border-color 0.3s;
     }
     .section.collapsed .section-content { display: none; }
     .section.hidden { display: none; }
     .section-header {
       background: #f9fafb; /* gray-50 */
       user-select: none;
-      transition: background 0.2s;
+      transition: background-color 0.3s;
     }
     .section-header:hover { background: #f3f4f6; /* gray-100 */ }
     .section-title {
         font-weight: 600; /* font-semibold */
+        transition: color 0.3s;
     }
     .section-progress {
         color: #4b5563; /* gray-600 */
         font-weight: 500; /* font-medium */
+        transition: color 0.3s;
+    }
+    .section-status-indicators span { /* Stil pentru indicatorii de stare ai secțiunii */
+        margin-left: 0.25rem; /* ml-1 */
+        font-size: 0.75rem; /* text-xs */
     }
     .collapse-icon { transition: transform 0.2s; }
     .section.collapsed .collapse-icon { transform: rotate(-90deg); }
     
-    .section-content {
-      /* Stiluri pentru conținutul secțiunii, dacă e nevoie */
+    .problem-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem; 
+      border-radius: 4px; 
+      transition: background-color 0.2s;
+    }
+    .problem-item:hover { 
+      background-color: #f9fafb; 
     }
 
-    label {
+    .problem-item.state-unsolved { background-color: transparent; } /* Sau #f3f4f6; */
+    .problem-item.state-in_progress { background-color: #fef9c3; /* yellow-100 */ }
+    .problem-item.state-solved { background-color: #d1fae5; /* green-100 */ }
+    .problem-item.state-needs_review { background-color: #fee2e2; /* red-100 */ }
+    .problem-item.state-to_revisit { background-color: #e0e7ff; /* indigo-100 */ }
+
+    .problem-state-selector {
+      margin-right: 0.75rem; 
+      padding: 0.25rem 0.5rem; 
+      border-radius: 4px; 
+      border: 1px solid #d1d5db; 
+      background-color: white;
+      font-size: 0.875rem; 
       cursor: pointer;
-      border-radius: 4px; /* rounded */
-      transition: background 0.2s;
+      min-width: 120px; 
+      transition: background-color 0.3s, border-color 0.3s, color 0.3s;
     }
-    label:hover { background: #f9fafb; /* gray-50 */ }
-    label.completed {
-      background: #d1fae5; /* green-100 */
-      text-decoration: line-through;
-      opacity: 0.7;
+    .problem-state-selector:focus {
+        outline: none;
+        border-color: #6366f1; 
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); 
     }
-    input[type=checkbox] {
-        transform: scale(1.3);
-        accent-color: #6366f1; /* indigo-600 */
-    }
+
     a.problem-link {
-        color: #6366f1; /* indigo-600 */
-        font-weight: 500; /* font-medium */
+        color: #6366f1; 
+        font-weight: 500; 
         flex-grow: 1;
     }
     a.problem-link:hover { text-decoration: underline; }
@@ -137,6 +170,78 @@
     .level-2 { border-left: 4px solid #3b82f6; } /* blue-500 */
     .level-3 { border-left: 4px solid #ef4444; } /* red-500 */
     .level-4 { border-left: 4px solid #8b5cf6; } /* purple-500 */
+
+    /* Stiluri Dark Mode */
+    body.dark-mode {
+      background: #1f2937; /* gray-800 */
+      color: #d1d5db; /* gray-300 */
+    }
+    body.dark-mode .container {
+      background: #374151; /* gray-700 */
+    }
+    body.dark-mode h1 {
+      color: #f9fafb; /* gray-50 */
+    }
+    body.dark-mode .stats-bar {
+      background: #4b5563; /* gray-600 */
+    }
+    body.dark-mode .stat-label {
+      color: #d1d5db; /* gray-300 */
+    }
+    body.dark-mode .progress-bar {
+      background: #4b5563; /* gray-600 */
+    }
+    body.dark-mode .search-box {
+      background-color: #4b5563; /* gray-600 */
+      border-color: #6b7280; /* gray-500 */
+      color: #f9fafb; /* gray-50 */
+    }
+    body.dark-mode .search-box::placeholder {
+      color: #9ca3af; /* gray-400 */
+    }
+    body.dark-mode .section {
+      border-color: #6b7280; /* gray-500 */
+    }
+    body.dark-mode .section-header {
+      background: #4b5563; /* gray-600 */
+    }
+    body.dark-mode .section-header:hover {
+      background: #525c6b; /* O nuanță puțin mai deschisă */
+    }
+    body.dark-mode .section-title {
+      color: #f3f4f6; /* gray-100 */
+    }
+    body.dark-mode .section-progress {
+      color: #d1d5db; /* gray-300 */
+    }
+     body.dark-mode .btn-theme-toggle {
+      background-color: #6b7280; /* gray-500 */
+      color: #f9fafb; /* gray-50 */
+      border-color: #9ca3af; /* gray-400 */
+    }
+    body.dark-mode .btn-theory {
+      background-color: #4b5563; /* gray-600 */
+      color: #a5b4fc; /* indigo-300 */
+      border-color: #6b7280; /* gray-500 */
+    }
+    body.dark-mode .btn-theory:hover {
+      background-color: #6b7280; /* gray-500 */
+    }
+    body.dark-mode .problem-item:hover {
+      background-color: #4b5563; /* gray-600 */
+    }
+    body.dark-mode .problem-item.state-unsolved { background-color: transparent; }
+    body.dark-mode .problem-item.state-in_progress { background-color: #78350f; /* amber-900 - ajustat pentru lizibilitate */ color: #fef3c7; /* amber-100 */ }
+    body.dark-mode .problem-item.state-solved { background-color: #065f46; /* green-800 */ color: #d1fae5; /* green-100 */ }
+    body.dark-mode .problem-item.state-needs_review { background-color: #991b1b; /* red-800 */ color: #fee2e2; /* red-100 */ }
+    body.dark-mode .problem-item.state-to_revisit { background-color: #4338ca; /* indigo-700 */ color: #e0e7ff; /* indigo-100 */ }
+    
+    body.dark-mode .problem-state-selector {
+      background-color: #374151; /* gray-700 */
+      border-color: #6b7280; /* gray-500 */
+      color: #f3f4f6; /* gray-100 */
+    }
+
 
     .notification {
       position: fixed;
@@ -235,8 +340,7 @@
     gtag('config', 'G-VS8NZFC0SE');
   </script>
 </head>
-<body class="min-h-screen p-4 md:p-8">
-  <div class="loading" id="loading">
+<body> <div class="loading" id="loading">
     <div class="spinner"></div>
   </div>
 
@@ -256,7 +360,7 @@
     <div class="stats-bar flex flex-col sm:flex-row justify-between items-center p-4 mb-8 gap-4">
       <div class="stat-item text-center">
         <div class="stat-number text-2xl font-bold" id="completed-count">0</div>
-        <div class="stat-label text-sm uppercase tracking-wider">Completate</div>
+        <div class="stat-label text-sm uppercase tracking-wider">Rezolvate</div>
       </div>
       <div class="stat-item text-center">
         <div class="stat-number text-2xl font-bold" id="total-count">0</div>
@@ -264,7 +368,7 @@
       </div>
       <div class="stat-item text-center">
         <div class="stat-number text-2xl font-bold" id="progress-percent">0%</div>
-        <div class="stat-label text-sm uppercase tracking-wider">Progres</div>
+        <div class="stat-label text-sm uppercase tracking-wider">Progres (Rezolvate)</div>
       </div>
       <div class="stat-item w-full sm:flex-1 min-w-[150px] sm:min-w-[200px]">
         <div class="progress-bar h-2 w-full">
@@ -279,6 +383,7 @@
         <button class="btn btn-primary py-2 px-4 text-sm flex-1 sm:flex-initial" onclick="expandAll()">Extinde Tot</button>
         <button class="btn btn-secondary py-2 px-4 text-sm flex-1 sm:flex-initial" onclick="collapseAll()">Restrânge Tot</button>
       </div>
+       <button id="theme-toggle-button" class="btn btn-theme-toggle py-2 px-4 text-sm w-full sm:w-auto">🌓 Comută Tema</button>
       <button class="btn btn-secondary py-2 px-4 text-sm w-full sm:w-auto bg-red-500 hover:bg-red-600" onclick="handleResetProgress()">Resetează Tot</button>
     </div>
 
@@ -316,14 +421,23 @@
     let checklistProgress = {}; 
     let totalProblemsCount = 0;
 
+    const problemStates = {
+        UNSOLVED:     { text: 'Nerezolvată',    value: 'unsolved',     class: 'state-unsolved',     icon: '⚪' },
+        IN_PROGRESS:  { text: 'În lucru',       value: 'in_progress',  class: 'state-in-progress',  icon: '🟡' },
+        SOLVED:       { text: 'Rezolvată',      value: 'solved',       class: 'state-solved',       icon: '🟢' },
+        NEEDS_REVIEW: { text: 'Neînțeleasă',    value: 'needs_review', class: 'state-needs-review', icon: '🔴' },
+        TO_REVISIT:   { text: 'De revizuit',    value: 'to_revisit',   class: 'state-to-revisit',   icon: '🟣' }
+    };
+    const defaultStateValue = problemStates.UNSOLVED.value;
+
     const loadingIndicator = document.getElementById('loading');
     const confirmModal = document.getElementById('custom-confirm-modal');
     const confirmMessageEl = document.getElementById('custom-confirm-message');
     const confirmOkButton = document.getElementById('custom-confirm-ok');
     const confirmCancelButton = document.getElementById('custom-confirm-cancel');
     const sectionsContainer = document.getElementById('sections-container');
+    const themeToggleButton = document.getElementById('theme-toggle-button');
 
-    // Am readăugat constanta roAlgoLessons
     const roAlgoLessons = {
         "operatii pe biti": "https://edu.roalgo.ro/mediu/bitwise-ops/",
         "greedy": "https://edu.roalgo.ro/usor/greedy/",
@@ -449,6 +563,28 @@
       });
     }
 
+    // --- Theme Management ---
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+    }
+
+    function toggleTheme() {
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+    }
+    
+    if (themeToggleButton) {
+        themeToggleButton.addEventListener('click', toggleTheme);
+    }
+    // --- End Theme Management ---
+
+
     function loadInitialProgress() {
       const localData = localStorage.getItem('checklistProgress');
       if (localData) {
@@ -462,10 +598,24 @@
       } else {
         checklistProgress = {};
       }
+       // Load and apply saved theme
+      const savedTheme = localStorage.getItem('theme') || 'light'; // Default to light
+      applyTheme(savedTheme);
     }
 
     function saveCurrentProgress() {
       localStorage.setItem('checklistProgress', JSON.stringify(checklistProgress));
+    }
+    
+    function applyProblemItemStyle(itemElement, stateValue) {
+        if (!itemElement) return;
+        Object.values(problemStates).forEach(s => itemElement.classList.remove(s.class));
+        const stateInfo = Object.values(problemStates).find(s => s.value === stateValue);
+        if (stateInfo) {
+            itemElement.classList.add(stateInfo.class);
+        } else {
+            itemElement.classList.add(problemStates.UNSOLVED.class); 
+        }
     }
 
     window.toggleSection = function(sectionId) {
@@ -475,40 +625,46 @@
       const sectionContentElement = sectionElement.querySelector('.section-content');
       const isCollapsed = sectionElement.classList.contains('collapsed');
 
-      if (isCollapsed) { // Expanding
+      if (isCollapsed) { 
         if (!sectionElement.dataset.contentRendered) {
           if (sectionProblemDataStore[sectionId] && sectionContentElement) {
             sectionContentElement.innerHTML = sectionProblemDataStore[sectionId].html;
             
-            sectionProblemDataStore[sectionId].checkboxIds.forEach(checkboxId => {
-              const checkbox = document.getElementById(checkboxId);
-              if (checkbox) {
-                checkbox.checked = !!checklistProgress[checkboxId];
-                checkbox.parentElement.classList.toggle('completed', checkbox.checked);
-                checkbox.addEventListener('change', handleCheckboxChange);
+            sectionProblemDataStore[sectionId].problemIds.forEach(problemId => {
+              const selector = document.getElementById(problemId);
+              const problemItem = selector ? selector.closest('.problem-item') : null;
+              if (selector && problemItem) {
+                selector.value = checklistProgress[problemId] || defaultStateValue;
+                applyProblemItemStyle(problemItem, selector.value);
+                selector.addEventListener('change', handleProblemStateChange);
               }
             });
             sectionElement.dataset.contentRendered = 'true';
           }
         }
         sectionElement.classList.remove('collapsed');
-      } else { // Collapsing
+      } else { 
         sectionElement.classList.add('collapsed');
       }
       updateSectionProgress(sectionId);
+      updateSectionStatusIndicators(sectionId); // Update indicators on toggle
     };
     
-    function handleCheckboxChange(event) {
-        const checkbox = event.target;
-        checklistProgress[checkbox.id] = checkbox.checked;
-        checkbox.parentElement.classList.toggle('completed', checkbox.checked);
-        if (checkbox.checked) {
-            showNotification('Problemă completată! 🎉');
+    function handleProblemStateChange(event) {
+        const selector = event.target;
+        const problemId = selector.id;
+        const newState = selector.value;
+        checklistProgress[problemId] = newState;
+        
+        const problemItem = selector.closest('.problem-item');
+        applyProblemItemStyle(problemItem, newState);
+
+        if (newState === problemStates.SOLVED.value) {
+            showNotification('Problemă marcată ca Rezolvată! 🎉');
         }
         saveCurrentProgress();
-        updateStats();
-        updateSectionProgress(allProblemsData[checkbox.id]?.sectionId);
-
+        updateStats(); // This will call updateSectionProgress and updateSectionStatusIndicators for all
+        
         if (userDocRef) {
             setDoc(userDocRef, { progress: checklistProgress }, { merge: true })
                 .catch(err => showNotification('Salvarea în cloud a eșuat: ' + err.message, 'error'));
@@ -522,13 +678,14 @@
             const sectionContentElement = section.querySelector('.section-content');
             if (sectionProblemDataStore[sectionId] && sectionContentElement) {
                 sectionContentElement.innerHTML = sectionProblemDataStore[sectionId].html;
-                sectionProblemDataStore[sectionId].checkboxIds.forEach(checkboxId => {
-                    const checkbox = document.getElementById(checkboxId);
-                    if (checkbox) {
-                        checkbox.checked = !!checklistProgress[checkboxId];
-                        checkbox.parentElement.classList.toggle('completed', checkbox.checked);
-                        checkbox.removeEventListener('change', handleCheckboxChange);
-                        checkbox.addEventListener('change', handleCheckboxChange);
+                sectionProblemDataStore[sectionId].problemIds.forEach(problemId => {
+                    const selector = document.getElementById(problemId);
+                    const problemItem = selector ? selector.closest('.problem-item') : null;
+                    if (selector && problemItem) {
+                        selector.value = checklistProgress[problemId] || defaultStateValue;
+                        applyProblemItemStyle(problemItem, selector.value);
+                        selector.removeEventListener('change', handleProblemStateChange); 
+                        selector.addEventListener('change', handleProblemStateChange);
                     }
                 });
                 section.dataset.contentRendered = 'true';
@@ -536,6 +693,7 @@
         }
         section.classList.remove('collapsed');
         updateSectionProgress(section.id);
+        updateSectionStatusIndicators(section.id);
       });
     };
 
@@ -546,28 +704,29 @@
     };
 
     window.handleResetProgress = function() {
-      showCustomConfirm('Sunteți sigur că doriți să resetați tot progresul? Această acțiune nu poate fi anulată.', async () => {
+      showCustomConfirm('Sunteți sigur că doriți să resetați toate stările problemelor? Această acțiune nu poate fi anulată.', async () => {
         checklistProgress = {}; 
-        document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-          if (cb.parentElement) { 
-            cb.checked = false;
-            cb.parentElement.classList.remove('completed');
-          }
+        document.querySelectorAll('.problem-state-selector').forEach(selector => {
+            selector.value = defaultStateValue;
+            const problemItem = selector.closest('.problem-item');
+            applyProblemItemStyle(problemItem, defaultStateValue);
+        });
+        Object.keys(allProblemsData).forEach(problemId => {
+            checklistProgress[problemId] = defaultStateValue;
         });
         
         saveCurrentProgress(); 
-        updateStats(); 
-        Object.keys(sectionProblemDataStore).forEach(updateSectionProgress); 
-
+        updateStats(); // This will update all section progresses and indicators
+        
         if (userDocRef) {
             try {
                 await setDoc(userDocRef, { progress: {} }); 
-                showNotification('Progres resetat cu succes!', 'info');
+                showNotification('Stările problemelor au fost resetate!', 'info');
             } catch (error) {
-                showNotification('Resetarea progresului în cloud a eșuat: ' + error.message, 'error');
+                showNotification('Resetarea stărilor în cloud a eșuat: ' + error.message, 'error');
             }
         } else {
-             showNotification('Progres resetat local. Sincronizarea Firebase nu este activă.', 'info');
+             showNotification('Stările problemelor au fost resetate local.', 'info');
         }
       });
     };
@@ -588,41 +747,72 @@
         if (!sectionId || !sectionProblemDataStore[sectionId]) return;
 
         const sectionData = sectionProblemDataStore[sectionId];
-        let sectionCompleted = 0;
-        sectionData.checkboxIds.forEach(checkboxId => {
-            if (checklistProgress[checkboxId]) {
-                sectionCompleted++;
+        let sectionSolvedCount = 0;
+        sectionData.problemIds.forEach(problemId => { 
+            if (checklistProgress[problemId] === problemStates.SOLVED.value) {
+                sectionSolvedCount++;
             }
         });
-        const sectionTotal = sectionData.checkboxIds.length;
+        const sectionTotal = sectionData.problemIds.length;
         const progressElement = document.getElementById(`progress-${sectionId}`);
         if (progressElement) {
-            progressElement.textContent = `${sectionCompleted}/${sectionTotal}`;
+            progressElement.textContent = `${sectionSolvedCount}/${sectionTotal}`;
+        }
+    }
+    
+    function updateSectionStatusIndicators(sectionId) {
+        if (!sectionId || !sectionProblemDataStore[sectionId]) return;
+
+        const sectionData = sectionProblemDataStore[sectionId];
+        let needsReviewCount = 0;
+        let toRevisitCount = 0;
+
+        sectionData.problemIds.forEach(problemId => {
+            const state = checklistProgress[problemId];
+            if (state === problemStates.NEEDS_REVIEW.value) {
+                needsReviewCount++;
+            } else if (state === problemStates.TO_REVISIT.value) {
+                toRevisitCount++;
+            }
+        });
+
+        const indicatorsElement = document.getElementById(`indicators-${sectionId}`);
+        if (indicatorsElement) {
+            let indicatorsHTML = '';
+            if (needsReviewCount > 0) {
+                indicatorsHTML += `<span title="${needsReviewCount} Neînțelese">${problemStates.NEEDS_REVIEW.icon} ${needsReviewCount}</span>`;
+            }
+            if (toRevisitCount > 0) {
+                indicatorsHTML += `<span title="${toRevisitCount} De revizuit">${problemStates.TO_REVISIT.icon} ${toRevisitCount}</span>`;
+            }
+            indicatorsElement.innerHTML = indicatorsHTML;
         }
     }
 
+
     function updateStats() {
-      let completedCount = 0;
-      Object.values(checklistProgress).forEach(isCompleted => {
-        if (isCompleted) {
-          completedCount++;
+      let solvedCount = 0;
+      Object.values(checklistProgress).forEach(stateValue => {
+        if (stateValue === problemStates.SOLVED.value) {
+          solvedCount++;
         }
       });
 
-      const percentage = totalProblemsCount > 0 ? Math.round((completedCount / totalProblemsCount) * 100) : 0;
+      const percentage = totalProblemsCount > 0 ? Math.round((solvedCount / totalProblemsCount) * 100) : 0;
 
       const completedCountEl = document.getElementById('completed-count');
       const totalCountEl = document.getElementById('total-count');
       const progressPercentEl = document.getElementById('progress-percent');
       const progressFillEl = document.getElementById('progress-fill');
 
-      if(completedCountEl) completedCountEl.textContent = completedCount;
+      if(completedCountEl) completedCountEl.textContent = solvedCount;
       if(totalCountEl) totalCountEl.textContent = totalProblemsCount;
       if(progressPercentEl) progressPercentEl.textContent = percentage + '%';
       if(progressFillEl) progressFillEl.style.width = percentage + '%';
       
       Object.keys(sectionProblemDataStore).forEach(sectionId => {
           updateSectionProgress(sectionId);
+          updateSectionStatusIndicators(sectionId); // Actualizează și indicatorii de stare
       });
     }
 
@@ -653,7 +843,7 @@
       }
     }
 
-    function normalizeText(text) { // Funcția este din nou necesară pentru roAlgoLessons
+    function normalizeText(text) {
         if (!text) return "";
         return text.toLowerCase()
             .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -667,7 +857,7 @@
         let sectionHeadersHtml = '';
         let currentSectionTitle = null;
         let currentProblemsHtmlBuffer = '';
-        let currentSectionCheckboxIds = [];
+        let currentSectionProblemIds = []; 
         let sectionIndex = 0;
         let problemIndexInSection = 0;
         const levelColors = ['level-0', 'level-1', 'level-2', 'level-3', 'level-4'];
@@ -679,7 +869,6 @@
                 const sectionId = `topic-${sectionIndex}`;
                 const levelClass = levelColors[sectionIndex % levelColors.length];
                 
-                // Logica pentru link-ul de teorie a fost readăugată
                 let theoryLinkHTML = '';
                 const normalizedCurrentSectionTitle = normalizeText(currentSectionTitle);
                 let bestMatchUrl = null;
@@ -698,31 +887,30 @@
                  if (bestMatchUrl) {
                     theoryLinkHTML = `<a href="${bestMatchUrl}" target="_blank" class="btn btn-theory py-1 px-2 text-xs" title="Vezi teoria pe edu.roalgo.ro">📖 Teorie</a>`;
                 }
-                // Sfârșitul logicii pentru link-ul de teorie
 
                 sectionHeadersHtml += `
                     <div class="section ${levelClass} collapsed" id="${sectionId}">
                         <div class="section-header p-3 flex flex-wrap justify-between items-center">
                             <div class="section-header-main flex items-center flex-grow cursor-pointer mr-2" onclick="toggleSection('${sectionId}')">
                                 <h2 class="section-title text-lg md:text-xl mr-2">${getEmojiForLevel(sectionIndex % levelColors.length)} ${currentSectionTitle}</h2>
-                                ${theoryLinkHTML} </div>
+                                ${theoryLinkHTML}
+                            </div>
                             <div class="section-header-controls flex items-center gap-2 mt-2 sm:mt-0">
-                                 <div class="section-progress text-sm" id="progress-${sectionId}">0/${currentSectionCheckboxIds.length}</div>
-                                <span class="collapse-icon text-gray-500">▼</span>
+                                 <div class="section-progress text-sm" id="progress-${sectionId}">0/${currentSectionProblemIds.length}</div>
+                                 <div class="section-status-indicators text-sm" id="indicators-${sectionId}"></div> <span class="collapse-icon text-gray-500">▼</span>
                             </div>
                         </div>
-                        <div class="section-content p-3 space-y-2">
-                            </div>
+                        <div class="section-content p-3 space-y-2"></div>
                     </div>`;
                 
                 sectionProblemDataStore[sectionId] = {
                     html: currentProblemsHtmlBuffer,
-                    checkboxIds: [...currentSectionCheckboxIds]
+                    problemIds: [...currentSectionProblemIds] 
                 };
                 
                 sectionIndex++;
                 currentProblemsHtmlBuffer = '';
-                currentSectionCheckboxIds = [];
+                currentSectionProblemIds = [];
             }
         }
 
@@ -757,15 +945,22 @@
                 if (match) {
                     const url = match[1];
                     const name = match[2].replace(/\s\s+/g, ' ').trim();
-                    const checkboxId = `cb_s${sectionIndex}_p${problemIndexInSection}`;
+                    const problemId = `problem_s${sectionIndex}_p${problemIndexInSection}`; 
                     
+                    let optionsHtml = '';
+                    Object.values(problemStates).forEach(state => {
+                        optionsHtml += `<option value="${state.value}">${state.icon} ${state.text}</option>`;
+                    });
+
                     currentProblemsHtmlBuffer += `
-                        <label class="flex items-center p-2 hover:bg-gray-100 rounded-md">
-                            <input type="checkbox" id="${checkboxId}" class="mr-3">
+                        <div class="problem-item ${problemStates.UNSOLVED.class}" id="item-${problemId}">
+                            <select id="${problemId}" class="problem-state-selector">
+                                ${optionsHtml}
+                            </select>
                             <a href="${url}" target="_blank" class="problem-link text-sm md:text-base">${name}</a>
-                        </label>`;
-                    currentSectionCheckboxIds.push(checkboxId);
-                    allProblemsData[checkboxId] = { name, url, sectionId: `topic-${sectionIndex}` }; 
+                        </div>`;
+                    currentSectionProblemIds.push(problemId);
+                    allProblemsData[problemId] = { name, url, sectionId: `topic-${sectionIndex}` }; 
                     problemIndexInSection++;
                     totalProblemsCount++;
                 }
@@ -828,26 +1023,37 @@
 
                 unsubscribeSnapshot = onSnapshot(userDocRef, (docSnap) => {
                     const cloudProgress = docSnap.exists() ? docSnap.data().progress || {} : {};
-                    checklistProgress = {...checklistProgress, ...cloudProgress}; 
                     
+                    Object.keys(allProblemsData).forEach(problemId => {
+                        if (cloudProgress.hasOwnProperty(problemId)) {
+                            checklistProgress[problemId] = cloudProgress[problemId];
+                        } else if (!checklistProgress.hasOwnProperty(problemId)) { // Dacă nu e nici în cloud, nici în local deja
+                            checklistProgress[problemId] = defaultStateValue;
+                        }
+                    });
+                     for (const pid in cloudProgress) { // Asigură-te că toate datele din cloud sunt în checklistProgress
+                        checklistProgress[pid] = cloudProgress[pid];
+                    }
+
                     saveCurrentProgress(); 
 
                     document.querySelectorAll('.section').forEach(sectionElement => {
                         if (sectionElement.dataset.contentRendered === 'true') {
                             const sectionId = sectionElement.id;
                             if (sectionProblemDataStore[sectionId]) {
-                                sectionProblemDataStore[sectionId].checkboxIds.forEach(checkboxId => {
-                                    const checkbox = document.getElementById(checkboxId);
-                                    if (checkbox && checkbox.parentElement) {
-                                         checkbox.checked = !!checklistProgress[checkboxId];
-                                         checkbox.parentElement.classList.toggle('completed', checkbox.checked);
+                                sectionProblemDataStore[sectionId].problemIds.forEach(problemId => {
+                                    const selector = document.getElementById(problemId);
+                                    const problemItem = selector ? selector.closest('.problem-item') : null;
+                                    if (selector && problemItem) {
+                                         selector.value = checklistProgress[problemId] || defaultStateValue;
+                                         applyProblemItemStyle(problemItem, selector.value);
                                     }
                                 });
                             }
                         }
                     });
                     
-                    if (Object.keys(cloudProgress).length > 0 && docSnap.exists()) { 
+                    if (docSnap.exists() && Object.keys(cloudProgress).length > 0) { 
                         showNotification('Progres sincronizat din cloud.', 'info');
                     }
                     updateStats();
