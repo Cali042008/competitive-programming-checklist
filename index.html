@@ -5,12 +5,13 @@
   <title>Competitive Programming Checklist</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
+    /* Stiluri de Bază */
     * { box-sizing: border-box; }
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
       line-height: 1.6; 
-      padding: 1rem; 
-      max-width: 950px; 
+      padding: 2rem; 
+      max-width: 900px; 
       margin: auto; 
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
@@ -20,14 +21,14 @@
       background: white;
       border-radius: 12px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      padding: 1.5rem; 
+      padding: 2rem;
       margin-bottom: 2rem;
     }
     h1 { 
       margin-bottom: 1.5rem; 
       color: #333;
       text-align: center;
-      font-size: 2.2rem; 
+      font-size: 2.5rem;
       font-weight: 700;
     }
     .stats-bar {
@@ -45,15 +46,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 100px; 
+      min-width: 120px;
     }
     .stat-number {
-      font-size: 1.4rem; 
+      font-size: 1.5rem;
       font-weight: bold;
       color: #667eea;
     }
     .stat-label {
-      font-size: 0.8rem; 
+      font-size: 0.9rem;
       color: #666;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -72,38 +73,16 @@
     }
     .controls {
       display: flex;
-      gap: 0.8rem; 
+      gap: 1rem;
       margin-bottom: 2rem;
       flex-wrap: wrap;
       align-items: center;
     }
-    .filter-controls {
-        display: flex;
-        gap: 0.8rem;
-        margin-bottom: 1rem;
-        flex-wrap: wrap;
-        align-items: center;
-        padding: 0.5rem;
-        background-color: #f0f0f0;
-        border-radius: 6px;
-    }
-    .filter-controls label {
-        font-weight: 500;
-        margin-right: 0.3rem;
-        font-size: 0.9rem;
-    }
-    .filter-controls select {
-        padding: 0.4rem 0.6rem;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-        font-size: 0.9rem;
-        background-color: white;
-    }
     .btn {
-      padding: 0.5rem 1rem; 
+      padding: 0.6rem 1.2rem;
       border: none;
       border-radius: 6px;
-      font-size: 0.85rem; 
+      font-size: 0.9rem;
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
@@ -125,31 +104,17 @@
       background: #5a6268;
       transform: translateY(-1px);
     }
-    .btn-gemini, .btn-note, .btn-status {
+    .btn-gemini {
+      background: linear-gradient(45deg, #8e44ad, #9b59b6);
       color: white;
-      padding: 0.3rem 0.6rem; 
-      font-size: 0.75rem; 
-      margin-left: 8px; 
-      border-radius: 4px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
+      margin-left: 10px;
     }
-    .btn-gemini { background: linear-gradient(45deg, #8e44ad, #9b59b6); }
-    .btn-gemini:hover { background: linear-gradient(45deg, #803aa0, #8c4da9); transform: translateY(-1px); }
-    
-    .btn-note { background: linear-gradient(45deg, #f39c12, #e67e22); }
-    .btn-note:hover { background: linear-gradient(45deg, #d88c0b, #cf6d17); transform: translateY(-1px); }
-    .btn-note.has-note { background: linear-gradient(45deg, #2ecc71, #27ae60); }
-
-    .btn-status {
-        background-color: #7f8c8d; 
-        min-width: 28px; 
-        padding: 0.3rem 0.5rem;
-        font-weight: bold;
+    .btn-gemini:hover {
+      background: linear-gradient(45deg, #803aa0, #8c4da9);
+      transform: translateY(-1px);
     }
-    .btn-status.status-not_started { background-color: #bdc3c7; color: #2c3e50; } 
-    .btn-status.status-working_on_it { background-color: #3498db; } 
-    .btn-status.status-to_review { background-color: #f1c40f; color: #333; } 
-    .btn-status.status-completed { background-color: #2ecc71; } 
-
     .btn-theory {
       background: #e0e0e0; 
       color: #5a6fd8; 
@@ -168,11 +133,11 @@
     }
     .search-box {
       flex: 1;
-      min-width: 180px; 
-      padding: 0.5rem 0.8rem; 
+      min-width: 200px;
+      padding: 0.6rem 1rem;
       border: 2px solid #e9ecef;
       border-radius: 6px;
-      font-size: 0.85rem; 
+      font-size: 0.9rem;
       transition: border-color 0.2s;
     }
     .search-box:focus {
@@ -180,19 +145,18 @@
       border-color: #667eea;
     }
     .section { 
-      margin-top: 1.5rem; 
+      margin-top: 2rem; 
       border: 2px solid #e9ecef;
       border-radius: 8px;
       overflow: hidden;
       transition: all 0.2s;
     }
     .section.collapsed .section-content { display: none; }
-    .section.hidden, label.hidden { display: none !important; } 
-
+    .section.hidden { display: none; }
     .section-header {
       background: #f8f9fa;
-      padding: 0.8rem 1rem; 
-      display: flex; 
+      padding: 1rem;
+      display: flex; /* Changed to flex for better control */
       justify-content: space-between;
       align-items: center;
       user-select: none;
@@ -202,50 +166,49 @@
     .section-header-main {
         display: flex;
         align-items: center;
-        flex-grow: 1; 
-        cursor: pointer; 
+        flex-grow: 1; /* Allow title part to take space */
+        cursor: pointer; /* Make only this part clickable for toggle */
     }
     .section-header-main > h2 { 
         margin-right: 0; 
-        display: inline; 
+        display: inline; /* Ensure title and theory button are on the same line if space allows */
     }
     .section-header-controls {
         display: flex;
         align-items: center;
-        gap: 0.4rem; 
-        margin-left: auto; 
+        gap: 0.5rem; 
+        margin-left: auto; /* Push to the right */
     }
     .section-header:hover { background: #e9ecef; }
-    .section-title { margin: 0; font-size: 1.2rem; font-weight: 600; } 
-    .section-progress { font-size: 0.8rem; color: #666; font-weight: 500; margin-left: 0.8rem; } 
-    .collapse-icon { margin-left: 0.4rem; transition: transform 0.2s; } 
+    .section-title { margin: 0; font-size: 1.3rem; font-weight: 600; /* margin-right: auto; removed */ }
+    .section-progress { font-size: 0.9rem; color: #666; font-weight: 500; margin-left: 1rem; }
+    .collapse-icon { margin-left: 0.5rem; transition: transform 0.2s; }
     .section.collapsed .collapse-icon { transform: rotate(-90deg); }
-    .section-content { padding: 0.8rem 1rem; } 
+    .section-content { padding: 1rem; }
     label { 
       display: flex;
       align-items: center;
-      margin: 0.5rem 0; 
-      cursor: default; 
-      padding: 0.4rem; 
+      margin: 0.6rem 0;
+      cursor: pointer;
+      padding: 0.5rem;
       border-radius: 4px;
       transition: background 0.2s;
-      flex-wrap: nowrap; 
-      gap: 8px; 
+      flex-wrap: wrap; 
     }
     label:hover { background: #f8f9fa; }
-    
-    label.status-working_on_it { background-color: #e9f5ff; border-left: 4px solid #3498db; }
-    label.status-to_review { background-color: #fef9e7; border-left: 4px solid #f1c40f; }
-    label.status-completed { background-color: #e8f8f5; border-left: 4px solid #2ecc71; text-decoration: line-through; opacity: 0.8; }
-    label.status-completed a { color: #58667a; }
-
-    a { text-decoration: none; color: #667eea; font-weight: 500; flex-grow: 1; margin-left: 5px; }
+    label.completed {
+      background: #d4edda;
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+    input[type=checkbox] { margin-right: 0.8rem; transform: scale(1.3); accent-color: #667eea; }
+    a { text-decoration: none; color: #667eea; font-weight: 500; flex-grow: 1; }
     a:hover { text-decoration: underline; }
-    .level-0 { border-left-color: #28a745 !important; } 
-    .level-1 { border-left-color: #ffc107 !important; } 
-    .level-2 { border-left-color: #007bff !important; } 
-    .level-3 { border-left-color: #dc3545 !important; } 
-    .level-4 { border-left-color: #6f42c1 !important; } 
+    .level-0 { border-left: 4px solid #28a745; } 
+    .level-1 { border-left: 4px solid #ffc107; } 
+    .level-2 { border-left: 4px solid #007bff; } 
+    .level-3 { border-left: 4px solid #dc3545; } 
+    .level-4 { border-left: 4px solid #6f42c1; } 
     
     .notification {
       position: fixed;
@@ -319,20 +282,12 @@
         font-size: 1.5rem;
         margin-bottom: 1rem;
     }
-    .modal-content p, .modal-content pre, .modal-content textarea {
+    .modal-content p, .modal-content pre {
       margin-bottom: 1rem;
       font-size: 1rem;
       color: #333;
       white-space: pre-wrap; 
       word-wrap: break-word; 
-    }
-    .modal-content textarea {
-        width: 100%;
-        min-height: 150px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 0.5rem;
-        font-family: inherit;
     }
     .modal-buttons {
       display: flex;
@@ -345,28 +300,20 @@
     }
     
     @media (max-width: 768px) {
-      body { padding: 0.5rem; }
-      .container { padding: 1rem; }
-      h1 { font-size: 1.8rem; }
-      .stats-bar { flex-direction: column; gap: 0.5rem;}
-      .stat-item { min-width: 80px;}
-      .stat-number { font-size: 1.2rem;}
-      .stat-label { font-size: 0.7rem;}
-      .controls { flex-direction: column; gap: 0.5rem;}
-      .filter-controls { flex-direction: column; gap: 0.5rem; align-items: stretch;}
-      .filter-controls select, .filter-controls label { width: 100%; margin-right: 0;}
-
-      .btn { width: 100%; margin-bottom: 0.5rem; padding: 0.5rem; font-size: 0.8rem;}
+      body { padding: 1rem; }
+      .container { padding: 1.5rem; }
+      h1 { font-size: 2rem; }
+      .stats-bar { flex-direction: column; }
+      .controls { flex-direction: column; }
+      .btn { width: 100%; margin-bottom: 0.5rem; }
       .btn:last-child { margin-bottom: 0; }
-      .search-box { width: 100%; font-size: 0.8rem; padding: 0.5rem;}
-      .section-header { flex-direction: column; align-items: flex-start; gap: 0.5rem;}
+      .search-box { width: 100%; }
+      .section-header { flex-direction: column; align-items: flex-start; }
       .section-header-main { width: 100%; }
-      .section-title { font-size: 1.1rem; }
-      .btn-theory {font-size: 0.7rem; padding: 0.1rem 0.4rem;}
-      .section-header-controls { width: 100%; justify-content: space-between; margin-top: 0.5rem; } 
-      .btn-gemini, .btn-note, .btn-status { margin-left: 0; margin-right: 5px; font-size: 0.7rem; padding: 0.3rem 0.5rem;}
-      label {flex-wrap: wrap; gap: 5px;} 
-      label .btn-gemini, label .btn-note, label .btn-status { width: auto; flex-grow: 0;}
+      .section-header-controls { width: 100%; justify-content: space-between; margin-top: 0.5rem; } /* Ajustat pentru spațiere */
+      .btn-gemini { margin-left: 0; margin-top: 5px; flex-grow: 1; margin-right: 5px; /* Buton gemini mai lat */ }
+      label .btn-gemini { width: auto; padding: 0.4rem 0.8rem; flex-grow: 0;}
+      .btn-theory { margin-left: 0; margin-top: 5px; width: auto; }
       .section-progress { margin-left: 0; margin-right: 10px;}
     }
   </style>
@@ -397,18 +344,6 @@
     </div>
   </div>
 
-  <div class="modal-overlay" id="notes-modal">
-    <div class="modal-content">
-      <h3 id="notes-modal-title">Notiță pentru Problemă</h3>
-      <textarea id="notes-modal-textarea" placeholder="Scrie notița aici..."></textarea>
-      <div class="modal-buttons">
-        <button class="btn btn-secondary" id="notes-modal-cancel">Anulează</button>
-        <button class="btn btn-primary" id="notes-modal-save">Salvează</button>
-      </div>
-    </div>
-  </div>
-
-
   <div class="container">
     <h1>🚀 Competitive Programming Checklist</h1>
     
@@ -438,25 +373,6 @@
       <button class="btn btn-secondary" onclick="collapseAll()">Restrânge Tot</button>
       <button class="btn btn-secondary" onclick="handleResetProgress()">Resetează Tot</button> 
     </div>
-
-    <div class="filter-controls">
-        <div>
-            <label for="filter-source">Sursă:</label>
-            <select id="filter-source">
-                <option value="all">Toate Sursele</option>
-                </select>
-        </div>
-        <div>
-            <label for="filter-status">Stare:</label>
-            <select id="filter-status">
-                <option value="all">Toate Stările</option>
-                <option value="not_started">Neîncepută</option>
-                <option value="working_on_it">În lucru</option>
-                <option value="to_review">De revizuit</option>
-                <option value="completed">Completată</option>
-            </select>
-        </div>
-    </div>
     
     <div id="sections-container">
         </div>
@@ -465,11 +381,13 @@
   <div class="notification" id="notification"></div>
 
   <script type="module">
+    // Import SDK-urile necesare
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
-    import { getDatabase, ref, onValue, update, set, get, child } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+    import { getDatabase, ref, onValue, update, set } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
+    // Configurația proiectului Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCKD_GIQ-WM-p92mlW2ixl5w2-pWxOFI6o", 
       authDomain: "cp-checklist-sync.firebaseapp.com",
@@ -481,17 +399,15 @@
       measurementId: "G-VS8NZFC0SE"
     };
 
+    // Inițializare Firebase
     const appFirebase = initializeApp(firebaseConfig);
     const analytics = getAnalytics(appFirebase);
     const auth = getAuth(appFirebase);
-    const db = getDatabase(appFirebase);
     
-    let dbRefRoot; 
+    let dbRef; 
     let currentConfirmCallback = null;
-    let currentProblemIdForNote = null;
-    let userNotes = {}; 
-    let problemStates = {}; 
 
+    // Elemente DOM
     const loadingIndicator = document.getElementById('loading');
     const confirmModal = document.getElementById('custom-confirm-modal');
     const confirmMessageEl = document.getElementById('custom-confirm-message');
@@ -504,23 +420,7 @@
     const geminiModalContent = document.getElementById('gemini-modal-content');
     const geminiModalCloseButton = document.getElementById('gemini-modal-close');
 
-    const notesModal = document.getElementById('notes-modal');
-    const notesModalTitle = document.getElementById('notes-modal-title');
-    const notesModalTextarea = document.getElementById('notes-modal-textarea');
-    const notesModalSaveButton = document.getElementById('notes-modal-save');
-    const notesModalCancelButton = document.getElementById('notes-modal-cancel');
-
-    const filterSourceSelect = document.getElementById('filter-source');
-    const filterStatusSelect = document.getElementById('filter-status');
-
-    const problemStatusOrder = ["not_started", "working_on_it", "to_review", "completed"];
-    const statusSymbols = {
-        "not_started": "◻",
-        "working_on_it": "P",
-        "to_review": "R",
-        "completed": "✔"
-    };
-
+    // Mapping lecții RoAlgo
     const roAlgoLessons = {
         "operatii pe biti": "https://edu.roalgo.ro/mediu/bitwise-ops/",
         "greedy": "https://edu.roalgo.ro/usor/greedy/",
@@ -564,8 +464,8 @@
         "apm": "https://edu.roalgo.ro/mediu/apcm/",
         "algoritmi pentru drumuri minime": "https://edu.roalgo.ro/mediu/shortest-path/",
         "dijkstra": "https://edu.roalgo.ro/mediu/shortest-path/",
-        "bellman ford": "https://edu.roalgo.ro/mediu/shortest-path/", 
-        "floyd warshall": "https://edu.roalgo.ro/mediu/shortest-path/", 
+        "bellman ford": "https://edu.roalgo.ro/mediu/shortest-path/", // Am adăugat și "bellman ford"
+        "floyd warshall": "https://edu.roalgo.ro/mediu/shortest-path/", // Am adăugat și "floyd warshall"
         "tehnica celor doua dfs-uri": "https://edu.roalgo.ro/mediu/rerooting/",
         "rerooting": "https://edu.roalgo.ro/mediu/rerooting/",
         "combinatorica": "https://edu.roalgo.ro/mediu/intro-combinatorics/",
@@ -602,8 +502,10 @@
         "componente biconexe": "https://edu.roalgo.ro/dificil/componente-biconexe/"
     };
 
+    // Funcții utilitare UI
     function showLoading() { if (loadingIndicator) loadingIndicator.style.display = 'flex'; }
     function hideLoading() { if (loadingIndicator) loadingIndicator.style.display = 'none'; }
+
     showLoading(); 
 
     function showCustomConfirm(message, onConfirm) {
@@ -613,97 +515,57 @@
         currentConfirmCallback = onConfirm;
       }
     }
-    if (confirmOkButton) confirmOkButton.addEventListener('click', () => {
-      if (confirmModal) confirmModal.style.display = 'none';
-      if (typeof currentConfirmCallback === 'function') currentConfirmCallback();
-      currentConfirmCallback = null;
-    });
-    if (confirmCancelButton) confirmCancelButton.addEventListener('click', () => {
-      if (confirmModal) confirmModal.style.display = 'none';
-      currentConfirmCallback = null;
-    });
+
+    if (confirmOkButton) {
+      confirmOkButton.addEventListener('click', () => {
+        if (confirmModal) confirmModal.style.display = 'none';
+        if (typeof currentConfirmCallback === 'function') currentConfirmCallback();
+        currentConfirmCallback = null;
+      });
+    }
+
+    if (confirmCancelButton) {
+      confirmCancelButton.addEventListener('click', () => {
+        if (confirmModal) confirmModal.style.display = 'none';
+        currentConfirmCallback = null;
+      });
+    }
 
     function showGeminiModal(title, contentAsText) {
-      if(geminiModal && geminiModalTitle && geminiModalContent) {
-        geminiModalTitle.textContent = title;
-        geminiModalContent.textContent = contentAsText; 
-        geminiModal.style.display = 'flex';
-      }
-    }
-    if(geminiModalCloseButton) geminiModalCloseButton.addEventListener('click', () => {
-      if(geminiModal) geminiModal.style.display = 'none';
-    });
-
-    window.openNotesModal = function(problemId, problemName) {
-        currentProblemIdForNote = problemId;
-        if (notesModalTitle) notesModalTitle.textContent = `Notiță pentru: \${problemName}\`;
-        if (notesModalTextarea) notesModalTextarea.value = userNotes[problemId] || '';
-        if (notesModal) notesModal.style.display = 'flex';
-    }
-    if (notesModalSaveButton) notesModalSaveButton.addEventListener('click', () => {
-      if (currentProblemIdForNote && notesModalTextarea) {
-        const noteText = notesModalTextarea.value.trim();
-        userNotes[currentProblemIdForNote] = noteText; 
-        if (auth.currentUser) {
-          const uid = auth.currentUser.uid;
-          const notePath = \`users/\${uid}/problemNotes/\${currentProblemIdForNote}\`;
-          set(ref(db, notePath), noteText)
-            .then(() => {
-              showNotification('Notiță salvată!', 'info');
-              updateNoteButtonIndicator(currentProblemIdForNote, noteText !== '');
-            })
-            .catch(error => {
-              console.error("Eroare la salvarea notiței:", error);
-              showNotification('Eroare la salvarea notiței.', 'error');
-            });
+        if(geminiModal && geminiModalTitle && geminiModalContent) {
+            geminiModalTitle.textContent = title;
+            geminiModalContent.textContent = contentAsText; 
+            geminiModal.style.display = 'flex';
         }
-        if (notesModal) notesModal.style.display = 'none';
-      }
-    });
-    if (notesModalCancelButton) notesModalCancelButton.addEventListener('click', () => {
-      if (notesModal) notesModal.style.display = 'none';
-      currentProblemIdForNote = null;
-    });
+    }
 
-    function updateNoteButtonIndicator(problemId, hasNote) {
-      const noteButton = document.querySelector(\`.btn-note[onclick*="'\${problemId}'"]\`);
-      if (noteButton) {
-        noteButton.classList.toggle('has-note', hasNote);
-      }
+    if(geminiModalCloseButton) {
+        geminiModalCloseButton.addEventListener('click', () => {
+            if(geminiModal) geminiModal.style.display = 'none';
+        });
     }
     
     function loadLocalProgress() {
-      const localProblemStates = localStorage.getItem('problemStates');
-      if (localProblemStates) {
+      const localData = localStorage.getItem('checklistProgress');
+      if (localData) {
         try {
-            problemStates = JSON.parse(localProblemStates);
-            Object.keys(problemStates).forEach(problemId => {
-                updateProblemUIAfterStateChange(problemId, problemStates[problemId]);
+            const data = JSON.parse(localData);
+            document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+              cb.checked = !!data[cb.id];
+              cb.parentElement.classList.toggle('completed', cb.checked);
             });
         } catch (e) {
-            console.error("Eroare la parsarea stărilor locale:", e);
-            localStorage.removeItem('problemStates');
+            console.error("Eroare la parsarea progresului local:", e);
+            localStorage.removeItem('checklistProgress');
         }
       }
-      const localNotes = localStorage.getItem('userNotes');
-        if (localNotes) {
-            try {
-                userNotes = JSON.parse(localNotes);
-                Object.keys(userNotes).forEach(problemId => {
-                    if (userNotes[problemId] && userNotes[problemId].trim() !== '') {
-                         updateNoteButtonIndicator(problemId, true);
-                    }
-                });
-            } catch (e) {
-                console.error("Eroare la parsarea notițelor locale:", e);
-                localStorage.removeItem('userNotes');
-            }
-        }
     }
-
     function saveLocalProgress() {
-      localStorage.setItem('problemStates', JSON.stringify(problemStates));
-      localStorage.setItem('userNotes', JSON.stringify(userNotes));
+      const progress = {};
+      document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+        progress[cb.id] = cb.checked;
+      });
+      localStorage.setItem('checklistProgress', JSON.stringify(progress));
     }
 
     window.toggleSection = function(sectionId) {
@@ -718,40 +580,25 @@
     };
 
     window.handleResetProgress = function() {
-      showCustomConfirm('Sunteți sigur că doriți să resetați tot progresul și notițele? Această acțiune nu poate fi anulată.', () => {
-        problemStates = {}; 
-        userNotes = {}; 
-        
-        document.querySelectorAll('label[data-problem-id]').forEach(label => {
-            const problemId = label.dataset.problemId;
-            updateProblemUIAfterStateChange(problemId, "not_started");
-            updateNoteButtonIndicator(problemId, false);
+      showCustomConfirm('Sunteți sigur că doriți să resetați tot progresul? Această acțiune nu poate fi anulată.', () => {
+        document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+          cb.checked = false;
+          cb.parentElement.classList.remove('completed');
         });
-
-
-        if (dbRefRoot && auth.currentUser) { 
-            const uid = auth.currentUser.uid;
-            const problemStatesRef = ref(db, \`users/\${uid}/problemStates\`);
-            const problemNotesRef = ref(db, \`users/\${uid}/problemNotes\`);
-            
-            Promise.all([set(problemStatesRef, {}), set(problemNotesRef, {})])
-                .then(() => {
-                    localStorage.removeItem('problemStates');
-                    localStorage.removeItem('userNotes');
-                    updateStats();
-                    showNotification('Progres și notițe resetate cu succes!', 'info');
-                })
-                .catch((error) => {
-                    showNotification('Resetarea în cloud a eșuat: ' + error.message, 'error');
-                    localStorage.removeItem('problemStates'); 
-                    localStorage.removeItem('userNotes');
-                    updateStats();
-                });
+        if (dbRef) {
+            set(dbRef, {}).then(() => {
+              localStorage.removeItem('checklistProgress');
+              updateStats();
+              showNotification('Progres resetat cu succes!', 'info');
+            }).catch((error) => {
+              showNotification('Resetarea progresului în cloud a eșuat: ' + error.message, 'error');
+              localStorage.removeItem('checklistProgress'); 
+              updateStats();
+            });
         } else {
-             localStorage.removeItem('problemStates');
-             localStorage.removeItem('userNotes');
+             localStorage.removeItem('checklistProgress');
              updateStats();
-             showNotification('Progres și notițe resetate local. Firebase nu este disponibil.', 'info');
+             showNotification('Progres resetat local. Firebase nu este disponibil.', 'info');
         }
       });
     };
@@ -769,30 +616,28 @@
     }
 
     function updateStats() {
-      const allProblemElements = document.querySelectorAll('label[data-problem-id]');
-      const completedProblems = Array.from(allProblemElements).filter(label => {
-          const problemId = label.dataset.problemId;
-          return problemStates[problemId] === "completed";
-      }).length;
+      const checkboxes = document.querySelectorAll('input[type=checkbox]');
+      const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
+      const total = checkboxes.length;
+      const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
       
-      const totalProblems = allProblemElements.length;
-      const percentage = totalProblems > 0 ? Math.round((completedProblems / totalProblems) * 100) : 0;
-      
-      document.getElementById('completed-count').textContent = completedProblems;
-      document.getElementById('total-count').textContent = totalProblems;
-      document.getElementById('progress-percent').textContent = percentage + '%';
-      document.getElementById('progress-fill').style.width = percentage + '%';
+      const completedCountEl = document.getElementById('completed-count');
+      const totalCountEl = document.getElementById('total-count');
+      const progressPercentEl = document.getElementById('progress-percent');
+      const progressFillEl = document.getElementById('progress-fill');
+
+      if(completedCountEl) completedCountEl.textContent = completed;
+      if(totalCountEl) totalCountEl.textContent = total;
+      if(progressPercentEl) progressPercentEl.textContent = percentage + '%';
+      if(progressFillEl) progressFillEl.style.width = percentage + '%';
       
       document.querySelectorAll('.section').forEach(section => {
-        const sectionProblemElements = section.querySelectorAll('label[data-problem-id]');
-        const sectionCompleted = Array.from(sectionProblemElements).filter(label => {
-            const problemId = label.dataset.problemId;
-            return problemStates[problemId] === "completed";
-        }).length;
-        const sectionTotal = sectionProblemElements.length;
+        const sectionCheckboxes = section.querySelectorAll('input[type=checkbox]');
+        const sectionCompleted = Array.from(sectionCheckboxes).filter(cb => cb.checked).length;
+        const sectionTotal = sectionCheckboxes.length;
         const progressElement = section.querySelector('.section-progress');
         if (progressElement) {
-          progressElement.textContent = \`\${sectionCompleted}/\${sectionTotal}\`;
+          progressElement.textContent = `${sectionCompleted}/${sectionTotal}`;
         }
       });
     }
@@ -800,7 +645,17 @@
     function setupSearch() {
       const searchBox = document.getElementById('search-box');
       if (searchBox) {
-        searchBox.addEventListener('input', applyFiltersAndSearch);
+        searchBox.addEventListener('input', function(e) {
+          const query = e.target.value.toLowerCase().trim();
+          document.querySelectorAll('.section').forEach(section => {
+            const sectionTitleEl = section.querySelector('.section-title');
+            const sectionContentEl = section.querySelector('.section-content');
+            let textToSearch = '';
+            if (sectionTitleEl) textToSearch += sectionTitleEl.textContent.toLowerCase();
+            if (sectionContentEl) textToSearch += sectionContentEl.textContent.toLowerCase();
+            section.classList.toggle('hidden', !(query === '' || textToSearch.includes(query)));
+          });
+        });
       }
     }
     
@@ -808,10 +663,11 @@
 
     async function callGeminiAPI(promptText) {
         showLoading(); 
-        const apiUrl = \`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=\${GEMINI_API_KEY}\`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
         const payload = {
             contents: [{ role: "user", parts: [{ text: promptText }] }]
         };
+
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -820,27 +676,36 @@
             });
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(\`Eroare API: \${response.status} \${response.statusText}. \${errorData?.error?.message || ''}\`);
+                console.error("Eroare API Gemini:", errorData);
+                throw new Error(`Eroare API: ${response.status} ${response.statusText}. ${errorData?.error?.message || ''}`);
             }
             const result = await response.json();
-            if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
+            hideLoading(); 
+
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
                 return result.candidates[0].content.parts[0].text;
             } else {
+                console.error("Răspuns neașteptat de la API:", result);
                 throw new Error("Răspunsul de la Gemini nu a putut fi procesat.");
             }
         } catch (error) {
+            hideLoading();
             console.error("Eroare la apelul Gemini API:", error);
             showNotification("Nu s-a putut obține răspuns de la Gemini: " + error.message, "error");
             return null; 
-        } finally {
-            hideLoading();
         }
     }
 
     window.fetchProblemExplanation = async function(problemName, problemUrl) {
-        const prompt = \`Ești un tutore expert în programare competitivă. Oferă o scurtă explicație conceptuală a problemei "\${problemName}" (disponibilă la \${problemUrl}) și un mic indiciu relevant pentru rezolvare. Nu oferi cod sau soluția directă. Fii concis și la obiect (maxim 100-150 cuvinte).\`;
+        const prompt = `Ești un tutore expert în programare competitivă. Oferă o scurtă explicație conceptuală a problemei "${problemName}" (disponibilă la ${problemUrl}) și un mic indiciu relevant pentru rezolvare. Nu oferi cod sau soluția directă. Fii concis și la obiect (maxim 100-150 cuvinte).`;
         const explanation = await callGeminiAPI(prompt);
-        showGeminiModal(\`✨ Ajutor pentru: \${problemName}\`, explanation || "Ne pare rău, nu am putut obține o explicație în acest moment.");
+        if (explanation) {
+            showGeminiModal(`✨ Ajutor pentru: ${problemName}`, explanation);
+        } else {
+            showGeminiModal(`✨ Ajutor pentru: ${problemName}`, "Ne pare rău, nu am putut obține o explicație în acest moment.");
+        }
     }
 
     window.fetchRelatedProblems = async function(sectionId, sectionTitle) {
@@ -852,9 +717,15 @@
                 exampleProblems.push(problemLinks[i].textContent.trim());
             }
         }
-        const prompt = \`Ești un antrenor de programare competitivă. Pentru secțiunea "\${sectionTitle}"\${exampleProblems.length > 0 ? \`, care conține probleme precum: \${exampleProblems.join(', ')}\` : ''}, sugerează 3-4 probleme suplimentare similare ca dificultate și subiect, de pe platforme cunoscute (ex: Codeforces, CSES, AtCoder, InfoArena, Kilonova). Include numele problemei și un link direct dacă este posibil. Formatează răspunsul ca o listă punctuală (bullet points).\`;
+        
+        const prompt = `Ești un antrenor de programare competitivă. Pentru secțiunea "${sectionTitle}"${exampleProblems.length > 0 ? `, care conține probleme precum: ${exampleProblems.join(', ')}` : ''}, sugerează 3-4 probleme suplimentare similare ca dificultate și subiect, de pe platforme cunoscute (ex: Codeforces, CSES, AtCoder, InfoArena, Kilonova). Include numele problemei și un link direct dacă este posibil. Formatează răspunsul ca o listă punctuală (bullet points).`;
+        
         const suggestions = await callGeminiAPI(prompt);
-        showGeminiModal(\`✨ Probleme similare pentru: \${sectionTitle}\`, suggestions || "Ne pare rău, nu am putut obține sugestii în acest moment.");
+        if (suggestions) {
+            showGeminiModal(`✨ Probleme similare pentru: ${sectionTitle}`, suggestions);
+        } else {
+            showGeminiModal(`✨ Probleme similare pentru: ${sectionTitle}`, "Ne pare rău, nu am putut obține sugestii în acest moment.");
+        }
     }
     
     function normalizeText(text) {
@@ -866,73 +737,6 @@
             .replace(/\s+/g, ' ').trim();
     }
 
-    function getProblemSource(url) {
-        try {
-            const hostname = new URL(url).hostname;
-            if (hostname.includes('kilonova.ro')) return 'Kilonova';
-            if (hostname.includes('codeforces.com')) return 'Codeforces';
-            if (hostname.includes('cses.fi')) return 'CSES';
-            if (hostname.includes('infoarena.ro')) return 'InfoArena';
-            if (hostname.includes('pbinfo.ro')) return 'PBInfo';
-            if (hostname.includes('atcoder.jp')) return 'AtCoder';
-            if (hostname.includes('leetcode.com')) return 'LeetCode';
-            if (hostname.includes('spoj.com')) return 'SPOJ';
-            if (hostname.includes('nerdarena.ro')) return 'NerdArena';
-            if (hostname.includes('acmicpc.net')) return 'ACMICPC'; 
-            if (hostname.includes('oj.uz')) return 'OJ Uz'; 
-            if (hostname.includes('dmoj.ca')) return 'DMOJ'; 
-            if (hostname.includes('csacademy.com')) return 'CSAcademy';
-            if (hostname.includes('lightoj.com')) return 'LightOJ';
-            if (hostname.includes('judge.yosupo.jp')) return 'Yosupo Judge';
-            if (hostname.includes('acm.timus.ru')) return 'Timus';
-            if (hostname.includes('open.kattis.com')) return 'Kattis';
-            if (hostname.includes('saco-evaluator.org.za')) return 'SAPO';
-            if (hostname.includes('tlx.toki.id')) return 'TLX TOKI';
-            const parts = hostname.split('.');
-            if (parts.length >= 2) return parts.slice(-2).join('.');
-            return hostname;
-        } catch (e) {
-            return 'Unknown';
-        }
-    }
-    
-    function updateProblemUIAfterStateChange(problemId, newState) {
-        const problemLabel = document.querySelector(\`label[data-problem-id="\${problemId}"]\`);
-        const statusButton = document.querySelector(\`button[data-problem-id="\${problemId}"].btn-status\`);
-
-        if (problemLabel && statusButton) {
-            problemStatusOrder.forEach(s => problemLabel.classList.remove(\`status-\${s}\`));
-            problemLabel.classList.add(\`status-\${newState}\`);
-            problemLabel.dataset.status = newState; 
-            statusButton.textContent = statusSymbols[newState];
-            statusButton.className = \`btn btn-status status-\${newState}\`; 
-        }
-    }
-
-
-    window.cycleProblemStatus = function(problemId, problemName) {
-        const currentStatus = problemStates[problemId] || "not_started";
-        const currentIndex = problemStatusOrder.indexOf(currentStatus);
-        const nextIndex = (currentIndex + 1) % problemStatusOrder.length;
-        const newStatus = problemStatusOrder[nextIndex];
-
-        problemStates[problemId] = newStatus; 
-        updateProblemUIAfterStateChange(problemId, newStatus);
-        
-        if (auth.currentUser) {
-            const uid = auth.currentUser.uid;
-            const problemStatePath = \`users/\${uid}/problemStates/\${problemId}\`;
-            set(ref(db, problemStatePath), newStatus)
-                .catch(error => {
-                    console.error("Eroare la salvarea stării problemei:", error);
-                    showNotification('Eroare la salvarea stării.', 'error');
-                });
-        }
-        updateStats();
-        saveLocalProgress(); 
-        applyFiltersAndSearch(); 
-    }
-
 
     function parseAndGenerateSections(problemText) {
         const lines = problemText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
@@ -942,11 +746,10 @@
         let problemIndexInSection = 0;
         const levelColors = ['level-0', 'level-1', 'level-2', 'level-3', 'level-4'];
         let problemCountInSection = 0;
-        const allSources = new Set();
 
         function finalizeSection() {
             if (currentSectionTitle && problemsHtml) {
-                const sectionId = \`topic-\${sectionIndex}\`;
+                const sectionId = `topic-${sectionIndex}`;
                 const levelClass = levelColors[sectionIndex % levelColors.length];
                 
                 let theoryLinkHTML = '';
@@ -956,18 +759,19 @@
 
                 for (const [key, url] of Object.entries(roAlgoLessons)) {
                     const normalizedKey = normalizeText(key);
-                    if (normalizedCurrentSectionTitle.includes(normalizedKey) && normalizedKey.length > 2) { 
+                    if (normalizedCurrentSectionTitle.includes(normalizedKey) && normalizedKey.length > 3) {
                         if (normalizedKey.length > bestMatchKeyLength) {
                             bestMatchUrl = url;
                             bestMatchKeyLength = normalizedKey.length;
                         }
                     }
                 }
-                if (!bestMatchUrl && normalizedCurrentSectionTitle.length > 2) {
+                // Cazul în care titlul secțiunii este mai scurt și este conținut în cheia RoAlgo
+                if (!bestMatchUrl && normalizedCurrentSectionTitle.length > 3) {
                     for (const [key, url] of Object.entries(roAlgoLessons)) {
                         const normalizedKey = normalizeText(key);
                         if (normalizedKey.includes(normalizedCurrentSectionTitle)) {
-                             if (normalizedCurrentSectionTitle.length > bestMatchKeyLength) { 
+                             if (normalizedCurrentSectionTitle.length > bestMatchKeyLength) { // Compară lungimea titlului secțiunii ca specificitate
                                 bestMatchUrl = url;
                                 bestMatchKeyLength = normalizedCurrentSectionTitle.length;
                             }
@@ -975,24 +779,25 @@
                     }
                 }
 
+
                  if (bestMatchUrl) {
-                    theoryLinkHTML = \`<a href="\${bestMatchUrl}" target="_blank" class="btn btn-theory" title="Vezi teoria">📖 Teorie</a>\`;
+                    theoryLinkHTML = `<a href="${bestMatchUrl}" target="_blank" class="btn btn-theory" title="Vezi teoria">📖 Teorie</a>`;
                 }
 
-                const sectionHeader = \`
+                const sectionHeader = `
                     <div class="section-header">
-                        <div class="section-header-main" onclick="toggleSection('\${sectionId}')">
-                            <h2 class="section-title">\${getEmojiForLevel(sectionIndex % levelColors.length)} \${currentSectionTitle}</h2>
-                            \${theoryLinkHTML}
+                        <div class="section-header-main" onclick="toggleSection('${sectionId}')">
+                            <h2 class="section-title">${getEmojiForLevel(sectionIndex % levelColors.length)} ${currentSectionTitle}</h2>
+                            ${theoryLinkHTML}
                         </div>
                         <div class="section-header-controls">
-                             <div class="section-progress" id="progress-\${sectionId}">0/\${problemCountInSection}</div>
-                            <button class="btn btn-gemini" onclick="fetchRelatedProblems('\${sectionId}', '\${currentSectionTitle.replace(/'/g, "\\\\'")}')">✨ Sugerează</button>
+                             <div class="section-progress" id="progress-${sectionId}">0/${problemCountInSection}</div>
+                            <button class="btn btn-gemini" onclick="fetchRelatedProblems('${sectionId}', '${currentSectionTitle.replace(/'/g, "\\'")}')">✨ Sugerează</button>
                             <span class="collapse-icon">▼</span>
                         </div>
-                    </div>\`;
-                const sectionContent = \`<div class="section-content">\${problemsHtml}</div>\`;
-                sectionsContainer.innerHTML += \`<div class="section \${levelClass} collapsed" id="\${sectionId}">\${sectionHeader}\${sectionContent}</div>\`;
+                    </div>`;
+                const sectionContent = `<div class="section-content">${problemsHtml}</div>`;
+                sectionsContainer.innerHTML += `<div class="section ${levelClass} collapsed" id="${sectionId}">${sectionHeader}${sectionContent}</div>`;
                 
                 sectionIndex++;
                 problemsHtml = '';
@@ -1010,79 +815,39 @@
                 problemIndexInSection = 0; 
                 continue;
             } else if (line.startsWith('</ul>')) {
-                continue; 
+                // Nu finaliza secțiunea aici dacă urmează imediat un alt titlu
+                // finalizeSection(); // Scoatem asta de aici pentru a gestiona titlurile multiple
+                // currentSectionTitle = null; // Scoatem și asta
+                continue;
             } else if (line.startsWith('<li><a href="')) {
-                const match = line.match(/<li><a href="([^"]+)">([^<]+)<\/a>(?:.*)<\/li>/); 
+                const match = line.match(/<li><a href="([^"]+)">([^<]+)<\/a>(?:.*)<\/li>/); // Permite text după </a>
                 if (match) {
                     const url = match[1];
                     const name = match[2].replace(/\s\s+/g, ' ').trim(); 
-                    const problemId = \`prob_\${sectionIndex}_\${problemIndexInSection}\`; 
-                    const source = getProblemSource(url);
-                    allSources.add(source);
-                    
-                    const currentStatus = problemStates[problemId] || "not_started";
-                    const statusSymbol = statusSymbols[currentStatus];
-                    const statusClass = \`status-\${currentStatus}\`;
-                    const hasNoteClass = (userNotes[problemId] && userNotes[problemId].trim() !== '') ? 'has-note' : '';
-
-                    problemsHtml += \`
-                        <label data-problem-id="\${problemId}" data-status="\${currentStatus}" data-source="\${source}" class="\${statusClass}">
-                            <button class="btn btn-status \${statusClass}" data-problem-id="\${problemId}" onclick="cycleProblemStatus('\${problemId}', '\${name.replace(/'/g, "\\\\'")}')">\${statusSymbol}</button>
-                            <a href="\${url}" target="_blank">\${name}</a>
-                            <button class="btn btn-note \${hasNoteClass}" onclick="openNotesModal('\${problemId}', '\${name.replace(/'/g, "\\\\'")}')">📝 Notiță</button>
-                            <button class="btn btn-gemini" onclick="fetchProblemExplanation('\${name.replace(/'/g, "\\\\'")}', '\${url}')">✨ Ajutor</button>
-                        </label>\`;
+                    const checkboxId = `cb_${sectionIndex}_${problemIndexInSection}`;
+                    problemsHtml += `
+                        <label>
+                            <input type="checkbox" id="${checkboxId}">
+                            <a href="${url}" target="_blank">${name}</a>
+                            <button class="btn btn-gemini" onclick="fetchProblemExplanation('${name.replace(/'/g, "\\'")}', '${url}')">✨ Ajutor</button>
+                        </label>`;
                     problemIndexInSection++;
                     problemCountInSection++;
                 }
             } else if (!line.startsWith('<') && line.length > 1 && (currentSectionTitle === null || !problemsHtml || (problemsHtml && line.endsWith(':')))) { 
+                // Condiție îmbunătățită pentru a detecta un nou titlu
+                // Dacă linia nu e tag HTML, e suficient de lungă, ȘI
+                // (nu avem titlu curent SAU nu am început problemele pentru titlul curent SAU (avem probleme ȘI linia se termină cu ':'))
                 finalizeSection(); 
                 currentSectionTitle = line.replace(/:$/, '').trim(); 
             }
         }
         finalizeSection(); 
-
-        if (filterSourceSelect) {
-            Array.from(allSources).sort().forEach(source => {
-                const option = document.createElement('option');
-                option.value = source;
-                option.textContent = source;
-                filterSourceSelect.appendChild(option);
-            });
-        }
-    }
-    
-    function applyFiltersAndSearch() {
-        const searchTerm = document.getElementById('search-box').value.toLowerCase().trim();
-        const selectedSource = filterSourceSelect.value;
-        const selectedStatus = filterStatusSelect.value;
-
-        document.querySelectorAll('.section').forEach(section => {
-            let sectionHasVisibleProblems = false;
-            section.querySelectorAll('label[data-problem-id]').forEach(label => {
-                const problemName = label.querySelector('a').textContent.toLowerCase();
-                const problemSource = label.dataset.source;
-                const problemStatus = label.dataset.status;
-
-                const matchesSearch = searchTerm === '' || problemName.includes(searchTerm);
-                const matchesSource = selectedSource === 'all' || problemSource === selectedSource;
-                const matchesStatus = selectedStatus === 'all' || problemStatus === selectedStatus;
-
-                if (matchesSearch && matchesSource && matchesStatus) {
-                    label.classList.remove('hidden');
-                    sectionHasVisibleProblems = true;
-                } else {
-                    label.classList.add('hidden');
-                }
-            });
-             section.classList.toggle('hidden', !sectionHasVisibleProblems);
-        });
     }
 
-    if (filterSourceSelect) filterSourceSelect.addEventListener('change', applyFiltersAndSearch);
-    if (filterStatusSelect) filterStatusSelect.addEventListener('change', applyFiltersAndSearch);
-
-    const problemDataText = \`
+    // Am extras conținutul din `Materie completa(exercitii).txt` și l-am pus aici
+    // Într-o aplicație reală, acest text ar putea fi încărcat dintr-un fișier separat.
+    const problemDataText = `
 Operatii pe biti :
 
 <ul>
@@ -1092,7 +857,7 @@ Operatii pe biti :
 <li><a href="https://kilonova.ro/problems/944">patratele OJI 2022</a></li>
 <li><a href="https://kilonova.ro/problems/2418">Matmare RoAlgo PreOJI 2024</a></li>
 <li><a href="https://codeforces.com/contest/244/problem/C">The Brand New Function</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=1182">Searching for Soulmates USACO</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1182">Searching for Soulmates USACO</a></li>
 <li><a href="https://codeforces.com/contest/1338/problem/A">Powered Addition</a></li>
 <li><a href="https://codeforces.com/contest/1872/problem/E">Data Structures Fan</a></li>
 <li><a href="https://kilonova.ro/problems/900">castel OJI 2018</a></li>
@@ -1109,20 +874,20 @@ Operatii pe biti :
 Greedy (Introducere) :
 
 <ul>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=1301">USACO Bronze Watching Mooloo</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=689">USACO Bronze Cow Tipping</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1301">USACO Bronze Watching Mooloo</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=689">USACO Bronze Cow Tipping</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/1877/kmax">pbinfo kmax</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/1004/eureni">pbinfo eureni</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/categorii/24/metoda-greedy-probleme-diverse-cu-metoda-greedy">Probleme cu greedy de pe pbinfo</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=785">USACO Bronze Out of Place</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=785">USACO Bronze Out of Place</a></li>
 <li><a href="https://leetcode.com/problems/minimum-cost-to-move-chips-to-the-same-position/description/">Leetcode Minimum Cost to Move Chips to The Same Position</a></li>
 <li><a href="https://kilonova.ro/problems/823">OJI 2012 Arme</a></li>
 <li><a href="https://kilonova.ro/problems/2502">OJI 2024 Santinele</a></li>
 <li><a href="https://kilonova.ro/problems/2659">ONI 2024 Soldati</a></li>
 <li><a href="https://cses.fi/problemset/task/1630">CSES Tasks and Deadlines</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=573">USACO Gold High Card Low Card</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=573">USACO Gold High Card Low Card</a></li>
 <li><a href="https://kilonova.ro/problems/2961">RoAlgo Contest #10 Paranteze</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=990">USACO Silver Berry Picking</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=990">USACO Silver Berry Picking</a></li>
 <li><a href="https://codeforces.com/contest/321/problem/B">Codeforces Ciel and Duel</a></li>
 <li><a href="https://kilonova.ro/tags/299">Probleme cu greedy pe Kilonova</a></li>
 <li><a href="https://infoarena.ro/cauta-probleme?tag_id[]=61">Probleme cu greedy pe Infoarena</a></li>
@@ -1138,10 +903,10 @@ Binary search :
 <li><a href="https://codeforces.com/edu/course/2/lesson/6/1/practice">Problemele din pasul 1 de la EDU</a></li>
 <li><a href="https://www.infoarena.ro/problema/nrtri">nrtri infoarena</a></li>
 <li><a href="https://codeforces.com/contest/702/problem/C">Codeforces Cellular Network</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=1035">USACO Bronze Social Distancing I</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1035">USACO Bronze Social Distancing I</a></li>
 <li><a href="https://kilonova.ro/problems/865">OJI 2016 pic</a></li>
 <li><a href="https://kilonova.ro/problems/1475">ONI 2016 dif2</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=858">USACO Silver Convention</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=858">USACO Silver Convention</a></li>
 <li><a href="https://kilonova.ro/problems/905">OJI 2019 mostenire</a></li>
 <li><a href="https://kilonova.ro/problems/1501">ONI 2017 orase</a></li>
 <li><a href="https://kilonova.ro/problems/1501">ONI 2017 orase</a></li>
@@ -1150,7 +915,7 @@ Binary search :
 <li><a href="https://www.pbinfo.ro/probleme/2789/cb3">cb3 pbinfo</a></li>
 <li><a href="https://kilonova.ro/problems/1098">Baraj Juniori 2021 intergalactic</a></li>
 <li><a href="https://kilonova.ro/problems/1522/">ONI 2018 plaja</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=991">USACO Silver Loan Repayment</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=991">USACO Silver Loan Repayment</a></li>
 <li><a href="https://kilonova.ro/tags/315">Problemele cu cautare binara de pe kilonova</a></li>
 <li><a href="https://codeforces.com/problemset?tags=binary+search">Problemele cu cautare binara de pe codeforces</a></li>
 <li><a href="https://www.infoarena.ro/cauta-probleme?tag_id[]=49">Problemele cu cautare binara de pe infoarena</a></li>
@@ -1163,7 +928,7 @@ Smenu lu mars :
 <li><a href="https://kilonova.ro/problems/2129/">Prefix Sums 1D</a></li>
 <li><a href="https://kilonova.ro/problems/1334">plaja ONI 2010</a></li>
 <li><a href="https://kilonova.ro/problems/1401">gradina ONI 2013</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=572">Breed Counting USACO Silver</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=572">Breed Counting USACO Silver</a></li>
 <li><a href="https://kilonova.ro/problems/2379/">flip01 RoAlgo PreOJI 2024</a></li>
 <li><a href="https://kilonova.ro/problems/2355/">sirpal RoAlgo PreOJI 2024</a></li>
 <li><a href="https://kilonova.ro/problems/662">cdcq RoAlgo Contest #1</a></li>
@@ -1175,10 +940,10 @@ Smenu lu mars :
 <li><a href="https://kilonova.ro/problems/134">investiție OJI 2023</a></li>
 <li><a href="https://kilonova.ro/tags/355">Probleme cu sume parțiale</a></li>
 <li><a href="https://kilonova.ro/tags/375">Probleme cu șmenul lui Mars</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=595">Subsequences Summing to Sevens USACO Silver</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=595">Subsequences Summing to Sevens USACO Silver</a></li>
 <li><a href="https://www.spoj.com/problems/HAYBALE/">Haybale Stacking USACO Bronze</a></li>
 <li><a href="https://kilonova.ro/problems/2653/">ONI 2024 Eras</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=923">Painting the Barn USACO Gold</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=923">Painting the Barn USACO Gold</a></li>
 <li><a href="https://codeforces.com/contest/1398/problem/C">Good Subarrays</a></li>
 <li><a href="https://codeforces.com/contest/2014/problem/D">Robert Hood and Mrs Hood</a></li>
 <li><a href="https://codeforces.com/contest/1826/problem/D">Running Miles</a></li>
@@ -1200,12 +965,12 @@ Two pointers:
 <li><a href="https://kilonova.ro/problems/556">Baraj Seniori 2023 sirbun</a></li>
 <li><a href="https://infoarena.ro/problema/nane">Infoarena nane</a></li>
 <li><a href="https://www.infoarena.ro/problema/teren">Infoarena teren</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=738">USACO Paired Up </a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=1038">USACO Social Distancing</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=789">USACO MooTube</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=992">USACO Wormhole Sort</a></li>
-<li><a href="http://usaco.org/index.php?page=viewproblem2&cpid=794">USACO Sprinklers</a></li>
-<li><a href="http://usaco.org/index.php?page=viewproblem2&cpid=924">USACO Cow Dating</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=738">USACO Paired Up </a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1038">USACO Social Distancing</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=789">USACO MooTube</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=992">USACO Wormhole Sort</a></li>
+<li><a href="http://usaco.org/index.php?page=viewproblem2&amp;cpid=794">USACO Sprinklers</a></li>
+<li><a href="http://usaco.org/index.php?page=viewproblem2&amp;cpid=924">USACO Cow Dating</a></li>
 <li><a href="https://kilonova.ro/tags/291">Probleme cu two pointers de pe kilonova</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/eticheta/144/two-pointers">Probleme cu two pointers de pe pbinfo</a></li>
 </ul>
@@ -2125,59 +1890,82 @@ Componente biconexe:
 <li><a href="https://dmoj.ca/problem/tle17c1p6">TLE 2017 Investment</a></li>
 <li><a href="https://kilonova.ro/tags/304">Probleme cu componente biconexe de pe Kilonova</a></li>
 </ul>
-`;}
+`;
     
+    // Inițializare principală
     document.addEventListener('DOMContentLoaded', () => {
         parseAndGenerateSections(problemDataText); 
         
         loadLocalProgress(); 
         setupSearch();
+        updateStats(); 
 
         signInAnonymously(auth)
           .then((userCredential) => {
             const user = userCredential.user;
             const uid = user.uid;
-            dbRefRoot = ref(db, 'users/' + uid); 
+            const db = getDatabase(appFirebase);
+            dbRef = ref(db, 'users/' + uid + '/checklistProgress');
 
-            onValue(dbRefRoot, snapshot => {
+            onValue(dbRef, snapshot => {
               hideLoading(); 
-              const userData = snapshot.val() || {};
-              problemStates = userData.problemStates || {}; 
-              userNotes = userData.problemNotes || {}; 
-
-              document.querySelectorAll('label[data-problem-id]').forEach(label => {
-                  const problemId = label.dataset.problemId;
-                  const cloudStatus = problemStates[problemId] || "not_started";
-                  updateProblemUIAfterStateChange(problemId, cloudStatus);
-                  updateNoteButtonIndicator(problemId, userNotes[problemId] && userNotes[problemId].trim() !== '');
+              const data = snapshot.val() || {};
+              let cloudDataChanged = false;
+              document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+                const cloudValue = !!data[cb.id];
+                if (cb.checked !== cloudValue) {
+                    cb.checked = cloudValue; 
+                    cloudDataChanged = true;
+                }
+                cb.parentElement.classList.toggle('completed', cb.checked);
               });
-              
-              applyFiltersAndSearch(); 
+
+              if (cloudDataChanged) {
+                 showNotification('Progres sincronizat din cloud.', 'info');
+              }
               updateStats(); 
+              saveLocalProgress(); 
             }, (error) => {
                 console.error("Eroare Firebase onValue:", error);
                 hideLoading();
                 showNotification('Nu s-a putut sincroniza cu cloud. Se folosesc datele locale.', 'error');
-                applyFiltersAndSearch();
                 updateStats(); 
+            });
+
+            // Adaugă event listeners la checkbox-uri DUPĂ ce au fost generate
+            document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+              cb.addEventListener('change', function() {
+                this.parentElement.classList.toggle('completed', this.checked);
+                if (this.checked) {
+                  showNotification('Problemă completată! 🎉');  
+                }
+                if (dbRef) { 
+                    update(dbRef, { [this.id]: this.checked }).catch(err => {
+                        showNotification('Salvarea în cloud a eșuat: ' + err.message, 'error');
+                    });
+                }
+                updateStats();
+                saveLocalProgress();
+              });
             });
           })
           .catch((error) => {
             console.error("Autentificare eșuată:", error);
             hideLoading();
             showNotification('Autentificare Firebase eșuată. Progresul va fi doar local.', 'error');
-            document.querySelectorAll('label[data-problem-id]').forEach(label => {
-                const problemId = label.dataset.problemId;
-                const localStatus = problemStates[problemId] || "not_started";
-                updateProblemUIAfterStateChange(problemId, localStatus);
-                updateNoteButtonIndicator(problemId, userNotes[problemId] && userNotes[problemId].trim() !== '');
+            // Permite funcționarea locală chiar dacă Firebase eșuează
+             document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+              cb.addEventListener('change', function() {
+                this.parentElement.classList.toggle('completed', this.checked);
+                updateStats();
+                saveLocalProgress();
+              });
             });
-            applyFiltersAndSearch();
             updateStats(); 
           });
           
         collapseAll(); 
-});
+    });
   </script>
 </body>
 </html>
