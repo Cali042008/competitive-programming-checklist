@@ -1,5 +1,4 @@
 Operatii pe biti :
-
 <ul>
 <li><a href="https://kilonova.ro/problems/1242">morse ONI 2006</a></li>
 <li><a href="https://kilonova.ro/problems/692">intervale RoAlgo Contest #3</a></li>
@@ -20,9 +19,7 @@ Operatii pe biti :
 <li><a href="https://kilonova.ro/tags/439">Probleme cu operații pe biți de pe kilonova</a></li>
 <li><a href="https://codeforces.com/problemset?tags=bitmasks">Probleme cu operații pe biți de pe codeforces</a></li>
 </ul>
-
 Greedy (Introducere) :
-
 <ul>
 <li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1301">USACO Bronze Watching Mooloo</a></li>
 <li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=689">USACO Bronze Cow Tipping</a></li>
@@ -42,10 +39,7 @@ Greedy (Introducere) :
 <li><a href="https://kilonova.ro/tags/299">Probleme cu greedy pe Kilonova</a></li>
 <li><a href="https://infoarena.ro/cauta-probleme?tag_id[]=61">Probleme cu greedy pe Infoarena</a></li>
 </ul>
-
-
 Binary search :
-
 <ul>
 <li><a href="https://www.infoarena.ro/problema/cautbin">Problema cautbin - Infoarena</a></li>
 <li><a href="https://www.infoarena.ro/problema/bete2">bete2 infoarena</a></li>
@@ -70,10 +64,7 @@ Binary search :
 <li><a href="https://codeforces.com/problemset?tags=binary+search">Problemele cu cautare binara de pe codeforces</a></li>
 <li><a href="https://www.infoarena.ro/cauta-probleme?tag_id[]=49">Problemele cu cautare binara de pe infoarena</a></li>
 </ul>
-
-
 Smenu lu mars :
-
 <ul>
 <li><a href="https://kilonova.ro/problems/2129/">Prefix Sums 1D</a></li>
 <li><a href="https://kilonova.ro/problems/1334">plaja ONI 2010</a></li>
@@ -104,9 +95,7 @@ Smenu lu mars :
 <li><a href="https://codeforces.com/contest/1343/problem/D">Constant Palindrome Sum</a></li>
 <li><a href="https://codeforces.com/edu/course/2/lesson/9/3/practice">Two Pointers Step 3 - Codeforces EDU</a></li>
 </ul>
-
 Two pointers:
-
 <ul>
 <li><a href="https://infoarena.ro/problema/3secv">Infoarena 3secv</a></li>
 <li><a href="https://oj.uz/problem/view/JOI20_ho_t2">JOI JJOOII 2</a></li>
@@ -125,10 +114,7 @@ Two pointers:
 <li><a href="https://kilonova.ro/tags/291">Probleme cu two pointers de pe kilonova</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/eticheta/144/two-pointers">Probleme cu two pointers de pe pbinfo</a></li>
 </ul>
-
-
 Sliding Window:
-
 <ul>
 <li><a href="https://kilonova.ro/problems/2502">OJI 2024 Santinele</a></li>
 <li><a href="https://codeforces.com/contest/488/problem/D">Strip Codeforces</a></li>
@@ -137,9 +123,7 @@ Sliding Window:
 <li><a href="https://www.infoarena.ro/problema/slidingwindow">slidingwindow infoarena</a></li>
 <li><a href="https://codeforces.com/problemset/problem/363/B">Fence Codeforces</a></li>
 </ul>
-
 Principiul lui Dirichlet (principiul cutiei) :
-
 <ul>
 <li><a href="https://codeforces.com/contest/1305/problem/C">Kuroni and Impossible Calculation - Codeforces</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/2059/porumbei">Porumbei - pbinfo</a></li>
@@ -153,7 +137,6 @@ Principiul lui Dirichlet (principiul cutiei) :
 <li><a href="https://codeforces.com/contest/1770/problem/C">Koxia and Number Theory - Codeforces</a></li>
 <li><a href="https://codeforces.com/contest/1994/problem/D">Funny Game - Codeforces</a></li>
 </ul>
-
 Baze de numeratie :
 <ul>
 <li><a href="https://www.pbinfo.ro/probleme/427/bazaminima">bazaminima pbinfo</a></li>
@@ -170,9 +153,7 @@ Baze de numeratie :
 <li><a href="https://www.infoarena.ro/problema/nop">nop infoarena</a></li>
 <li><a href="https://kilonova.ro/problems/534">ONI 2023 xidartros</a></li>
 </ul>
-
 Indicatorul lui Euler :
-
 <ul>
 <li><a href="https://www.infoarena.ro/problema/fractii">fractii infoarena</a></li>
 <li><a href="https://www.spoj.com/problems/LCMSUM/">LCMSUM Spoj</a></li>
@@ -182,10 +163,7 @@ Indicatorul lui Euler :
 <li><a href="https://www.pbinfo.ro/probleme/eticheta/57/indicatorul-lui-euler">problemele de pe pbinfo</a></li>
 <li><a href="https://vjudge.net/contest/561512">Problemele din această listă de pe Vjudge</a></li>
 </ul>
-
-
 Aritmetică modulară. Ridicare la putere în timp logaritmic:
-
 <ul>
 <li><a href="https://cses.fi/problemset/task/1712">CSES Exponentiation II</a></li>
 <li><a href="https://events.info.uaic.ro/infogim/2015/lectii/6/614.pdf">Tema infogym</a></li>
@@ -193,9 +171,7 @@ Aritmetică modulară. Ridicare la putere în timp logaritmic:
 <li><a href="https://www.pbinfo.ro/probleme/843/puteri2">puteri2 pbinfo</a></li>
 <li><a href="https://codeforces.com/contest/1279/problem/D">Santa's bot Codeforces</a></li>
 </ul>
-
 Divide et Impera :
-
 <ul>
 <li><a href="https://www.pbinfo.ro/probleme/categorii/94/divide-et-impera">cât mai multe probleme din acest capitol pentru Divide et Impera</a></li>
 <li><a href="https://kilonova.ro/problems/2504">OJI 2024 aprogressive</a></li>
@@ -213,10 +189,7 @@ Divide et Impera :
 <li><a href="https://codeforces.com/problemset?tags=divide%20and%20conquer">probleme cu Divide et Impera de pe Codeforces</a></li>
 <li><a href="https://kilonova.ro/tags/280">probleme cu Divide et Impera de pe Kilonova</a></li>
 </ul>
-
-
 Backtracking :
-
 <ul>
 <li><a href="https://www.pbinfo.ro/probleme/196/aranjamente">pbinfo aranjamente</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/1277/produscartezian1">pbinfo produscartezian1</a></li>
@@ -234,10 +207,7 @@ Backtracking :
 <li><a href="https://kilonova.ro/tags/378">Probleme cu backtracking de pe kilonova</a></li>
 <li><a href="https://cses.fi/problemset/task/1625">CSES Grid Paths</a></li>
 </ul>
-
-
 Principiul Includerii si al excluderii (pinex) :
-
 <ul>
 <li><a href="https://infoarena.ro/problema/frac">infoarena frac</a></li>
 <li><a href="https://infoarena.ro/problema/reuniune">infoarena reuniune</a></li>
@@ -260,10 +230,7 @@ Principiul Includerii si al excluderii (pinex) :
 <li><a href="https://atcoder.jp/contests/dp/tasks/dp_y">Atcoder DP Contest Grid 2</a></li>
 <li><a href="https://kilonova.ro/tags/292">Probleme cu PINEX de pe Kilonova</a></li>
 </ul>
-
-
 Fill.Algoritmul lui Lee :
-
 <ul>
 <li><a href="https://kilonova.ro/problems/734">OJI 2004 rj</a></li>
 <li><a href="https://kilonova.ro/problems/768">OJI 2007 alee</a></li>
@@ -292,10 +259,7 @@ Fill.Algoritmul lui Lee :
 <li><a href="https://www.pbinfo.ro/?pagina=probleme-lista&amp;disciplina=0&amp;clasa=10&amp;tag=85&amp;subtag=87&amp;dificultate=2&amp;folosesc_consola=-1&amp;eticheta=&amp;start=0">Probleme cu coada si lee de pe pbinfo</a></li>
 <li><a href="https://kilonova.ro/tags/356">Problemele cu flood fill de pe kilonova</a></li>
 </ul>
-
-
 Deque:
-
 <ul>
 <li><a href="https://www.infoarena.ro/problema/vila2">infoarena vila2</a></li>
 <li><a href="https://www.infoarena.ro/problema/knumere">infoarena knumere</a></li>
@@ -306,9 +270,7 @@ Deque:
 <li><a href="https://kilonova.ro/tags/409">Problemele cu deque de pe kilonova</a></li>
 <li><a href="https://www.infoarena.ro/cauta-probleme?tag_id[]=94">Problemele cu deque de pe infoarena</a></li>
 </ul>
-
 Probleme ad-hoc:
-
 <ul>
 <li><a href="https://kilonova.ro/problems/915">OJI 2019 traseu</a></li>
 <li><a href="https://www.infoarena.ro/problema/palind">infoarena palind</a></li>
@@ -334,10 +296,7 @@ Probleme ad-hoc:
 <li><a href="https://codeforces.com/contest/1736/problem/D">CF 1736D</a></li>
 <li><a href="https://kilonova.ro/tags/297">Probleme ad-hoc de pe kilonova</a></li>
 </ul>
-
-
 Probleme Constructive :
-
 <ul>
 <li><a href="https://kilonova.ro/problems/1941">IIOT 2023 Ping Pong</a></li>
 <li><a href="https://kilonova.ro/problems/878">OJI 2017 Roboti</a></li>
@@ -352,10 +311,7 @@ Probleme Constructive :
 <li><a href="https://kilonova.ro/tags/345">Probleme constructive de pe kilonova</a></li>
 <li><a href="https://codeforces.com/problemset?tags=constructive%20algorithms">Probleme constructive de pe Codeforces</a></li>
 </ul>
-
-
 Graphuri (Introducere) :
-
 <ul>
 <li><a href="https://kilonova.ro/problems/1611">Kilonova unire</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/4290/gasesteciclu">GasesteCiclu pbinfo</a></li>
@@ -371,9 +327,7 @@ Graphuri (Introducere) :
 <li><a href="https://kilonova.ro/tags/300">Probleme cu grafuri de pe kilonova</a></li>
 <li><a href="https://codeforces.com/problemset?order=BY_RATING_ASC&amp;tags=combine-tags-by-or%2Cgraphs%2Cdfs+and+similar">Probleme cu grafuri de pe codeforces, ordonate după dificultate</a></li>
 </ul>
-
 Arbori(Introducere):
-
 <ul>
 <li><a href="https://cses.fi/problemset/task/1674">Subordinates</a></li>
 <li><a href="https://www.infoarena.ro/problema/nivele2">nivele2 infoarena</a></li>
@@ -385,9 +339,7 @@ Arbori(Introducere):
 <li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=968">Milk Visits USACO Silver</a></li>
 <li><a href="https://kilonova.ro/problems/1802">Sap</a></li>
 </ul>
-
 Dynamic Programming (Introducere) :
-
 <ul>
 <li><a href="https://infoarena.ro/problema/custi">Infoarena custi</a></li>
 <li><a href="https://codeforces.com/problemset/problem/455/A">Codeforces Boredom</a></li>
@@ -407,11 +359,8 @@ Dynamic Programming (Introducere) :
 <li><a href="https://atcoder-tags.herokuapp.com/tag_search/Dynamic-Programming">Problemele intre rating 500 si 1400 de aici</a></li>
 <li><a href="https://infoarena.ro/cauta-probleme?tag_id[]=58">Problemele cu DP de pe infoarena</a></li>
 </ul>
-
-
 DP:
 Problema rucsacului(DP)
-
 <ul>
 <li><a href="https://atcoder.jp/contests/dp/tasks/dp_d">AtCoder Knapsack I</a></li>
 <li><a href="https://atcoder.jp/contests/dp/tasks/dp_e">AtCoder Knapsack II</a></li>
@@ -431,17 +380,13 @@ Problema rucsacului(DP)
 <li><a href="https://kilonova.ro/tags/298">Probleme cu rucsac de pe Kilonova</a></li>
 <li><a href="https://infoarena.ro/cauta-probleme?tag_id[]=95">Probleme cu rucsac de pe Infoarena</a></li>
 </ul>
-
 Subsir comun maximal :
-
 <ul>
 <li><a href="https://www.infoarena.ro/problema/cmlsc">cmlsc infoarena</a></li>
 <li><a href="https://oj.uz/problem/view/eJOI20_exam">EJOI 2020 Exam</a></li>
 <li><a href="https://codeforces.com/contest/1488/problem/E">Palindromic Doubles</a></li>
 </ul>
-
 Subsir crescator maximal:
-
 <ul>
 <li><a href="https://codeforces.com/problemset/problem/1325/B">CopyCopyCopyCopyCopy Codeforces</a></li>
 <li><a href="https://infoarena.ro/problema/scmax">scmax infoarena</a></li>
@@ -453,9 +398,7 @@ Subsir crescator maximal:
 <li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=496">USACO Gold Cowjog</a></li>
 <li><a href="https://kilonova.ro/problems/2808?list_id=1104">Pokemoni - Lot 2024 Juniori</a></li>
 </ul>
-
 Dinamica pe stari exponentiale(bitmask DP) :
-
 <ul>
 <li><a href="https://infoarena.ro/problema/morcovi">infoarena morcovi</a></li>
 <li><a href="https://infoarena.ro/problema/poly">infoarena poly</a></li>
@@ -478,12 +421,9 @@ Dinamica pe stari exponentiale(bitmask DP) :
 <li><a href="https://oj.uz/problem/view/COCI16_burza">COCI 2016 Burza</a></li>
 <li><a href="https://kilonova.ro/problems/3247">permutare - InfoTeams #2</a></li>
 </ul>
-
 Teoria Graphurilor:
 
-
 Sortare Topologica(Graphuri):
-
 <ul>
 <li><a href="https://www.infoarena.ro/problema/sortaret">Infoarena - Sortare Topologica</a></li>
 <li><a href="https://cses.fi/problemset/task/1679">CSES Course Schedule</a></li>
@@ -496,9 +436,7 @@ Sortare Topologica(Graphuri):
 <li><a href="https://infoarena.ro/problema/alpin">Infoarena alpin</a></li>
 <li><a href="https://codeforces.com/gym/103741/problem/H">Codeforces Gym Permutation Counting</a></li>
 </ul>
-
 Cicluri în grafuri. Grafuri funcționale:
-
 <ul>
 <li><a href="https://cses.fi/problemset/task/1691">CSES Mail Delivery</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/579/drum-hamiltonian">pbinfo drum hamiltonian</a></li>
@@ -527,9 +465,7 @@ Cicluri în grafuri. Grafuri funcționale:
 <li><a href="https://kilonova.ro/problems/2234">Lot Seniori 2011 amici</a></li>
 <li><a href="https://oj.uz/problem/view/IOI11_garden">IOI 2011 Tropical Garden</a></li>
 </ul>
-
 Paduri de multimi disjuncte(DSU):
-
 <ul>
 <li><a href="https://cses.fi/395/list/">Chemical table - EJOI 2018</a></li>
 <li><a href="https://kilonova.ro/problems/1785">MexC ONI 2008</a></li>
@@ -544,9 +480,7 @@ Paduri de multimi disjuncte(DSU):
 <li><a href="https://codeforces.com/edu/course/2/lesson/7/1/practice">DSU Step 1 - Codeforces EDU</a></li>
 <li><a href="https://codeforces.com/edu/course/2/lesson/7/2/practice">DSU Step 2 - Codeforces EDU</a></li>
 </ul>
-
 Arbore parțial de cost minim (Kruskal, Prim, Boruvka):
-
 <ul>
 <li><a href="https://cses.fi/problemset/task/1675/">Road Reparation</a></li>
 <li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=623">USACO Gold Fenced In</a></li>
@@ -564,10 +498,7 @@ Arbore parțial de cost minim (Kruskal, Prim, Boruvka):
 <li><a href="https://codeforces.com/gym/100238">Probleme educaționale cu APM</a></li>
 <li><a href="https://codeforces.com/problemset/problem/609/E">Minimum spanning tree for each edge</a></li>
 </ul>
-
-
 Algoritmi pentru drumuri minime (Dijkstra, Bellman-Ford, Floyd-Warshall):
-
 <ul>
 <li><a href="https://kilonova.ro/problems/2037/">Simple Shortest Path</a></li>
 <li><a href="https://cses.fi/problemset/task/1671/">Shortest Routes I</a></li>
@@ -590,10 +521,7 @@ Algoritmi pentru drumuri minime (Dijkstra, Bellman-Ford, Floyd-Warshall):
 <li><a href="https://www.infoarena.ro/problema/rfinv">rfinv infoarena</a></li>
 <li><a href="https://infoarena.ro/cauta-probleme?tag_id[]=92">Probleme cu Floyd-Warshall de pe Infoarena</a></li>
 </ul>
-
-
 Tehnica celor două DFS-uri (rerooting):
-
 <ul>
 <li><a href="https://www.infoarena.ro/problema/razboi">infoarena razboiul lumilor</a></li>
 <li><a href="https://codeforces.com/gym/105012/problem/J">Codeforces Jovial Jaunt</a></li>
@@ -609,11 +537,9 @@ Tehnica celor două DFS-uri (rerooting):
 <li><a href="https://dmoj.ca/problem/apio10p2">APIO 2010 Patrol</a></li>
 </ul>
 
-
 Matematica:
 
 Combinatorica:
-
 <ul>
 <li><a href="https://kilonova.ro/problems/1982">Combination</a></li>
 <li><a href="https://www.infoarena.ro/problema/pascal">pascal infoarena</a></li>
@@ -642,13 +568,8 @@ Combinatorica:
 <li><a href="https://codeforces.com/contest/660/problem/E">Codeforces Different Subsets For All Tuples</a></li>
 <li><a href="https://codeforces.com/problemset?tags=combinatorics">Probleme de combinatorică de pe Codeforces</a></li>
 </ul>
-
-
 Alte notiuni :
-
-
 Hashing:
-
 <ul>
 <li><a href="https://kilonova.ro/problems/36">subsecvente OJI 2013</a></li>
 <li><a href="https://kilonova.ro/problems/2165">Carry Bit IIOT 2023-24</a></li>
@@ -663,7 +584,6 @@ Hashing:
 <li><a href="https://kilonova.ro/tags/322">Probleme cu hashing de pe kilonova</a></li>
 <li><a href="https://www.infoarena.ro/cauta-probleme?tag_id[]=432">Probleme cu hashing de pe infoarena</a></li>
 </ul>
-
 Meet in the Middle:
 <ul>
 <li><a href="https://kilonova.ro/problems/1691">Piese Lot Juniori 2017</a></li>
@@ -679,10 +599,7 @@ Meet in the Middle:
 <li><a href="https://kilonova.ro/tags/348">Probleme cu meet in the middle de pe Kilonova</a></li>
 </ul>
 
-
 Structuri de date :
-
-
 Descompuneri în bucăți de radical (Square Root Decomposition)
 
 <ul>
@@ -708,10 +625,7 @@ Descompuneri în bucăți de radical (Square Root Decomposition)
 <li><a href="https://codeforces.com/contest/877/problem/F">Codeforces Ann and Books</a></li>
 <li><a href="https://codeforces.com/contest/617/problem/E">Codeforces XOR and Favorite Number</a></li>
 </ul>
-
-
 Arbori de intervale(AINT) :
-
 <ul>
 <li><a href="https://cses.fi/problemset/task/1649">Dynamic Range Minimum Queries</a></li>
 <li><a href="https://codeforces.com/edu/course/2/lesson/4/1/practice/contest/273169/problem/C">Number of Minimums on a Segment</a></li>
@@ -733,9 +647,7 @@ Arbori de intervale(AINT) :
 <li><a href="https://kilonova.ro/problems/304/">Panama Sum - IIOT 2022-2023</a></li>
 <li><a href="https://codeforces.com/contest/121/problem/E">Lucky Array</a></li>
 </ul>
-
 Arbori indexati binar(AIB):
-
 <ul>
 <li><a href="https://www.infoarena.ro/problema/aib">infoarena aib</a></li>
 <li><a href="https://kilonova.ro/problems/2100">Kilonova Fenwick Tree</a></li>
@@ -746,9 +658,7 @@ Arbori indexati binar(AIB):
 <li><a href="https://codeforces.com/edu/course/2/lesson/4/1/practice/contest/273169/problem/A">Segment Tree for the Sum - Codeforces Edu</a></li>
 <li><a href="https://infoarena.ro/problema/inv">infoarena inv</a></li>
 </ul>
-
 Sparse Table. Binary Lifting. Range Minimum Query (RMQ):
-
 <ul>
 <li><a href="https://kilonova.ro/problems/1096">ONI 2021 Baraj Juniori cartita</a></li>
 <li><a href="https://kilonova.ro/problems/3147">Info1Cup 2021 wonderland</a></li>
@@ -771,10 +681,7 @@ Sparse Table. Binary Lifting. Range Minimum Query (RMQ):
 <li><a href="https://codeforces.com/blog/entry/55274">Problemele de RMQ din acest blog</a></li>
 <li><a href="https://codeforces.com/blog/entry/70418">Problemele din acest blog</a></li>
 </ul>
-
-
 Trie (arbore de prefixe):
-
 <ul>
 <li><a href="https://kilonova.ro/problems/456">intervalxor2</a> (Trie pe biți persistent. Puteți face queriurile și offline)</li>
 <li><a href="https://kilonova.ro/problems/361">xortree2</a> (Problemă ok cu trie pe biți)</li>
@@ -785,11 +692,7 @@ Trie (arbore de prefixe):
 <li><a href="https://codeforces.com/contest/948/problem/D">Perfect Security</a></li>
 <li><a href="https://codeforces.com/contest/1902/problem/E">Collapsing Strings</a></li>
 </ul>
-
-
-
 Programare dinamică cu structuri de date(DP):
-
 <ul>
 <li><a href="https://kilonova.ro/problems/2287">IIOT 2024 Planning Excursions</a></li>
 <li><a href="https://kilonova.ro/problems/184">ONI 2010 Stalpi</a></li>
@@ -807,12 +710,9 @@ Programare dinamică cu structuri de date(DP):
 <li><a href="https://kilonova.ro/problems?tags=275%2C409">Probleme cu dinamica si deque de pe kilonova</a></li>
 <li><a href="https://kilonova.ro/problems?tags=275%2C282">Alte probleme similare de pe kilonova</a></li>
 </ul>
-
-
 Lucrul cu arbori:
 
 Binary lifting. Lowest common ancestor (LCA):
-
 <ul>
 <li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=968">Milk Visits USACO Silver</a></li>
 <li><a href="https://cses.fi/problemset/task/1750">CSES Planet Queries I</a></li>
@@ -824,11 +724,7 @@ Binary lifting. Lowest common ancestor (LCA):
 <li><a href="https://kilonova.ro/problems/1918">Lot 2016 Seniori maxdist</a></li>
 <li><a href="https://kilonova.ro/tags/285">Probleme cu LCA de pe Kilonova</a></li>
 </ul>
-
-
-
 Programare dinamică pe arbore:
-
 <ul>
 <li><a href="https://atcoder.jp/contests/dp/tasks/dp_p">AtCoder Independent Set</a></li>
 <li><a href="https://kilonova.ro/problems/22">OJI 2019 Tairos</a></li>
@@ -852,20 +748,14 @@ Programare dinamică pe arbore:
 <li><a href="https://kilonova.ro/problems?tags=275%2C284">Probleme cu DP pe arbore de pe Kilonova</a></li>
 <li><a href="https://codeforces.com/problemset?tags=dp,trees">Probleme cu DP pe arbore de pe Codeforces</a></li>
 </ul>
-
-
 Small to large:
-
 <ul>
 <li><a href="https://kilonova.ro/problems/2098">Toska - Kilonova</a></li>
 <li><a href="https://codeforces.com/problemset/problem/600/E">Lomsat Gerlal - Codeforces</a></li>
 <li><a href="https://kilonova.ro/problems/2970">Arborel - Kilonova</a></li>
 <li><a href="https://codeforces.com/contest/1193/problem/B">Magic Tree - CEOI 2019</a></li>
 <li><a href="https://kilonova.ro/tags/317">Alte probleme cu small-to-large de pe Kilonova</a></li> </ul>
-
-
 Heavy light decomposition (HLD):
-
 <ul>
 <li><a href="https://cses.fi/problemset/task/2134/">Path Queries II</a></li>
 <li><a href="https://cses.fi/problemset/task/1688">Company Queries II</a></li>
@@ -891,12 +781,7 @@ Heavy light decomposition (HLD):
 <li><a href="https://oj.uz/problem/view/JOI18_catdog">Cats or Dogs</a></li>
 <li><a href="https://kilonova.ro/tags/295">Probleme cu HLD de pe Kilonova</a></li>
 </ul>
-
-
-
 Alte tehnici:
-
-
 Bitsets:
 <ul>
 <li><a href="https://atcoder.jp/contests/abc258/tasks/abc258_g">atcoder - Triangle</a></li>
@@ -915,10 +800,7 @@ Bitsets:
 <li><a href="https://kilonova.ro/problems/2798">Lot Seniori 2024 - Matrice Palindrom</a></li>
 <li><a href="https://open.kattis.com/problems/holmes">holmesc</a></li>
 </ul>
-
-
 Cautarea ternara:
-
 <ul>
 <li><a href="https://codeforces.com/contest/439/problem/D">CF 439D</a></li>
 <li><a href="https://infoarena.ro/problema/copii3">copii3 infoarena</a></li>
@@ -928,9 +810,7 @@ Cautarea ternara:
 <li><a href="https://kilonova.ro/problems/1626">Lot Juniori 2018 cherhanale</a></li>
 <li><a href="https://dmoj.ca/problem/cco18p4">CCO 18-Gradient Descent</a></li>
 </ul>
-
 Functia Mobius :
-
 <ul>
 <li><a href="https://kilonova.ro/problems/69">ONI 2021 Baraj Seniori Pastile</a></li>
 <li><a href="https://kilonova.ro/problems/640">Lot 2023 Juniori countall</a></li>
@@ -939,13 +819,9 @@ Functia Mobius :
 <li><a href="https://vjudge.net/contest/151569">Listă de probleme cu Mobius</a></li>
 <li><a href="https://atcoder.jp/contests/abc162/tasks/abc162_e">Sum of gcd of Tuples (Hard)</a></li>
 </ul>
-
-
-
 Dynamic Programming :
 
 Programare dinamică pe intervale (range DP):
-
 <ul>
 <li><a href="https://www.infoarena.ro/problema/podm">podm infoarena</a></li>
 <li><a href="https://atcoder.jp/contests/dp/tasks/dp_n">Slimes AtCoder DP</a></li>
@@ -968,10 +844,7 @@ Programare dinamică pe intervale (range DP):
 <li><a href="https://kilonova.ro/tags/278">Probleme de pe kilonova cu Range DP</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/eticheta/121/programare-dinamica-metoda-mixta">Probleme de pe pbinfo cu Range DP</a></li>
 </ul>
-
-
 Programare dinamică pe cifre (digit DP):
-
 <ul>
 <li><a href="https://cses.fi/problemset/task/2220/">CSES Counting Numbers</a></li>
 <li><a href="https://kilonova.ro/problems/2800">Bug Lot Juniori 2024</a></li>
@@ -986,10 +859,7 @@ Programare dinamică pe cifre (digit DP):
 <li><a href="https://codeforces.com/contest/628/problem/D">Codeforces Magic Numbers</a></li>
 <li><a href="https://kilonova.ro/tags/310">Probleme cu digit dp de pe kilonova</a></li>
 </ul>
-
-
 Programare dinamică pe permutări:
-
 <ul>
 <li><a href="https://infoarena.ro/problema/perm3">infoarena perm3</a></li>
 <li><a href="https://kilonova.ro/problems/164">ONI 2008 pviz</a></li>
@@ -999,14 +869,10 @@ Programare dinamică pe permutări:
 <li><a href="https://infoarena.ro/problema/doipatru">Lot 2002 doipatru</a></li>
 <li><a href="https://infoarena.ro/problema/perm4">infoarena perm4</a></li>
 </ul>
-
-
 Teoria Graphurilor :
 
 
 Componente tare conexe:
-
-
 <ul>
 <li><a href="https://infoarena.ro/problema/ctc">ctc infoarena</a></li>
 <li><a href="https://codeforces.com/problemset/problem/427/C">Checkposts Codeforces</a></li>
@@ -1020,9 +886,7 @@ Componente tare conexe:
 <li><a href="https://kilonova.ro/problems/278">network Baraj Seniori 2016</a></li>
 <li><a href="https://kilonova.ro/tags/302">Probleme cu componente tare conexe de pe kilonova</a></li>
 </ul>
-
 Componente biconexe:
-
 <ul>
 <li><a href="https://www.infoarena.ro/problema/biconex">biconex infoarena</a></li>
 <li><a href="https://cses.fi/problemset/task/2177">Strongly Connected Edges - CSES</a></li>

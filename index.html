@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Stiluri de Bază */
+    /* Stiluri de Bază Tailwind Customizate */
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -117,7 +117,7 @@
         font-weight: 500; /* font-medium */
         transition: color 0.3s;
     }
-    .section-status-indicators span { /* Stil pentru indicatorii de stare ai secțiunii */
+    .section-status-indicators span { 
         margin-left: 0.25rem; /* ml-1 */
         font-size: 0.75rem; /* text-xs */
     }
@@ -135,7 +135,7 @@
       background-color: #f9fafb; 
     }
 
-    .problem-item.state-unsolved { background-color: transparent; } /* Sau #f3f4f6; */
+    .problem-item.state-unsolved { background-color: transparent; }
     .problem-item.state-in_progress { background-color: #fef9c3; /* yellow-100 */ }
     .problem-item.state-solved { background-color: #d1fae5; /* green-100 */ }
     .problem-item.state-needs_review { background-color: #fee2e2; /* red-100 */ }
@@ -165,11 +165,11 @@
     }
     a.problem-link:hover { text-decoration: underline; }
 
-    .level-0 { border-left: 4px solid #22c55e; } /* green-500 */
-    .level-1 { border-left: 4px solid #f59e0b; } /* amber-500 */
-    .level-2 { border-left: 4px solid #3b82f6; } /* blue-500 */
-    .level-3 { border-left: 4px solid #ef4444; } /* red-500 */
-    .level-4 { border-left: 4px solid #8b5cf6; } /* purple-500 */
+    .level-0 { border-left: 4px solid #22c55e; } 
+    .level-1 { border-left: 4px solid #f59e0b; } 
+    .level-2 { border-left: 4px solid #3b82f6; } 
+    .level-3 { border-left: 4px solid #ef4444; } 
+    .level-4 { border-left: 4px solid #8b5cf6; } 
 
     /* Stiluri Dark Mode */
     body.dark-mode {
@@ -206,7 +206,7 @@
       background: #4b5563; /* gray-600 */
     }
     body.dark-mode .section-header:hover {
-      background: #525c6b; /* O nuanță puțin mai deschisă */
+      background: #525c6b; 
     }
     body.dark-mode .section-title {
       color: #f3f4f6; /* gray-100 */
@@ -231,10 +231,10 @@
       background-color: #4b5563; /* gray-600 */
     }
     body.dark-mode .problem-item.state-unsolved { background-color: transparent; }
-    body.dark-mode .problem-item.state-in_progress { background-color: #78350f; /* amber-900 - ajustat pentru lizibilitate */ color: #fef3c7; /* amber-100 */ }
-    body.dark-mode .problem-item.state-solved { background-color: #065f46; /* green-800 */ color: #d1fae5; /* green-100 */ }
-    body.dark-mode .problem-item.state-needs_review { background-color: #991b1b; /* red-800 */ color: #fee2e2; /* red-100 */ }
-    body.dark-mode .problem-item.state-to_revisit { background-color: #4338ca; /* indigo-700 */ color: #e0e7ff; /* indigo-100 */ }
+    body.dark-mode .problem-item.state-in_progress { background-color: #78350f; color: #fef3c7; }
+    body.dark-mode .problem-item.state-solved { background-color: #065f46; color: #d1fae5; }
+    body.dark-mode .problem-item.state-needs_review { background-color: #991b1b; color: #fee2e2; }
+    body.dark-mode .problem-item.state-to_revisit { background-color: #4338ca; color: #e0e7ff; }
     
     body.dark-mode .problem-state-selector {
       background-color: #374151; /* gray-700 */
@@ -242,95 +242,19 @@
       color: #f3f4f6; /* gray-100 */
     }
 
-
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #22c55e; /* green-500 */
-      color: white;
-      padding: 1rem; /* p-4 */
-      border-radius: 6px; /* rounded-md */
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* shadow-lg */
-      transform: translateX(110%);
-      transition: transform 0.3s ease-in-out;
-      z-index: 1000;
-    }
+    .notification { position: fixed; top: 20px; right: 20px; background: #22c55e; color: white; padding: 1rem; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateX(110%); transition: transform 0.3s ease-in-out; z-index: 1000; }
     .notification.show { transform: translateX(0); }
-    .notification.error { background: #ef4444; /* red-500 */ }
-    .notification.info { background: #0ea5e9; /* sky-500 */ }
-
-    .loading {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(255, 255, 255, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-    }
-    .spinner {
-      border: 8px solid #f3f4f6; /* gray-100 */
-      border-top: 8px solid #6366f1; /* indigo-600 */
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 3000;
-      padding: 1rem; /* p-4 */
-    }
-    .modal-content {
-      background: white;
-      padding: 1.5rem 2rem; /* p-6 md:p-8 */
-      border-radius: 8px; /* rounded-lg */
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* shadow-xl */
-      text-align: left;
-      max-width: 600px;
-      width: 95%;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-    .modal-content h3 {
-        margin-top: 0;
-        color: #6366f1; /* indigo-600 */
-        font-size: 1.5rem; /* text-2xl */
-        margin-bottom: 1rem; /* mb-4 */
-    }
-    .modal-content p, .modal-content pre {
-      margin-bottom: 1rem; /* mb-4 */
-      font-size: 1rem; /* text-base */
-      color: #1f2937; /* gray-800 */
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-    .modal-buttons {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 1.5rem; /* mt-6 */
-    }
-    .modal-buttons .btn {
-      min-width: 100px;
-      margin-left: 0.5rem; /* ml-2 */
-    }
+    .notification.error { background: #ef4444; }
+    .notification.info { background: #0ea5e9; }
+    .loading { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 2000; }
+    .spinner { border: 8px solid #f3f4f6; border-top: 8px solid #6366f1; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); display: none; justify-content: center; align-items: center; z-index: 3000; padding: 1rem; }
+    .modal-content { background: white; padding: 1.5rem 2rem; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: left; max-width: 600px; width: 95%; max-height: 80vh; overflow-y: auto; }
+    .modal-content h3 { margin-top: 0; color: #6366f1; font-size: 1.5rem; margin-bottom: 1rem; }
+    .modal-content p, .modal-content pre { margin-bottom: 1rem; font-size: 1rem; color: #1f2937; white-space: pre-wrap; word-wrap: break-word; }
+    .modal-buttons { display: flex; justify-content: flex-end; margin-top: 1.5rem; }
+    .modal-buttons .btn { min-width: 100px; margin-left: 0.5rem; }
   </style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-VS8NZFC0SE"></script>
   <script>
@@ -340,7 +264,8 @@
     gtag('config', 'G-VS8NZFC0SE');
   </script>
 </head>
-<body> <div class="loading" id="loading">
+<body> 
+  <div class="loading" id="loading">
     <div class="spinner"></div>
   </div>
 
@@ -388,7 +313,7 @@
     </div>
 
     <div id="sections-container" class="space-y-6">
-        </div>
+    </div>
 
   </div>
   <div class="notification" id="notification"></div>
@@ -563,7 +488,6 @@
       });
     }
 
-    // --- Theme Management ---
     function applyTheme(theme) {
         if (theme === 'dark') {
             document.body.classList.add('dark-mode');
@@ -582,8 +506,6 @@
     if (themeToggleButton) {
         themeToggleButton.addEventListener('click', toggleTheme);
     }
-    // --- End Theme Management ---
-
 
     function loadInitialProgress() {
       const localData = localStorage.getItem('checklistProgress');
@@ -598,8 +520,7 @@
       } else {
         checklistProgress = {};
       }
-       // Load and apply saved theme
-      const savedTheme = localStorage.getItem('theme') || 'light'; // Default to light
+      const savedTheme = localStorage.getItem('theme') || 'light';
       applyTheme(savedTheme);
     }
 
@@ -647,7 +568,7 @@
         sectionElement.classList.add('collapsed');
       }
       updateSectionProgress(sectionId);
-      updateSectionStatusIndicators(sectionId); // Update indicators on toggle
+      updateSectionStatusIndicators(sectionId); 
     };
     
     function handleProblemStateChange(event) {
@@ -663,7 +584,7 @@
             showNotification('Problemă marcată ca Rezolvată! 🎉');
         }
         saveCurrentProgress();
-        updateStats(); // This will call updateSectionProgress and updateSectionStatusIndicators for all
+        updateStats(); 
         
         if (userDocRef) {
             setDoc(userDocRef, { progress: checklistProgress }, { merge: true })
@@ -716,7 +637,7 @@
         });
         
         saveCurrentProgress(); 
-        updateStats(); // This will update all section progresses and indicators
+        updateStats(); 
         
         if (userDocRef) {
             try {
@@ -789,7 +710,6 @@
         }
     }
 
-
     function updateStats() {
       let solvedCount = 0;
       Object.values(checklistProgress).forEach(stateValue => {
@@ -812,7 +732,7 @@
       
       Object.keys(sectionProblemDataStore).forEach(sectionId => {
           updateSectionProgress(sectionId);
-          updateSectionStatusIndicators(sectionId); // Actualizează și indicatorii de stare
+          updateSectionStatusIndicators(sectionId); 
       });
     }
 
@@ -865,7 +785,7 @@
         totalProblemsCount = 0; 
 
         function finalizeSection() {
-            if (currentSectionTitle) {
+            if (currentSectionTitle && (currentProblemsHtmlBuffer || currentSectionProblemIds.length > 0)) { // MODIFICAT: finalizează doar dacă are titlu ȘI probleme
                 const sectionId = `topic-${sectionIndex}`;
                 const levelClass = levelColors[sectionIndex % levelColors.length];
                 
@@ -897,7 +817,8 @@
                             </div>
                             <div class="section-header-controls flex items-center gap-2 mt-2 sm:mt-0">
                                  <div class="section-progress text-sm" id="progress-${sectionId}">0/${currentSectionProblemIds.length}</div>
-                                 <div class="section-status-indicators text-sm" id="indicators-${sectionId}"></div> <span class="collapse-icon text-gray-500">▼</span>
+                                 <div class="section-status-indicators text-sm" id="indicators-${sectionId}"></div>
+                                <span class="collapse-icon text-gray-500">▼</span>
                             </div>
                         </div>
                         <div class="section-content p-3 space-y-2"></div>
@@ -909,37 +830,42 @@
                 };
                 
                 sectionIndex++;
-                currentProblemsHtmlBuffer = '';
-                currentSectionProblemIds = [];
             }
+            // Resetare pentru următoarea secțiune potențială
+            currentProblemsHtmlBuffer = '';
+            currentSectionProblemIds = [];
+            // currentSectionTitle va fi setat de următorul titlu găsit
         }
 
         function getEmojiForLevel(level) {
             const emojis = ['🟩', '🟨', '🟦', '🟥', '🟪'];
             return emojis[level % emojis.length];
         }
+        
         let potentialTitleBuffer = "";
 
         for (const line of lines) {
             if (line.startsWith('<ul>')) {
-                 if (potentialTitleBuffer) {
-                    finalizeSection(); 
+                 if (potentialTitleBuffer) { // Avem un titlu în buffer, îl procesăm
+                    finalizeSection(); // Finalizează secțiunea anterioară dacă există una cu probleme
                     currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
-                    potentialTitleBuffer = "";
+                    potentialTitleBuffer = ""; // Golește bufferul
+                 } else if (currentSectionTitle) { // Dacă nu e nimic în buffer, dar avem un currentSectionTitle (poate de la o linie anterioară care nu s-a terminat cu ':')
+                    // Nu facem nimic special aici, `finalizeSection` se va ocupa la următorul titlu sau la final
                  }
-                problemIndexInSection = 0;
+                problemIndexInSection = 0; // Resetăm indexul problemelor pentru noua listă
                 continue;
             } else if (line.startsWith('</ul>')) {
+                // Nu facem nimic special la </ul>, finalizarea se face la următorul titlu sau la sfârșit
                 continue; 
             } else if (line.startsWith('<li><a href="')) {
-                 if (potentialTitleBuffer && !currentSectionTitle) {
+                 if (potentialTitleBuffer && !currentSectionTitle) { // Dacă avem un titlu în buffer și nu e setat currentSectionTitle
                     finalizeSection(); 
                     currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
                     potentialTitleBuffer = "";
                  } else if (potentialTitleBuffer && currentSectionTitle && currentProblemsHtmlBuffer === '') {
-                    finalizeSection(); 
-                    currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
-                    potentialTitleBuffer = "";
+                    // Acest caz ar putea duce la secțiuni goale dacă titlul e urmat imediat de alt titlu fără probleme.
+                    // `finalizeSection` are acum o verificare pentru a nu crea secțiuni fără probleme.
                  }
                 const match = line.match(/<li><a href="([^"]+)">([^<]+)<\/a>(?:.*?)<\/li>/i);
                 if (match) {
@@ -964,23 +890,21 @@
                     problemIndexInSection++;
                     totalProblemsCount++;
                 }
-            } else if (!line.startsWith('<') && line.length > 1) { 
-                if (currentSectionTitle) { 
-                    finalizeSection();
-                }
-                 potentialTitleBuffer = line;
+            } else if (!line.startsWith('<') && line.length > 1 && line.trim() !== "DP:" && line.trim() !== "Teoria Graphurilor:" && line.trim() !== "Matematica:" && line.trim() !== "Alte notiuni :" && line.trim() !== "Structuri de date :" && line.trim() !== "Lucrul cu arbori:" && line.trim() !== "Dynamic Programming :") { // Linie de text, potențial titlu, ignorăm liniile goale sau cele care sunt doar tag-uri
+                finalizeSection(); // Finalizează secțiunea anterioară înainte de a procesa un nou titlu
+                potentialTitleBuffer = line; // Adaugă la buffer
                  if (line.endsWith(':')) { 
-                    finalizeSection(); 
                     currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
                     potentialTitleBuffer = ""; 
                  }
             }
         }
-        if (potentialTitleBuffer) { 
-            finalizeSection();
-            currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
+        // După ce am parcurs toate liniile
+        if (potentialTitleBuffer) { // Dacă a rămas ceva în buffer (un titlu fără ':' la final)
+            finalizeSection(); // Finalizează secțiunea anterioară
+            currentSectionTitle = potentialTitleBuffer.trim(); // Setează ultimul titlu
         }
-        finalizeSection(); 
+        finalizeSection(); // Asigură finalizarea ultimei secțiuni procesate
 
         if (sectionsContainer) {
             sectionsContainer.innerHTML = sectionHeadersHtml;
@@ -1027,11 +951,11 @@
                     Object.keys(allProblemsData).forEach(problemId => {
                         if (cloudProgress.hasOwnProperty(problemId)) {
                             checklistProgress[problemId] = cloudProgress[problemId];
-                        } else if (!checklistProgress.hasOwnProperty(problemId)) { // Dacă nu e nici în cloud, nici în local deja
+                        } else if (!checklistProgress.hasOwnProperty(problemId)) { 
                             checklistProgress[problemId] = defaultStateValue;
                         }
                     });
-                     for (const pid in cloudProgress) { // Asigură-te că toate datele din cloud sunt în checklistProgress
+                     for (const pid in cloudProgress) { 
                         checklistProgress[pid] = cloudProgress[pid];
                     }
 
