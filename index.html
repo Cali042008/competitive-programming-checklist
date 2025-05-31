@@ -5,12 +5,11 @@
   <title>Competitive Programming Checklist</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    /* Stiluri de Bază */
     * { box-sizing: border-box; }
     body { 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
       line-height: 1.6; 
-      padding: 1rem; /* Redus pentru ecrane mici */
+      padding: 1rem; 
       max-width: 950px; 
       margin: auto; 
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -21,14 +20,14 @@
       background: white;
       border-radius: 12px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      padding: 1.5rem; /* Redus pentru ecrane mici */
+      padding: 1.5rem; 
       margin-bottom: 2rem;
     }
     h1 { 
       margin-bottom: 1.5rem; 
       color: #333;
       text-align: center;
-      font-size: 2.2rem; /* Ajustat */
+      font-size: 2.2rem; 
       font-weight: 700;
     }
     .stats-bar {
@@ -46,15 +45,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 100px; /* Ajustat */
+      min-width: 100px; 
     }
     .stat-number {
-      font-size: 1.4rem; /* Ajustat */
+      font-size: 1.4rem; 
       font-weight: bold;
       color: #667eea;
     }
     .stat-label {
-      font-size: 0.8rem; /* Ajustat */
+      font-size: 0.8rem; 
       color: #666;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -73,7 +72,7 @@
     }
     .controls {
       display: flex;
-      gap: 0.8rem; /* Ajustat */
+      gap: 0.8rem; 
       margin-bottom: 2rem;
       flex-wrap: wrap;
       align-items: center;
@@ -100,12 +99,11 @@
         font-size: 0.9rem;
         background-color: white;
     }
-
     .btn {
-      padding: 0.5rem 1rem; /* Ajustat */
+      padding: 0.5rem 1rem; 
       border: none;
       border-radius: 6px;
-      font-size: 0.85rem; /* Ajustat */
+      font-size: 0.85rem; 
       font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
@@ -129,9 +127,9 @@
     }
     .btn-gemini, .btn-note, .btn-status {
       color: white;
-      padding: 0.3rem 0.6rem; /* Ajustat */
-      font-size: 0.75rem; /* Ajustat */
-      margin-left: 8px; /* Ajustat */
+      padding: 0.3rem 0.6rem; 
+      font-size: 0.75rem; 
+      margin-left: 8px; 
       border-radius: 4px;
     }
     .btn-gemini { background: linear-gradient(45deg, #8e44ad, #9b59b6); }
@@ -142,16 +140,15 @@
     .btn-note.has-note { background: linear-gradient(45deg, #2ecc71, #27ae60); }
 
     .btn-status {
-        background-color: #7f8c8d; /* Gri neutru */
-        min-width: 28px; /* Lățime minimă pentru a afișa simbolul */
+        background-color: #7f8c8d; 
+        min-width: 28px; 
         padding: 0.3rem 0.5rem;
         font-weight: bold;
     }
-    .btn-status.status-not_started { background-color: #bdc3c7; color: #2c3e50; } /* Gri deschis */
-    .btn-status.status-working_on_it { background-color: #3498db; } /* Albastru */
-    .btn-status.status-to_review { background-color: #f1c40f; color: #333; } /* Galben */
-    .btn-status.status-completed { background-color: #2ecc71; } /* Verde */
-
+    .btn-status.status-not_started { background-color: #bdc3c7; color: #2c3e50; } 
+    .btn-status.status-working_on_it { background-color: #3498db; } 
+    .btn-status.status-to_review { background-color: #f1c40f; color: #333; } 
+    .btn-status.status-completed { background-color: #2ecc71; } 
 
     .btn-theory {
       background: #e0e0e0; 
@@ -171,11 +168,11 @@
     }
     .search-box {
       flex: 1;
-      min-width: 180px; /* Ajustat */
-      padding: 0.5rem 0.8rem; /* Ajustat */
+      min-width: 180px; 
+      padding: 0.5rem 0.8rem; 
       border: 2px solid #e9ecef;
       border-radius: 6px;
-      font-size: 0.85rem; /* Ajustat */
+      font-size: 0.85rem; 
       transition: border-color 0.2s;
     }
     .search-box:focus {
@@ -183,18 +180,18 @@
       border-color: #667eea;
     }
     .section { 
-      margin-top: 1.5rem; /* Ajustat */
+      margin-top: 1.5rem; 
       border: 2px solid #e9ecef;
       border-radius: 8px;
       overflow: hidden;
       transition: all 0.2s;
     }
     .section.collapsed .section-content { display: none; }
-    .section.hidden, label.hidden { display: none !important; } /* Important pentru a suprascrie alte stiluri */
+    .section.hidden, label.hidden { display: none !important; } 
 
     .section-header {
       background: #f8f9fa;
-      padding: 0.8rem 1rem; /* Ajustat */
+      padding: 0.8rem 1rem; 
       display: flex; 
       justify-content: space-between;
       align-items: center;
@@ -215,35 +212,32 @@
     .section-header-controls {
         display: flex;
         align-items: center;
-        gap: 0.4rem; /* Ajustat */
+        gap: 0.4rem; 
         margin-left: auto; 
     }
     .section-header:hover { background: #e9ecef; }
-    .section-title { margin: 0; font-size: 1.2rem; font-weight: 600; } /* Ajustat */
-    .section-progress { font-size: 0.8rem; color: #666; font-weight: 500; margin-left: 0.8rem; } /* Ajustat */
-    .collapse-icon { margin-left: 0.4rem; transition: transform 0.2s; } /* Ajustat */
+    .section-title { margin: 0; font-size: 1.2rem; font-weight: 600; } 
+    .section-progress { font-size: 0.8rem; color: #666; font-weight: 500; margin-left: 0.8rem; } 
+    .collapse-icon { margin-left: 0.4rem; transition: transform 0.2s; } 
     .section.collapsed .collapse-icon { transform: rotate(-90deg); }
-    .section-content { padding: 0.8rem 1rem; } /* Ajustat */
+    .section-content { padding: 0.8rem 1rem; } 
     label { 
       display: flex;
       align-items: center;
-      margin: 0.5rem 0; /* Ajustat */
-      cursor: default; /* Nu mai e nevoie de cursor pointer pe label */
-      padding: 0.4rem; /* Ajustat */
+      margin: 0.5rem 0; 
+      cursor: default; 
+      padding: 0.4rem; 
       border-radius: 4px;
       transition: background 0.2s;
-      flex-wrap: nowrap; /* Previne trecerea pe rândul următor a butoanelor interne */
-      gap: 8px; /* Spațiu între elementele din label */
+      flex-wrap: nowrap; 
+      gap: 8px; 
     }
     label:hover { background: #f8f9fa; }
     
-    /* Stiluri pentru stări probleme */
-    /* Removed empty ruleset for label.status-not_started */
     label.status-working_on_it { background-color: #e9f5ff; border-left: 4px solid #3498db; }
     label.status-to_review { background-color: #fef9e7; border-left: 4px solid #f1c40f; }
     label.status-completed { background-color: #e8f8f5; border-left: 4px solid #2ecc71; text-decoration: line-through; opacity: 0.8; }
     label.status-completed a { color: #58667a; }
-
 
     a { text-decoration: none; color: #667eea; font-weight: 500; flex-grow: 1; margin-left: 5px; }
     a:hover { text-decoration: underline; }
@@ -371,7 +365,7 @@
       .btn-theory {font-size: 0.7rem; padding: 0.1rem 0.4rem;}
       .section-header-controls { width: 100%; justify-content: space-between; margin-top: 0.5rem; } 
       .btn-gemini, .btn-note, .btn-status { margin-left: 0; margin-right: 5px; font-size: 0.7rem; padding: 0.3rem 0.5rem;}
-      label {flex-wrap: wrap; gap: 5px;} /* Permite butoanelor din label să treacă pe rândul următor */
+      label {flex-wrap: wrap; gap: 5px;} 
       label .btn-gemini, label .btn-note, label .btn-status { width: auto; flex-grow: 0;}
       .section-progress { margin-left: 0; margin-right: 10px;}
     }
@@ -471,7 +465,6 @@
   <div class="notification" id="notification"></div>
 
   <script type="module">
-    // Import SDK-urile necesare
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
     import { getDatabase, ref, onValue, update, set, get, child } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
@@ -527,7 +520,6 @@
         "to_review": "R",
         "completed": "✔"
     };
-
 
     const roAlgoLessons = {
         "operatii pe biti": "https://edu.roalgo.ro/mediu/bitwise-ops/",
@@ -644,7 +636,7 @@
 
     window.openNotesModal = function(problemId, problemName) {
         currentProblemIdForNote = problemId;
-        if (notesModalTitle) notesModalTitle.textContent = `Notiță pentru: ${problemName}`;
+        if (notesModalTitle) notesModalTitle.textContent = `Notiță pentru: \${problemName}\`;
         if (notesModalTextarea) notesModalTextarea.value = userNotes[problemId] || '';
         if (notesModal) notesModal.style.display = 'flex';
     }
@@ -654,7 +646,7 @@
         userNotes[currentProblemIdForNote] = noteText; 
         if (auth.currentUser) {
           const uid = auth.currentUser.uid;
-          const notePath = `users/${uid}/problemNotes/${currentProblemIdForNote}`;
+          const notePath = \`users/\${uid}/problemNotes/\${currentProblemIdForNote}\`;
           set(ref(db, notePath), noteText)
             .then(() => {
               showNotification('Notiță salvată!', 'info');
@@ -674,7 +666,7 @@
     });
 
     function updateNoteButtonIndicator(problemId, hasNote) {
-      const noteButton = document.querySelector(`.btn-note[onclick*="'${problemId}'"]`);
+      const noteButton = document.querySelector(\`.btn-note[onclick*="'\${problemId}'"]\`);
       if (noteButton) {
         noteButton.classList.toggle('has-note', hasNote);
       }
@@ -739,8 +731,8 @@
 
         if (dbRefRoot && auth.currentUser) { 
             const uid = auth.currentUser.uid;
-            const problemStatesRef = ref(db, `users/${uid}/problemStates`);
-            const problemNotesRef = ref(db, `users/${uid}/problemNotes`);
+            const problemStatesRef = ref(db, \`users/\${uid}/problemStates\`);
+            const problemNotesRef = ref(db, \`users/\${uid}/problemNotes\`);
             
             Promise.all([set(problemStatesRef, {}), set(problemNotesRef, {})])
                 .then(() => {
@@ -800,7 +792,7 @@
         const sectionTotal = sectionProblemElements.length;
         const progressElement = section.querySelector('.section-progress');
         if (progressElement) {
-          progressElement.textContent = `${sectionCompleted}/${sectionTotal}`;
+          progressElement.textContent = \`\${sectionCompleted}/\${sectionTotal}\`;
         }
       });
     }
@@ -816,7 +808,7 @@
 
     async function callGeminiAPI(promptText) {
         showLoading(); 
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+        const apiUrl = \`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=\${GEMINI_API_KEY}\`;
         const payload = {
             contents: [{ role: "user", parts: [{ text: promptText }] }]
         };
@@ -828,7 +820,7 @@
             });
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(`Eroare API: ${response.status} ${response.statusText}. ${errorData?.error?.message || ''}`);
+                throw new Error(\`Eroare API: \${response.status} \${response.statusText}. \${errorData?.error?.message || ''}\`);
             }
             const result = await response.json();
             if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
@@ -846,7 +838,7 @@
     }
 
     window.fetchProblemExplanation = async function(problemName, problemUrl) {
-        const prompt = `Ești un tutore expert în programare competitivă. Oferă o scurtă explicație conceptuală a problemei "\${problemName}" (disponibilă la \${problemUrl}) și un mic indiciu relevant pentru rezolvare. Nu oferi cod sau soluția directă. Fii concis și la obiect (maxim 100-150 cuvinte).\`;
+        const prompt = \`Ești un tutore expert în programare competitivă. Oferă o scurtă explicație conceptuală a problemei "\${problemName}" (disponibilă la \${problemUrl}) și un mic indiciu relevant pentru rezolvare. Nu oferi cod sau soluția directă. Fii concis și la obiect (maxim 100-150 cuvinte).\`;
         const explanation = await callGeminiAPI(prompt);
         showGeminiModal(\`✨ Ajutor pentru: \${problemName}\`, explanation || "Ne pare rău, nu am putut obține o explicație în acest moment.");
     }
@@ -886,7 +878,7 @@
             if (hostname.includes('leetcode.com')) return 'LeetCode';
             if (hostname.includes('spoj.com')) return 'SPOJ';
             if (hostname.includes('nerdarena.ro')) return 'NerdArena';
-            if (hostname.includes('acmicpc.net')) return 'ACMICPC';
+            if (hostname.includes('acmicpc.net')) return 'ACMICPC'; 
             if (hostname.includes('oj.uz')) return 'OJ Uz'; 
             if (hostname.includes('dmoj.ca')) return 'DMOJ'; 
             if (hostname.includes('csacademy.com')) return 'CSAcademy';
@@ -911,7 +903,7 @@
         if (problemLabel && statusButton) {
             problemStatusOrder.forEach(s => problemLabel.classList.remove(\`status-\${s}\`));
             problemLabel.classList.add(\`status-\${newState}\`);
-            problemLabel.dataset.status = newState; // Actualizează atributul data-status
+            problemLabel.dataset.status = newState; 
             statusButton.textContent = statusSymbols[newState];
             statusButton.className = \`btn btn-status status-\${newState}\`; 
         }
@@ -938,7 +930,7 @@
         }
         updateStats();
         saveLocalProgress(); 
-        applyFiltersAndSearch(); // Reaplică filtrele dacă starea afectează vizibilitatea
+        applyFiltersAndSearch(); 
     }
 
 
@@ -1009,7 +1001,7 @@
         }
         
         function getEmojiForLevel(level) {
-            const emojis = ['🟩', '🟨', '�', '🟥', '🟪'];
+            const emojis = ['🟩', '🟨', '🟦', '🟥', '🟪'];
             return emojis[level % emojis.length];
         }
 
@@ -1024,7 +1016,7 @@
                 if (match) {
                     const url = match[1];
                     const name = match[2].replace(/\s\s+/g, ' ').trim(); 
-                    const problemId = \`prob_\${sectionIndex}_\${problemIndexInSection}\`; // ID mai robust
+                    const problemId = \`prob_\${sectionIndex}_\${problemIndexInSection}\`; 
                     const source = getProblemSource(url);
                     allSources.add(source);
                     
@@ -1090,7 +1082,6 @@
     if (filterSourceSelect) filterSourceSelect.addEventListener('change', applyFiltersAndSearch);
     if (filterStatusSelect) filterStatusSelect.addEventListener('change', applyFiltersAndSearch);
 
-
     const problemDataText = \`
 Operatii pe biti :
 
@@ -1101,7 +1092,7 @@ Operatii pe biti :
 <li><a href="https://kilonova.ro/problems/944">patratele OJI 2022</a></li>
 <li><a href="https://kilonova.ro/problems/2418">Matmare RoAlgo PreOJI 2024</a></li>
 <li><a href="https://codeforces.com/contest/244/problem/C">The Brand New Function</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1182">Searching for Soulmates USACO</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=1182">Searching for Soulmates USACO</a></li>
 <li><a href="https://codeforces.com/contest/1338/problem/A">Powered Addition</a></li>
 <li><a href="https://codeforces.com/contest/1872/problem/E">Data Structures Fan</a></li>
 <li><a href="https://kilonova.ro/problems/900">castel OJI 2018</a></li>
@@ -1118,20 +1109,20 @@ Operatii pe biti :
 Greedy (Introducere) :
 
 <ul>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1301">USACO Bronze Watching Mooloo</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=689">USACO Bronze Cow Tipping</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=1301">USACO Bronze Watching Mooloo</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=689">USACO Bronze Cow Tipping</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/1877/kmax">pbinfo kmax</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/1004/eureni">pbinfo eureni</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/categorii/24/metoda-greedy-probleme-diverse-cu-metoda-greedy">Probleme cu greedy de pe pbinfo</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=785">USACO Bronze Out of Place</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=785">USACO Bronze Out of Place</a></li>
 <li><a href="https://leetcode.com/problems/minimum-cost-to-move-chips-to-the-same-position/description/">Leetcode Minimum Cost to Move Chips to The Same Position</a></li>
 <li><a href="https://kilonova.ro/problems/823">OJI 2012 Arme</a></li>
 <li><a href="https://kilonova.ro/problems/2502">OJI 2024 Santinele</a></li>
 <li><a href="https://kilonova.ro/problems/2659">ONI 2024 Soldati</a></li>
 <li><a href="https://cses.fi/problemset/task/1630">CSES Tasks and Deadlines</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=573">USACO Gold High Card Low Card</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=573">USACO Gold High Card Low Card</a></li>
 <li><a href="https://kilonova.ro/problems/2961">RoAlgo Contest #10 Paranteze</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=990">USACO Silver Berry Picking</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=990">USACO Silver Berry Picking</a></li>
 <li><a href="https://codeforces.com/contest/321/problem/B">Codeforces Ciel and Duel</a></li>
 <li><a href="https://kilonova.ro/tags/299">Probleme cu greedy pe Kilonova</a></li>
 <li><a href="https://infoarena.ro/cauta-probleme?tag_id[]=61">Probleme cu greedy pe Infoarena</a></li>
@@ -1147,10 +1138,10 @@ Binary search :
 <li><a href="https://codeforces.com/edu/course/2/lesson/6/1/practice">Problemele din pasul 1 de la EDU</a></li>
 <li><a href="https://www.infoarena.ro/problema/nrtri">nrtri infoarena</a></li>
 <li><a href="https://codeforces.com/contest/702/problem/C">Codeforces Cellular Network</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1035">USACO Bronze Social Distancing I</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=1035">USACO Bronze Social Distancing I</a></li>
 <li><a href="https://kilonova.ro/problems/865">OJI 2016 pic</a></li>
 <li><a href="https://kilonova.ro/problems/1475">ONI 2016 dif2</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=858">USACO Silver Convention</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=858">USACO Silver Convention</a></li>
 <li><a href="https://kilonova.ro/problems/905">OJI 2019 mostenire</a></li>
 <li><a href="https://kilonova.ro/problems/1501">ONI 2017 orase</a></li>
 <li><a href="https://kilonova.ro/problems/1501">ONI 2017 orase</a></li>
@@ -1159,7 +1150,7 @@ Binary search :
 <li><a href="https://www.pbinfo.ro/probleme/2789/cb3">cb3 pbinfo</a></li>
 <li><a href="https://kilonova.ro/problems/1098">Baraj Juniori 2021 intergalactic</a></li>
 <li><a href="https://kilonova.ro/problems/1522/">ONI 2018 plaja</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=991">USACO Silver Loan Repayment</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=991">USACO Silver Loan Repayment</a></li>
 <li><a href="https://kilonova.ro/tags/315">Problemele cu cautare binara de pe kilonova</a></li>
 <li><a href="https://codeforces.com/problemset?tags=binary+search">Problemele cu cautare binara de pe codeforces</a></li>
 <li><a href="https://www.infoarena.ro/cauta-probleme?tag_id[]=49">Problemele cu cautare binara de pe infoarena</a></li>
@@ -1172,7 +1163,7 @@ Smenu lu mars :
 <li><a href="https://kilonova.ro/problems/2129/">Prefix Sums 1D</a></li>
 <li><a href="https://kilonova.ro/problems/1334">plaja ONI 2010</a></li>
 <li><a href="https://kilonova.ro/problems/1401">gradina ONI 2013</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=572">Breed Counting USACO Silver</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=572">Breed Counting USACO Silver</a></li>
 <li><a href="https://kilonova.ro/problems/2379/">flip01 RoAlgo PreOJI 2024</a></li>
 <li><a href="https://kilonova.ro/problems/2355/">sirpal RoAlgo PreOJI 2024</a></li>
 <li><a href="https://kilonova.ro/problems/662">cdcq RoAlgo Contest #1</a></li>
@@ -1184,10 +1175,10 @@ Smenu lu mars :
 <li><a href="https://kilonova.ro/problems/134">investiție OJI 2023</a></li>
 <li><a href="https://kilonova.ro/tags/355">Probleme cu sume parțiale</a></li>
 <li><a href="https://kilonova.ro/tags/375">Probleme cu șmenul lui Mars</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=595">Subsequences Summing to Sevens USACO Silver</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=595">Subsequences Summing to Sevens USACO Silver</a></li>
 <li><a href="https://www.spoj.com/problems/HAYBALE/">Haybale Stacking USACO Bronze</a></li>
 <li><a href="https://kilonova.ro/problems/2653/">ONI 2024 Eras</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=923">Painting the Barn USACO Gold</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=923">Painting the Barn USACO Gold</a></li>
 <li><a href="https://codeforces.com/contest/1398/problem/C">Good Subarrays</a></li>
 <li><a href="https://codeforces.com/contest/2014/problem/D">Robert Hood and Mrs Hood</a></li>
 <li><a href="https://codeforces.com/contest/1826/problem/D">Running Miles</a></li>
@@ -1209,12 +1200,12 @@ Two pointers:
 <li><a href="https://kilonova.ro/problems/556">Baraj Seniori 2023 sirbun</a></li>
 <li><a href="https://infoarena.ro/problema/nane">Infoarena nane</a></li>
 <li><a href="https://www.infoarena.ro/problema/teren">Infoarena teren</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=738">USACO Paired Up </a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1038">USACO Social Distancing</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=789">USACO MooTube</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=992">USACO Wormhole Sort</a></li>
-<li><a href="http://usaco.org/index.php?page=viewproblem2&amp;cpid=794">USACO Sprinklers</a></li>
-<li><a href="http://usaco.org/index.php?page=viewproblem2&amp;cpid=924">USACO Cow Dating</a></li>
+<li><a href="https://usaco.org/index.php?page=viewproblem2&cpid=738">USACO Paired Up </a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=1038">USACO Social Distancing</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=789">USACO MooTube</a></li>
+<li><a href="http://www.usaco.org/index.php?page=viewproblem2&cpid=992">USACO Wormhole Sort</a></li>
+<li><a href="http://usaco.org/index.php?page=viewproblem2&cpid=794">USACO Sprinklers</a></li>
+<li><a href="http://usaco.org/index.php?page=viewproblem2&cpid=924">USACO Cow Dating</a></li>
 <li><a href="https://kilonova.ro/tags/291">Probleme cu two pointers de pe kilonova</a></li>
 <li><a href="https://www.pbinfo.ro/probleme/eticheta/144/two-pointers">Probleme cu two pointers de pe pbinfo</a></li>
 </ul>
@@ -2134,15 +2125,13 @@ Componente biconexe:
 <li><a href="https://dmoj.ca/problem/tle17c1p6">TLE 2017 Investment</a></li>
 <li><a href="https://kilonova.ro/tags/304">Probleme cu componente biconexe de pe Kilonova</a></li>
 </ul>
-` // Am eliminat backslash-ul de aici
+`;}
     
-    // Inițializare principală
     document.addEventListener('DOMContentLoaded', () => {
         parseAndGenerateSections(problemDataText); 
         
         loadLocalProgress(); 
         setupSearch();
-        // updateStats(); // Se va apela după ce se încarcă datele din Firebase
 
         signInAnonymously(auth)
           .then((userCredential) => {
@@ -2153,22 +2142,18 @@ Componente biconexe:
             onValue(dbRefRoot, snapshot => {
               hideLoading(); 
               const userData = snapshot.val() || {};
-              problemStates = userData.problemStates || {}; // Încarcă stările
+              problemStates = userData.problemStates || {}; 
               userNotes = userData.problemNotes || {}; 
 
-              // let cloudDataChanged = false; // Nu mai este necesar să verificăm dacă stările s-au schimbat aici
-                                          // deoarece actualizăm UI-ul complet oricum
               document.querySelectorAll('label[data-problem-id]').forEach(label => {
                   const problemId = label.dataset.problemId;
                   const cloudStatus = problemStates[problemId] || "not_started";
-                  
                   updateProblemUIAfterStateChange(problemId, cloudStatus);
                   updateNoteButtonIndicator(problemId, userNotes[problemId] && userNotes[problemId].trim() !== '');
               });
               
               applyFiltersAndSearch(); 
               updateStats(); 
-              // Nu mai salvăm local aici, Firebase e sursa de adevăr la încărcare
             }, (error) => {
                 console.error("Eroare Firebase onValue:", error);
                 hideLoading();
@@ -2187,15 +2172,12 @@ Componente biconexe:
                 updateProblemUIAfterStateChange(problemId, localStatus);
                 updateNoteButtonIndicator(problemId, userNotes[problemId] && userNotes[problemId].trim() !== '');
             });
-            applyFiltersAndSearch();  
+            applyFiltersAndSearch();
             updateStats(); 
           });
           
         collapseAll(); 
-    });
-    
-    // Close the DOMContentLoaded handler
-    };
+});
   </script>
 </body>
 </html>
