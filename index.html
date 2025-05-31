@@ -62,7 +62,7 @@
       background-color: #4b5563; /* gray-600 */
       transform: translateY(-1px);
     }
-    .btn-theory {
+    .btn-theory { /* Am readăugat stilul pentru butonul de teorie */
       background-color: #e5e7eb; /* gray-200 */
       color: #4f46e5; /* indigo-700 */
       border: 1px solid #d1d5db; /* gray-300 */
@@ -87,7 +87,6 @@
       border: 2px solid #e5e7eb; /* gray-200 */
       border-radius: 8px; /* rounded-lg */
       overflow: hidden;
-      transition: all 0.2s;
     }
     .section.collapsed .section-content { display: none; }
     .section.hidden { display: none; }
@@ -106,6 +105,11 @@
     }
     .collapse-icon { transition: transform 0.2s; }
     .section.collapsed .collapse-icon { transform: rotate(-90deg); }
+    
+    .section-content {
+      /* Stiluri pentru conținutul secțiunii, dacă e nevoie */
+    }
+
     label {
       cursor: pointer;
       border-radius: 4px; /* rounded */
@@ -285,15 +289,12 @@
   <div class="notification" id="notification"></div>
 
   <script type="module">
-    // Import SDK-urile necesare
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js"; // Comentat pentru performanță
     import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // Configurația proiectului Firebase
     const firebaseConfig = {
-      apiKey: "AIzaSyCKD_GIQ-WM-p92mlW2ixl5w2-pWxOFI6o", // ATENȚIE: Cheia API este vizibilă în codul client. Pentru producție, se recomandă reguli de securitate stricte.
+      apiKey: "AIzaSyCKD_GIQ-WM-p92mlW2ixl5w2-pWxOFI6o",
       authDomain: "cp-checklist-sync.firebaseapp.com",
       databaseURL: "https://cp-checklist-sync-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "cp-checklist-sync",
@@ -303,23 +304,18 @@
       measurementId: "G-VS8NZFC0SE"
     };
 
-    // Inițializare Firebase
     const appFirebase = initializeApp(firebaseConfig);
-    /* // Comentat pentru performanță
-    try {
-        const analytics = getAnalytics(appFirebase);
-    } catch (e) {
-        console.warn("Firebase Analytics nu a putut fi inițializat:", e.message);
-    }
-    */
     const auth = getAuth(appFirebase);
     const db = getFirestore(appFirebase);
 
     let userDocRef = null;
     let currentConfirmCallback = null;
     let unsubscribeSnapshot = null;
+    let allProblemsData = {}; 
+    let sectionProblemDataStore = {}; 
+    let checklistProgress = {}; 
+    let totalProblemsCount = 0;
 
-    // Elemente DOM
     const loadingIndicator = document.getElementById('loading');
     const confirmModal = document.getElementById('custom-confirm-modal');
     const confirmMessageEl = document.getElementById('custom-confirm-message');
@@ -327,7 +323,7 @@
     const confirmCancelButton = document.getElementById('custom-confirm-cancel');
     const sectionsContainer = document.getElementById('sections-container');
 
-    // Mapping lecții RoAlgo
+    // Am readăugat constanta roAlgoLessons
     const roAlgoLessons = {
         "operatii pe biti": "https://edu.roalgo.ro/mediu/bitwise-ops/",
         "greedy": "https://edu.roalgo.ro/usor/greedy/",
@@ -427,11 +423,8 @@
         "componente biconexe": "https://edu.roalgo.ro/dificil/componente-biconexe/"
     };
 
-    // Funcții utilitare UI
     function showLoading() { if (loadingIndicator) loadingIndicator.style.display = 'flex'; }
     function hideLoading() { if (loadingIndicator) loadingIndicator.style.display = 'none'; }
-
-    showLoading();
 
     function showCustomConfirm(message, onConfirm) {
       if (confirmModal && confirmMessageEl) {
@@ -456,56 +449,124 @@
       });
     }
 
-    function loadLocalProgress() {
+    function loadInitialProgress() {
       const localData = localStorage.getItem('checklistProgress');
       if (localData) {
         try {
-            const data = JSON.parse(localData);
-            // Aplicarea progresului se va face după generarea checkbox-urilor
-            return data;
+            checklistProgress = JSON.parse(localData) || {};
         } catch (e) {
             console.error("Eroare la parsarea progresului local:", e);
             localStorage.removeItem('checklistProgress');
+            checklistProgress = {};
         }
+      } else {
+        checklistProgress = {};
       }
-      return {};
     }
-    function saveLocalProgress(progressData) {
-      localStorage.setItem('checklistProgress', JSON.stringify(progressData));
+
+    function saveCurrentProgress() {
+      localStorage.setItem('checklistProgress', JSON.stringify(checklistProgress));
     }
 
     window.toggleSection = function(sectionId) {
-      const section = document.getElementById(sectionId);
-      if (section) section.classList.toggle('collapsed');
+      const sectionElement = document.getElementById(sectionId);
+      if (!sectionElement) return;
+
+      const sectionContentElement = sectionElement.querySelector('.section-content');
+      const isCollapsed = sectionElement.classList.contains('collapsed');
+
+      if (isCollapsed) { // Expanding
+        if (!sectionElement.dataset.contentRendered) {
+          if (sectionProblemDataStore[sectionId] && sectionContentElement) {
+            sectionContentElement.innerHTML = sectionProblemDataStore[sectionId].html;
+            
+            sectionProblemDataStore[sectionId].checkboxIds.forEach(checkboxId => {
+              const checkbox = document.getElementById(checkboxId);
+              if (checkbox) {
+                checkbox.checked = !!checklistProgress[checkboxId];
+                checkbox.parentElement.classList.toggle('completed', checkbox.checked);
+                checkbox.addEventListener('change', handleCheckboxChange);
+              }
+            });
+            sectionElement.dataset.contentRendered = 'true';
+          }
+        }
+        sectionElement.classList.remove('collapsed');
+      } else { // Collapsing
+        sectionElement.classList.add('collapsed');
+      }
+      updateSectionProgress(sectionId);
     };
+    
+    function handleCheckboxChange(event) {
+        const checkbox = event.target;
+        checklistProgress[checkbox.id] = checkbox.checked;
+        checkbox.parentElement.classList.toggle('completed', checkbox.checked);
+        if (checkbox.checked) {
+            showNotification('Problemă completată! 🎉');
+        }
+        saveCurrentProgress();
+        updateStats();
+        updateSectionProgress(allProblemsData[checkbox.id]?.sectionId);
+
+        if (userDocRef) {
+            setDoc(userDocRef, { progress: checklistProgress }, { merge: true })
+                .catch(err => showNotification('Salvarea în cloud a eșuat: ' + err.message, 'error'));
+        }
+    }
+
     window.expandAll = function() {
-      document.querySelectorAll('.section').forEach(section => section.classList.remove('collapsed'));
+      document.querySelectorAll('.section').forEach(section => {
+        if (!section.dataset.contentRendered) {
+            const sectionId = section.id;
+            const sectionContentElement = section.querySelector('.section-content');
+            if (sectionProblemDataStore[sectionId] && sectionContentElement) {
+                sectionContentElement.innerHTML = sectionProblemDataStore[sectionId].html;
+                sectionProblemDataStore[sectionId].checkboxIds.forEach(checkboxId => {
+                    const checkbox = document.getElementById(checkboxId);
+                    if (checkbox) {
+                        checkbox.checked = !!checklistProgress[checkboxId];
+                        checkbox.parentElement.classList.toggle('completed', checkbox.checked);
+                        checkbox.removeEventListener('change', handleCheckboxChange);
+                        checkbox.addEventListener('change', handleCheckboxChange);
+                    }
+                });
+                section.dataset.contentRendered = 'true';
+            }
+        }
+        section.classList.remove('collapsed');
+        updateSectionProgress(section.id);
+      });
     };
+
     window.collapseAll = function() {
-      document.querySelectorAll('.section').forEach(section => section.classList.add('collapsed'));
+      document.querySelectorAll('.section').forEach(section => {
+        section.classList.add('collapsed');
+      });
     };
 
     window.handleResetProgress = function() {
       showCustomConfirm('Sunteți sigur că doriți să resetați tot progresul? Această acțiune nu poate fi anulată.', async () => {
+        checklistProgress = {}; 
         document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-          cb.checked = false;
-          cb.parentElement.classList.remove('completed');
+          if (cb.parentElement) { 
+            cb.checked = false;
+            cb.parentElement.classList.remove('completed');
+          }
         });
-        const emptyProgress = {};
+        
+        saveCurrentProgress(); 
+        updateStats(); 
+        Object.keys(sectionProblemDataStore).forEach(updateSectionProgress); 
+
         if (userDocRef) {
             try {
-                await setDoc(userDocRef, { progress: emptyProgress });
-                saveLocalProgress(emptyProgress);
-                updateStats();
+                await setDoc(userDocRef, { progress: {} }); 
                 showNotification('Progres resetat cu succes!', 'info');
             } catch (error) {
                 showNotification('Resetarea progresului în cloud a eșuat: ' + error.message, 'error');
-                saveLocalProgress(emptyProgress);
-                updateStats();
             }
         } else {
-             saveLocalProgress(emptyProgress);
-             updateStats();
              showNotification('Progres resetat local. Sincronizarea Firebase nu este activă.', 'info');
         }
       });
@@ -519,35 +580,49 @@
         if (type === 'error') notification.classList.add('error');
         else if (type === 'info') notification.classList.add('info');
         else notification.classList.remove('error', 'info');
-
         setTimeout(() => { notification.classList.remove('show'); }, 3000);
       }
     }
+    
+    function updateSectionProgress(sectionId) {
+        if (!sectionId || !sectionProblemDataStore[sectionId]) return;
+
+        const sectionData = sectionProblemDataStore[sectionId];
+        let sectionCompleted = 0;
+        sectionData.checkboxIds.forEach(checkboxId => {
+            if (checklistProgress[checkboxId]) {
+                sectionCompleted++;
+            }
+        });
+        const sectionTotal = sectionData.checkboxIds.length;
+        const progressElement = document.getElementById(`progress-${sectionId}`);
+        if (progressElement) {
+            progressElement.textContent = `${sectionCompleted}/${sectionTotal}`;
+        }
+    }
 
     function updateStats() {
-      const checkboxes = document.querySelectorAll('input[type=checkbox]');
-      const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
-      const total = checkboxes.length;
-      const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+      let completedCount = 0;
+      Object.values(checklistProgress).forEach(isCompleted => {
+        if (isCompleted) {
+          completedCount++;
+        }
+      });
+
+      const percentage = totalProblemsCount > 0 ? Math.round((completedCount / totalProblemsCount) * 100) : 0;
 
       const completedCountEl = document.getElementById('completed-count');
       const totalCountEl = document.getElementById('total-count');
       const progressPercentEl = document.getElementById('progress-percent');
       const progressFillEl = document.getElementById('progress-fill');
 
-      if(completedCountEl) completedCountEl.textContent = completed;
-      if(totalCountEl) totalCountEl.textContent = total;
+      if(completedCountEl) completedCountEl.textContent = completedCount;
+      if(totalCountEl) totalCountEl.textContent = totalProblemsCount;
       if(progressPercentEl) progressPercentEl.textContent = percentage + '%';
       if(progressFillEl) progressFillEl.style.width = percentage + '%';
-
-      document.querySelectorAll('.section').forEach(section => {
-        const sectionCheckboxes = section.querySelectorAll('input[type=checkbox]');
-        const sectionCompleted = Array.from(sectionCheckboxes).filter(cb => cb.checked).length;
-        const sectionTotal = sectionCheckboxes.length;
-        const progressElement = section.querySelector('.section-progress');
-        if (progressElement) {
-          progressElement.textContent = `${sectionCompleted}/${sectionTotal}`;
-        }
+      
+      Object.keys(sectionProblemDataStore).forEach(sectionId => {
+          updateSectionProgress(sectionId);
       });
     }
 
@@ -558,22 +633,27 @@
           const query = e.target.value.toLowerCase().trim();
           document.querySelectorAll('.section').forEach(section => {
             const sectionTitleEl = section.querySelector('.section-title');
-            const sectionContentEl = section.querySelector('.section-content');
             let textToSearch = '';
             if (sectionTitleEl) textToSearch += sectionTitleEl.textContent.toLowerCase();
-            if (sectionContentEl) textToSearch += sectionContentEl.textContent.toLowerCase();
+            
+            const sectionId = section.id;
+            if (section.dataset.contentRendered && sectionProblemDataStore[sectionId]) {
+                 const contentDiv = section.querySelector('.section-content');
+                 if(contentDiv) textToSearch += contentDiv.textContent.toLowerCase();
+            } else if (sectionProblemDataStore[sectionId] && sectionProblemDataStore[sectionId].html) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = sectionProblemDataStore[sectionId].html;
+                textToSearch += tempDiv.textContent.toLowerCase();
+            }
 
             const isMatch = query === '' || textToSearch.includes(query);
             section.classList.toggle('hidden', !isMatch);
-            if (isMatch && query !== '') {
-                 section.classList.remove('collapsed');
-            }
           });
         });
       }
     }
 
-    function normalizeText(text) {
+    function normalizeText(text) { // Funcția este din nou necesară pentru roAlgoLessons
         if (!text) return "";
         return text.toLowerCase()
             .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -582,21 +662,24 @@
             .replace(/\s+/g, ' ').trim();
     }
 
-
-    function parseAndGenerateSections(problemText) {
-        const lines = problemText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-        let allSectionsHtml = ''; // Acumulator pentru tot HTML-ul secțiunilor
+    function parseAndGenerateUIData(problemTextData) {
+        const lines = problemTextData.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+        let sectionHeadersHtml = '';
         let currentSectionTitle = null;
-        let problemsHtml = '';
+        let currentProblemsHtmlBuffer = '';
+        let currentSectionCheckboxIds = [];
         let sectionIndex = 0;
         let problemIndexInSection = 0;
         const levelColors = ['level-0', 'level-1', 'level-2', 'level-3', 'level-4'];
-        let problemCountInSection = 0;
+        
+        totalProblemsCount = 0; 
 
         function finalizeSection() {
-            if (currentSectionTitle && problemsHtml) {
+            if (currentSectionTitle) {
                 const sectionId = `topic-${sectionIndex}`;
                 const levelClass = levelColors[sectionIndex % levelColors.length];
+                
+                // Logica pentru link-ul de teorie a fost readăugată
                 let theoryLinkHTML = '';
                 const normalizedCurrentSectionTitle = normalizeText(currentSectionTitle);
                 let bestMatchUrl = null;
@@ -606,40 +689,40 @@
                     const normalizedKey = normalizeText(key);
                     if (normalizedKey && url) {
                         if (normalizedCurrentSectionTitle.includes(normalizedKey) && normalizedKey.length > 3) {
-                            if (normalizedKey.length > bestMatchKeyLength) {
-                                bestMatchUrl = url;
-                                bestMatchKeyLength = normalizedKey.length;
-                            }
+                            if (normalizedKey.length > bestMatchKeyLength) { bestMatchUrl = url; bestMatchKeyLength = normalizedKey.length; }
                         } else if (normalizedKey.includes(normalizedCurrentSectionTitle) && normalizedCurrentSectionTitle.length > 3) {
-                             if (normalizedCurrentSectionTitle.length > bestMatchKeyLength) {
-                                bestMatchUrl = url;
-                                bestMatchKeyLength = normalizedCurrentSectionTitle.length;
-                            }
+                             if (normalizedCurrentSectionTitle.length > bestMatchKeyLength) { bestMatchUrl = url; bestMatchKeyLength = normalizedCurrentSectionTitle.length; }
                         }
                     }
                 }
-
                  if (bestMatchUrl) {
                     theoryLinkHTML = `<a href="${bestMatchUrl}" target="_blank" class="btn btn-theory py-1 px-2 text-xs" title="Vezi teoria pe edu.roalgo.ro">📖 Teorie</a>`;
                 }
+                // Sfârșitul logicii pentru link-ul de teorie
 
-                const sectionHeader = `
-                    <div class="section-header p-3 flex flex-wrap justify-between items-center">
-                        <div class="section-header-main flex items-center flex-grow cursor-pointer mr-2" onclick="toggleSection('${sectionId}')">
-                            <h2 class="section-title text-lg md:text-xl mr-2">${getEmojiForLevel(sectionIndex % levelColors.length)} ${currentSectionTitle}</h2>
-                            ${theoryLinkHTML}
+                sectionHeadersHtml += `
+                    <div class="section ${levelClass} collapsed" id="${sectionId}">
+                        <div class="section-header p-3 flex flex-wrap justify-between items-center">
+                            <div class="section-header-main flex items-center flex-grow cursor-pointer mr-2" onclick="toggleSection('${sectionId}')">
+                                <h2 class="section-title text-lg md:text-xl mr-2">${getEmojiForLevel(sectionIndex % levelColors.length)} ${currentSectionTitle}</h2>
+                                ${theoryLinkHTML} </div>
+                            <div class="section-header-controls flex items-center gap-2 mt-2 sm:mt-0">
+                                 <div class="section-progress text-sm" id="progress-${sectionId}">0/${currentSectionCheckboxIds.length}</div>
+                                <span class="collapse-icon text-gray-500">▼</span>
+                            </div>
                         </div>
-                        <div class="section-header-controls flex items-center gap-2 mt-2 sm:mt-0">
-                             <div class="section-progress text-sm" id="progress-${sectionId}">0/${problemCountInSection}</div>
-                            <span class="collapse-icon text-gray-500">▼</span>
-                        </div>
+                        <div class="section-content p-3 space-y-2">
+                            </div>
                     </div>`;
-                const sectionContent = `<div class="section-content p-3 space-y-2">${problemsHtml}</div>`;
-                allSectionsHtml += `<div class="section ${levelClass} collapsed" id="${sectionId}">${sectionHeader}${sectionContent}</div>`; // Adaugă la string-ul acumulator
-
+                
+                sectionProblemDataStore[sectionId] = {
+                    html: currentProblemsHtmlBuffer,
+                    checkboxIds: [...currentSectionCheckboxIds]
+                };
+                
                 sectionIndex++;
-                problemsHtml = '';
-                problemCountInSection = 0;
+                currentProblemsHtmlBuffer = '';
+                currentSectionCheckboxIds = [];
             }
         }
 
@@ -652,1197 +735,140 @@
         for (const line of lines) {
             if (line.startsWith('<ul>')) {
                  if (potentialTitleBuffer) {
-                    finalizeSection();
+                    finalizeSection(); 
                     currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
                     potentialTitleBuffer = "";
                  }
                 problemIndexInSection = 0;
                 continue;
             } else if (line.startsWith('</ul>')) {
-                continue;
+                continue; 
             } else if (line.startsWith('<li><a href="')) {
                  if (potentialTitleBuffer && !currentSectionTitle) {
-                    finalizeSection();
+                    finalizeSection(); 
                     currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
                     potentialTitleBuffer = "";
-                 } else if (potentialTitleBuffer && currentSectionTitle && problemsHtml === '') {
-                    finalizeSection();
+                 } else if (potentialTitleBuffer && currentSectionTitle && currentProblemsHtmlBuffer === '') {
+                    finalizeSection(); 
                     currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
                     potentialTitleBuffer = "";
                  }
-
                 const match = line.match(/<li><a href="([^"]+)">([^<]+)<\/a>(?:.*?)<\/li>/i);
                 if (match) {
                     const url = match[1];
                     const name = match[2].replace(/\s\s+/g, ' ').trim();
-                    const checkboxId = `cb_${sectionIndex}_${problemIndexInSection}`;
-                    problemsHtml += `
+                    const checkboxId = `cb_s${sectionIndex}_p${problemIndexInSection}`;
+                    
+                    currentProblemsHtmlBuffer += `
                         <label class="flex items-center p-2 hover:bg-gray-100 rounded-md">
                             <input type="checkbox" id="${checkboxId}" class="mr-3">
                             <a href="${url}" target="_blank" class="problem-link text-sm md:text-base">${name}</a>
                         </label>`;
+                    currentSectionCheckboxIds.push(checkboxId);
+                    allProblemsData[checkboxId] = { name, url, sectionId: `topic-${sectionIndex}` }; 
                     problemIndexInSection++;
-                    problemCountInSection++;
+                    totalProblemsCount++;
                 }
-            } else if (!line.startsWith('<') && line.length > 1) {
-                if (currentSectionTitle && problemsHtml) {
+            } else if (!line.startsWith('<') && line.length > 1) { 
+                if (currentSectionTitle) { 
                     finalizeSection();
                 }
                  potentialTitleBuffer = line;
-                 if (line.endsWith(':')) {
-                    finalizeSection();
+                 if (line.endsWith(':')) { 
+                    finalizeSection(); 
                     currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
-                    potentialTitleBuffer = "";
+                    potentialTitleBuffer = ""; 
                  }
             }
         }
-        if (potentialTitleBuffer) {
+        if (potentialTitleBuffer) { 
             finalizeSection();
             currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
         }
-        finalizeSection();
+        finalizeSection(); 
 
         if (sectionsContainer) {
-            sectionsContainer.innerHTML = allSectionsHtml; // Setează innerHTML o singură dată
+            sectionsContainer.innerHTML = sectionHeadersHtml;
         }
     }
 
-    const problemDataText = `
-Operatii pe biti :
-
-<ul>
-<li><a href="https://kilonova.ro/problems/1242">morse ONI 2006</a></li>
-<li><a href="https://kilonova.ro/problems/692">intervale RoAlgo Contest #3</a></li>
-<li><a href="https://kilonova.ro/problems/2249">Bit Showdown RoAlgo Contest #9</a></li>
-<li><a href="https://kilonova.ro/problems/944">patratele OJI 2022</a></li>
-<li><a href="https://kilonova.ro/problems/2418">Matmare RoAlgo PreOJI 2024</a></li>
-<li><a href="https://codeforces.com/contest/244/problem/C">The Brand New Function</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1182">Searching for Soulmates USACO</a></li>
-<li><a href="https://codeforces.com/contest/1338/problem/A">Powered Addition</a></li>
-<li><a href="https://codeforces.com/contest/1872/problem/E">Data Structures Fan</a></li>
-<li><a href="https://kilonova.ro/problems/900">castel OJI 2018</a></li>
-<li><a href="https://codeforces.com/problemset/problem/1732/C1">Sheikh (Easy version)</a></li>
-<li><a href="https://atcoder.jp/contests/abc295/tasks/abc295_d">Three Days Ago</a></li>
-<li><a href="https://codeforces.com/contest/1715/problem/D">2+ Doors</a></li>
-<li><a href="https://codeforces.com/problemset/problem/550/B">Preparing Olympiad</a></li>
-<li><a href="https://codeforces.com/problemset/problem/1097/B">Petr and a Combination Lock</a></li>
-<li><a href="https://www.cses.fi/problemset/task/2419">CSES Xor Pyramid</a></li>
-<li><a href="https://kilonova.ro/tags/439">Probleme cu operații pe biți de pe kilonova</a></li>
-<li><a href="https://codeforces.com/problemset?tags=bitmasks">Probleme cu operații pe biți de pe codeforces</a></li>
-</ul>
-
-Greedy (Introducere) :
-
-<ul>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1301">USACO Bronze Watching Mooloo</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=689">USACO Bronze Cow Tipping</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/1877/kmax">pbinfo kmax</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/1004/eureni">pbinfo eureni</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/categorii/24/metoda-greedy-probleme-diverse-cu-metoda-greedy">Probleme cu greedy de pe pbinfo</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=785">USACO Bronze Out of Place</a></li>
-<li><a href="https://leetcode.com/problems/minimum-cost-to-move-chips-to-the-same-position/description/">Leetcode Minimum Cost to Move Chips to The Same Position</a></li>
-<li><a href="https://kilonova.ro/problems/823">OJI 2012 Arme</a></li>
-<li><a href="https://kilonova.ro/problems/2502">OJI 2024 Santinele</a></li>
-<li><a href="https://kilonova.ro/problems/2659">ONI 2024 Soldati</a></li>
-<li><a href="https://cses.fi/problemset/task/1630">CSES Tasks and Deadlines</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=573">USACO Gold High Card Low Card</a></li>
-<li><a href="https://kilonova.ro/problems/2961">RoAlgo Contest #10 Paranteze</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=990">USACO Silver Berry Picking</a></li>
-<li><a href="https://codeforces.com/contest/321/problem/B">Codeforces Ciel and Duel</a></li>
-<li><a href="https://kilonova.ro/tags/299">Probleme cu greedy pe Kilonova</a></li>
-<li><a href="https://infoarena.ro/cauta-probleme?tag_id[]=61">Probleme cu greedy pe Infoarena</a></li>
-</ul>
-
-
-Binary search :
-
-<ul>
-<li><a href="https://www.infoarena.ro/problema/cautbin">Problema cautbin - Infoarena</a></li>
-<li><a href="https://www.infoarena.ro/problema/bete2">bete2 infoarena</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/2443/cb2">cb2 pbinfo</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/6/1/practice">Problemele din pasul 1 de la EDU</a></li>
-<li><a href="https://www.infoarena.ro/problema/nrtri">nrtri infoarena</a></li>
-<li><a href="https://codeforces.com/contest/702/problem/C">Codeforces Cellular Network</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1035">USACO Bronze Social Distancing I</a></li>
-<li><a href="https://kilonova.ro/problems/865">OJI 2016 pic</a></li>
-<li><a href="https://kilonova.ro/problems/1475">ONI 2016 dif2</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=858">USACO Silver Convention</a></li>
-<li><a href="https://kilonova.ro/problems/905">OJI 2019 mostenire</a></li>
-<li><a href="https://kilonova.ro/problems/1501">ONI 2017 orase</a></li>
-<li><a href="https://kilonova.ro/problems/1501">ONI 2017 orase</a></li>
-<li><a href="https://www.infoarena.ro/problema/zone">zone infoarena</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/6/2/practice">Problemele din pasul 2 de la EDU</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/2789/cb3">cb3 pbinfo</a></li>
-<li><a href="https://kilonova.ro/problems/1098">Baraj Juniori 2021 intergalactic</a></li>
-<li><a href="https://kilonova.ro/problems/1522/">ONI 2018 plaja</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=991">USACO Silver Loan Repayment</a></li>
-<li><a href="https://kilonova.ro/tags/315">Problemele cu cautare binara de pe kilonova</a></li>
-<li><a href="https://codeforces.com/problemset?tags=binary+search">Problemele cu cautare binara de pe codeforces</a></li>
-<li><a href="https://www.infoarena.ro/cauta-probleme?tag_id[]=49">Problemele cu cautare binara de pe infoarena</a></li>
-</ul>
-
-
-Smenu lu mars :
-
-<ul>
-<li><a href="https://kilonova.ro/problems/2129/">Prefix Sums 1D</a></li>
-<li><a href="https://kilonova.ro/problems/1334">plaja ONI 2010</a></li>
-<li><a href="https://kilonova.ro/problems/1401">gradina ONI 2013</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=572">Breed Counting USACO Silver</a></li>
-<li><a href="https://kilonova.ro/problems/2379/">flip01 RoAlgo PreOJI 2024</a></li>
-<li><a href="https://kilonova.ro/problems/2355/">sirpal RoAlgo PreOJI 2024</a></li>
-<li><a href="https://kilonova.ro/problems/662">cdcq RoAlgo Contest #1</a></li>
-<li><a href="https://infoarena.ro/problema/mostenire2">infoarena mostenire2</a></li>
-<li><a href="https://www.infoarena.ro/problema/bmatrix">infoarena bmatrix</a></li>
-<li><a href="https://kilonova.ro/problems/892">tnia OJI 2018</a></li>
-<li><a href="https://kilonova.ro/problems/547">balon ONI 2023</a></li>
-<li><a href="https://kilonova.ro/problems/1018">poseidon RoAlgo Contest #4</a></li>
-<li><a href="https://kilonova.ro/problems/134">investiție OJI 2023</a></li>
-<li><a href="https://kilonova.ro/tags/355">Probleme cu sume parțiale</a></li>
-<li><a href="https://kilonova.ro/tags/375">Probleme cu șmenul lui Mars</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=595">Subsequences Summing to Sevens USACO Silver</a></li>
-<li><a href="https://www.spoj.com/problems/HAYBALE/">Haybale Stacking USACO Bronze</a></li>
-<li><a href="https://kilonova.ro/problems/2653/">ONI 2024 Eras</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=923">Painting the Barn USACO Gold</a></li>
-<li><a href="https://codeforces.com/contest/1398/problem/C">Good Subarrays</a></li>
-<li><a href="https://codeforces.com/contest/2014/problem/D">Robert Hood and Mrs Hood</a></li>
-<li><a href="https://codeforces.com/contest/1826/problem/D">Running Miles</a></li>
-<li><a href="https://codeforces.com/contest/1291/problem/D">Irreductible Anagrams</a></li>
-<li><a href="https://codeforces.com/contest/2025/problem/D">Attribute Checks</a></li>
-<li><a href="https://codeforces.com/contest/1795/problem/C">Tea Tasting</a></li>
-<li><a href="https://codeforces.com/gym/104114/problem/N">Nusret Gokce</a></li>
-<li><a href="https://codeforces.com/contest/1343/problem/D">Constant Palindrome Sum</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/9/3/practice">Two Pointers Step 3 - Codeforces EDU</a></li>
-</ul>
-
-Two pointers:
-
-<ul>
-<li><a href="https://infoarena.ro/problema/3secv">Infoarena 3secv</a></li>
-<li><a href="https://oj.uz/problem/view/JOI20_ho_t2">JOI JJOOII 2</a></li>
-<li><a href="https://cses.fi/problemset/task/1084/">CSES Apartments</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/2943/maru">pbinfo maru</a></li>
-<li><a href="https://oj.uz/problem/view/NOI13_gw">NOI Singapore Global Warming</a></li>
-<li><a href="https://kilonova.ro/problems/556">Baraj Seniori 2023 sirbun</a></li>
-<li><a href="https://infoarena.ro/problema/nane">Infoarena nane</a></li>
-<li><a href="https://www.infoarena.ro/problema/teren">Infoarena teren</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=738">USACO Paired Up </a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1038">USACO Social Distancing</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=789">USACO MooTube</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=992">USACO Wormhole Sort</a></li>
-<li><a href="http://usaco.org/index.php?page=viewproblem2&amp;cpid=794">USACO Sprinklers</a></li>
-<li><a href="http://usaco.org/index.php?page=viewproblem2&amp;cpid=924">USACO Cow Dating</a></li>
-<li><a href="https://kilonova.ro/tags/291">Probleme cu two pointers de pe kilonova</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/eticheta/144/two-pointers">Probleme cu two pointers de pe pbinfo</a></li>
-</ul>
-
-
-Sliding Window:
-
-<ul>
-<li><a href="https://kilonova.ro/problems/2502">OJI 2024 Santinele</a></li>
-<li><a href="https://codeforces.com/contest/488/problem/D">Strip Codeforces</a></li>
-<li><a href="https://cses.fi/problemset/task/1077">Sliding Window Cost</a></li>
-<li><a href="https://cses.fi/problemset/task/1644">Max Subarray Sum II</a></li>
-<li><a href="https://www.infoarena.ro/problema/slidingwindow">slidingwindow infoarena</a></li>
-<li><a href="https://codeforces.com/problemset/problem/363/B">Fence Codeforces</a></li>
-</ul>
-
-Principiul lui Dirichlet (principiul cutiei) :
-
-<ul>
-<li><a href="https://codeforces.com/contest/1305/problem/C">Kuroni and Impossible Calculation - Codeforces</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/2059/porumbei">Porumbei - pbinfo</a></li>
-<li><a href="https://codeforces.com/contest/1536/problem/B">Prinzessin der Verurteilung - Codeforces</a></li>
-<li><a href="https://www.infoarena.ro/problema/razboi2">Razboi2 - infoarena</a></li>
-<li><a href="https://kilonova.ro/problems/1723">Lot Juniori 2013 Numere</a></li>
-<li><a href="https://kilonova.ro/problems/543/">ONI 2023 Struguri</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/2105/moretime">OMI Iasi 2013 moretime</a></li>
-<li><a href="https://kilonova.ro/problems/1476">ONI 2016 Leduri</a></li>
-<li><a href="https://codeforces.com/contest/1501/problem/C">Going Home - Codeforces</a></li>
-<li><a href="https://codeforces.com/contest/1770/problem/C">Koxia and Number Theory - Codeforces</a></li>
-<li><a href="https://codeforces.com/contest/1994/problem/D">Funny Game - Codeforces</a></li>
-</ul>
-
-Baze de numeratie :
-<ul>
-<li><a href="https://www.pbinfo.ro/probleme/427/bazaminima">bazaminima pbinfo</a></li>
-<li><a href="https://www.nerdarena.ro/problema/ascunsa">ascunsa nerdarena</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/946/douabaze">douabaze pbinfo</a></li>
-<li><a href="https://www.nerdarena.ro/problema/criptic">criptic nerdarena</a></li>
-<li><a href="https://kilonova.ro/problems/1444">ONI 2014 zimeria</a></li>
-<li><a href="https://www.nerdarena.ro/problema/suc1">suc1 nerdarena</a></li>
-<li><a href="https://www.infoarena.ro/problema/psychtraining">psychtraining infoarena</a></li>
-<li><a href="https://www.infoarena.ro/problema/sticle">sticle infoarena</a></li>
-<li><a href="https://kilonova.ro/problems/1636">Lot 2010 Juniori puteri35</a></li>
-<li><a href="https://kilonova.ro/problems/912">OJI 2019 cate3cifre</a></li>
-<li><a href="https://kilonova.ro/problems/420">ONI 2011 Baraj Seniori copii</a></li>
-<li><a href="https://www.infoarena.ro/problema/nop">nop infoarena</a></li>
-<li><a href="https://kilonova.ro/problems/534">ONI 2023 xidartros</a></li>
-</ul>
-
-Indicatorul lui Euler :
-
-<ul>
-<li><a href="https://www.infoarena.ro/problema/fractii">fractii infoarena</a></li>
-<li><a href="https://www.spoj.com/problems/LCMSUM/">LCMSUM Spoj</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/3295/permeuler">Permeuler pbinfo</a></li>
-<li><a href="https://codeforces.com/problemset/problem/1203/C">Common Divisors Codeforces</a></li>
-<li><a href="https://cppi.sync.ro/materia/indicatorul_lui_euler.html">problemele de pe CPPI Sync</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/eticheta/57/indicatorul-lui-euler">problemele de pe pbinfo</a></li>
-<li><a href="https://vjudge.net/contest/561512">Problemele din această listă de pe Vjudge</a></li>
-</ul>
-
-
-Aritmetică modulară. Ridicare la putere în timp logaritmic:
-
-<ul>
-<li><a href="https://cses.fi/problemset/task/1712">CSES Exponentiation II</a></li>
-<li><a href="https://events.info.uaic.ro/infogim/2015/lectii/6/614.pdf">Tema infogym</a></li>
-<li><a href="https://www.infoarena.ro/problema/modulo">modulo infoarena</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/843/puteri2">puteri2 pbinfo</a></li>
-<li><a href="https://codeforces.com/contest/1279/problem/D">Santa's bot Codeforces</a></li>
-</ul>
-
-Divide et Impera :
-
-<ul>
-<li><a href="https://www.pbinfo.ro/probleme/categorii/94/divide-et-impera">cât mai multe probleme din acest capitol pentru Divide et Impera</a></li>
-<li><a href="https://kilonova.ro/problems/2504">OJI 2024 aprogressive</a></li>
-<li><a href="https://kilonova.ro/problems/1419">ONI 2013 romb</a></li>
-<li><a href="https://codeforces.com/contest/1385/problem/D">Codeforces a-good String</a></li>
-<li><a href="https://www.infoarena.ro/problema/bitcost">infoarena bitcost</a></li>
-<li><a href="https://codeforces.com/contest/1111/problem/C">Codeforces Creative Snap</a></li>
-<li><a href="https://kilonova.ro/problems/887">OJI 2017 caps</a></li>
-<li><a href="https://kilonova.ro/problems/1350">ONI 2010 xp</a></li>
-<li><a href="https://codeforces.com/contest/1285/problem/D">Codeforces Dr. Evil Underscores</a></li>
-<li><a href="https://kilonova.ro/problems/1993">ONI 2004 invsort</a></li>
-<li><a href="https://codeforces.com/problemset/problem/1175/F">Codeforces The Number of Subpermutations</a></li>
-<li><a href="https://kilonova.ro/problems/1543">ONI 2018 proiectoare</a></li>
-<li><a href="https://kilonova.ro/problems/1894">RCPC 2023 blabla</a></li>
-<li><a href="https://codeforces.com/problemset?tags=divide%20and%20conquer">probleme cu Divide et Impera de pe Codeforces</a></li>
-<li><a href="https://kilonova.ro/tags/280">probleme cu Divide et Impera de pe Kilonova</a></li>
-</ul>
-
-
-Backtracking :
-
-<ul>
-<li><a href="https://www.pbinfo.ro/probleme/196/aranjamente">pbinfo aranjamente</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/1277/produscartezian1">pbinfo produscartezian1</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/198/submultimi">pbinfo generarea submulțimilor</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/1281/regine1">pbinfo regine1</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/320/partitiinumar">pbinfo partitiinumar</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/344/paranteze">pbinfo paranteze</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/categorii/27/backtracking">Probleme cu backtracking de pe pbinfo</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=963">USACO Bronze Cow Gymnastics</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=712">USACO Bronze Why Did The Cow Cross The Road II</a></li>
-<li><a href="https://kilonova.ro/problems/41">OJI 2010 Immortal</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=965">USACO Bronze Livestock Lineup</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=857">USACO Bronze Back and Forth</a></li>
-<li><a href="https://codeforces.com/problemset/problem/581/D">Codeforces Three logos</a></li>
-<li><a href="https://kilonova.ro/tags/378">Probleme cu backtracking de pe kilonova</a></li>
-<li><a href="https://cses.fi/problemset/task/1625">CSES Grid Paths</a></li>
-</ul>
-
-
-Principiul Includerii si al excluderii (pinex) :
-
-<ul>
-<li><a href="https://infoarena.ro/problema/frac">infoarena frac</a></li>
-<li><a href="https://infoarena.ro/problema/reuniune">infoarena reuniune</a></li>
-<li><a href="https://infoarena.ro/problema/pairs">infoarena pairs</a></li>
-<li><a href="https://codeforces.com/contest/1349/problem/A">Codeforces Orac and LCM</a></li>
-<li><a href="https://kilonova.ro/problems/2506/">OJI 2024 Poseidon</a></li>
-<li><a href="https://codeforces.com/contest/1750/problem/D">Codeforces Count GCD</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=862">USACO Gold Cowpability</a></li>
-<li><a href="https://codeforces.com/contest/1900/problem/D">Codeforces Small GCD</a></li>
-<li><a href="https://kilonova.ro/problems/1639">Lot Juniori 2015 cardinal</a></li>
-<li><a href="https://kilonova.ro/problems/1807">Lot Juniori 2019 divizori</a></li>
-<li><a href="https://kilonova.ro/problems/640">Lot Juniori 2023 countall</a></li>
-<li><a href="https://kilonova.ro/problems/536/">ONI 2023 Comun</a></li>
-<li><a href="https://kilonova.ro/problems/652">RoAlgo Contest #1 Echipe</a></li>
-<li><a href="https://infoarena.ro/problema/cowfood">infoarena cowfood</a></li>
-<li><a href="https://kilonova.ro/problems/563">ONI 2023 Baraj Seniori Secvxor</a></li>
-<li><a href="https://kilonova.ro/problems/11">ONI 2019 TreeGCD</a></li>
-<li><a href="https://kilonova.ro/problems/220">ONI 2013 Xnumere</a></li>
-<li><a href="https://kilonova.ro/problems/2936">kilonova polyglot</a></li>
-<li><a href="https://atcoder.jp/contests/dp/tasks/dp_y">Atcoder DP Contest Grid 2</a></li>
-<li><a href="https://kilonova.ro/tags/292">Probleme cu PINEX de pe Kilonova</a></li>
-</ul>
-
-
-Fill.Algoritmul lui Lee :
-
-<ul>
-<li><a href="https://kilonova.ro/problems/734">OJI 2004 rj</a></li>
-<li><a href="https://kilonova.ro/problems/768">OJI 2007 alee</a></li>
-<li><a href="https://infoarena.ro/problema/muzeu">infoarena muzeu</a></li>
-<li><a href="https://infoarena.ro/problema/barbar">infoarena barbar</a></li>
-<li><a href="https://kilonova.ro/problems/664/">RoAlgo Contest #1 - Expansion</a></li>
-<li><a href="https://usaco.org/current/index.php?page=viewproblem2&amp;cpid=895">USACO Silver Icy Perimeter</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=380">USACO Silver Cross Country Skiing</a></li>
-<li><a href="https://kilonova.ro/problems/938">OJI 2021 labirint</a></li>
-<li><a href="https://kilonova.ro/problems/398">OJI 2009 insule</a></li>
-<li><a href="https://www.infoarena.ro/problema/delfin">infoarena delfin</a></li>
-<li><a href="https://infoarena.ro/problema/vila">infoarena vila</a></li>
-<li><a href="https://www.infoarena.ro/problema/marceland">infoarena marceland</a></li>
-<li><a href="https://codeforces.com/contest/510/problem/B">Codeforces Fox and Two Dots</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=740">USACO Silver Where's Bessie</a></li>
-<li><a href="https://codeforces.com/contest/1365/problem/D">Codeforces Solve the Maze</a></li>
-<li><a href="https://kilonova.ro/problems/900">OJI 2018 castel</a></li>
-<li><a href="https://kilonova.ro/problems/1429">ONI 2014 traseu</a></li>
-<li><a href="https://codeforces.com/contest/598/problem/D">Codeforces Igor in the Museum</a></li>
-<li><a href="https://kilonova.ro/problems/1396">ONI 2012 gheizere</a></li>
-<li><a href="https://codeforces.com/problemset/problem/877/D">Codeforces Olya and Energy Drinks</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1110">USACO Silver Comfortable Cows</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=811">USACO Silver Snow Boots</a></li>
-<li><a href="https://kilonova.ro/problems/1700">Lot Juniori 2021 Fete si baieti</a></li>
-<li><a href="https://kilonova.ro/problems/875">OJI 2016 miting</a></li>
-<li><a href="https://www.pbinfo.ro/?pagina=probleme-lista&amp;disciplina=0&amp;clasa=10&amp;tag=85&amp;subtag=87&amp;dificultate=2&amp;folosesc_consola=-1&amp;eticheta=&amp;start=0">Probleme cu coada si lee de pe pbinfo</a></li>
-<li><a href="https://kilonova.ro/tags/356">Problemele cu flood fill de pe kilonova</a></li>
-</ul>
-
-
-Deque:
-
-<ul>
-<li><a href="https://www.infoarena.ro/problema/vila2">infoarena vila2</a></li>
-<li><a href="https://www.infoarena.ro/problema/knumere">infoarena knumere</a></li>
-<li><a href="https://kilonova.ro/problems/2187">RoAlgo PreOJI 2024 pofta</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/4198/wall1">JBOI 2022 Wall</a></li>
-<li><a href="https://kilonova.ro/problems/1715">Lot Juniori 2016 pofta</a></li>
-<li><a href="https://kilonova.ro/problems/994">IIOT Discount Optimization</a></li>
-<li><a href="https://kilonova.ro/tags/409">Problemele cu deque de pe kilonova</a></li>
-<li><a href="https://www.infoarena.ro/cauta-probleme?tag_id[]=94">Problemele cu deque de pe infoarena</a></li>
-</ul>
-
-Probleme ad-hoc:
-
-<ul>
-<li><a href="https://kilonova.ro/problems/915">OJI 2019 traseu</a></li>
-<li><a href="https://www.infoarena.ro/problema/palind">infoarena palind</a></li>
-<li><a href="https://oj.uz/problem/view/COCI18_karte">COCI 2018 karte</a></li>
-<li><a href="https://kilonova.ro/problems/1303">ONI 2008 aranjare</a></li>
-<li><a href="https://codeforces.com/contest/1815/problem/A">CF 1815A</a></li>
-<li><a href="https://codeforces.com/contest/1797/problem/C">CF 1797C</a>  </li>
-<li><a href="https://codeforces.com/contest/1815/problem/B">CF 1815B</a></li>
-<li><a href="https://kilonova.ro/problems/1084">Baraj juniori 2016 asort</a></li>
-<li><a href="https://oj.uz/problem/view/IOI10_quality">IOI 2010 quality</a></li>
-<li><a href="https://dmoj.ca/problem/coci13c1p5">COCI 2013 organizator</a></li>
-<li><a href="https://codeforces.com/problemset/problem/1332/B">CF 1332B</a></li>
-<li><a href="https://atcoder.jp/contests/abc134/tasks/abc134_d">ABC134 D</a></li>
-<li><a href="https://codeforces.com/contest/1804/problem/B">CF 1804B</a></li>
-<li><a href="https://atcoder.jp/contests/arc158/tasks/arc158_a">ARC158 A</a></li>
-<li><a href="https://atcoder.jp/contests/arc153/tasks/arc153_b">ARC153 B</a></li>
-<li><a href="https://atcoder.jp/contests/arc145/tasks/arc145_b">ARC145 B</a></li>
-<li><a href="https://codeforces.com/problemset/problem/1407/C">CF 1407C</a></li>
-<li><a href="https://codeforces.com/contest/1776/problem/F">CF 1776F</a></li>
-<li><a href="https://atcoder.jp/contests/arc118/tasks/arc118_c">ARC118 C</a></li>
-<li><a href="https://codeforces.com/contest/1776/problem/G">CF 1776G</a></li>
-<li><a href="https://atcoder.jp/contests/arc159/tasks/arc159_c">ARC159 C</a></li>
-<li><a href="https://codeforces.com/contest/1736/problem/D">CF 1736D</a></li>
-<li><a href="https://kilonova.ro/tags/297">Probleme ad-hoc de pe kilonova</a></li>
-</ul>
-
-
-Probleme Constructive :
-
-<ul>
-<li><a href="https://kilonova.ro/problems/1941">IIOT 2023 Ping Pong</a></li>
-<li><a href="https://kilonova.ro/problems/878">OJI 2017 Roboti</a></li>
-<li><a href="https://codeforces.com/contest/1028/problem/B">Codeforces Unnatural Conditions</a></li>
-<li><a href="https://kilonova.ro/problems/3365/">IIOT 2024 Tetris Tiling</a></li>
-<li><a href="https://kilonova.ro/problems/2961">RoAlgo Contest #10 Paranteze</a></li>
-<li><a href="https://kilonova.ro/problems/23">OJI 2018 Galeti</a></li>
-<li><a href="https://kilonova.ro/problems/1730">Lot Juniori 2011 domino</a></li>
-<li><a href="https://kilonova.ro/problems/345">IIOT 2022 Pepi and his Friends</a></li>
-<li><a href="https://codeforces.com/problemset/problem/763/B">Codeforces Timofey and Rectangles</a></li>
-<li><a href="https://kilonova.ro/problems/170">ONI 2017 Tris</a></li>
-<li><a href="https://kilonova.ro/tags/345">Probleme constructive de pe kilonova</a></li>
-<li><a href="https://codeforces.com/problemset?tags=constructive%20algorithms">Probleme constructive de pe Codeforces</a></li>
-</ul>
-
-
-Graphuri (Introducere) :
-
-<ul>
-<li><a href="https://kilonova.ro/problems/1611">Kilonova unire</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/4290/gasesteciclu">GasesteCiclu pbinfo</a></li>
-<li><a href="https://cses.fi/problemset/task/1667">CSES Message Route</a></li>
-<li><a href="https://cses.fi/problemset/task/1668">CSES Building Teams</a></li>
-<li><a href="https://cses.fi/problemset/task/1669">CSES Round Trip</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=940">USACO Bronze Milk Factory</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=916">USACO Bronze The Great Revegetation</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=644">USACO Silver Closing the Farm</a></li>
-<li><a href="https://usaco.org/current/index.php?page=viewproblem2&amp;cpid=668">USACO Silver Moocast</a></li>
-<li><a href="https://www.infoarena.ro/problema/multiplu">infoarena multiplu</a></li>
-<li><a href="https://kilonova.ro/problems/117">ONI 2004 base3</a></li>
-<li><a href="https://kilonova.ro/tags/300">Probleme cu grafuri de pe kilonova</a></li>
-<li><a href="https://codeforces.com/problemset?order=BY_RATING_ASC&amp;tags=combine-tags-by-or%2Cgraphs%2Cdfs+and+similar">Probleme cu grafuri de pe codeforces, ordonate după dificultate</a></li>
-</ul>
-
-Arbori(Introducere):
-
-<ul>
-<li><a href="https://cses.fi/problemset/task/1674">Subordinates</a></li>
-<li><a href="https://www.infoarena.ro/problema/nivele2">nivele2 infoarena</a></li>
-<li><a href="https://www.infoarena.ro/problema/grarb">Grarb infoarena</a></li>
-<li><a href="https://codeforces.com/contest/1098/problem/A">Sum in the Tree</a></li>
-<li><a href="https://kilonova.ro/problems/630">IIOT tourdetree</a></li>
-<li><a href="https://kilonova.ro/problems/2188">Tree Diameter</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=788">Mootube USACO Silver</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=968">Milk Visits USACO Silver</a></li>
-<li><a href="https://kilonova.ro/problems/1802">Sap</a></li>
-</ul>
-
-Dynamic Programming (Introducere) :
-
-<ul>
-<li><a href="https://infoarena.ro/problema/custi">Infoarena custi</a></li>
-<li><a href="https://codeforces.com/problemset/problem/455/A">Codeforces Boredom</a></li>
-<li><a href="https://atcoder.jp/contests/abc232/tasks/abc232_d">AtCoder Weak Takahashi</a></li>
-<li><a href="https://kilonova.ro/problems/1941">IIOT 2023-24 PingPong</a></li>
-<li><a href="https://atcoder.jp/contests/abc242/tasks/abc242_c">AtCoder 1111gal password</a></li>
-<li><a href="https://atcoder.jp/contests/abc291/tasks/abc291_d">AtCoder Flip Cards</a></li>
-<li><a href="https://kilonova.ro/problems/967">IIOT Police</a></li>
-<li><a href="https://cses.fi/problemset/task/2413">Counting Towers</a></li>
-<li><a href="https://atcoder.jp/contests/abc267/tasks/abc267_d">AtCoder Index × A(Not Continuous ver.)</a></li>
-<li><a href="https://atcoder.jp/contests/abc222/tasks/abc222_d">AtCoder Between Two Arrays</a></li>
-<li><a href="https://kilonova.ro/problems/1743">Lot Juniori Minusk</a></li>
-<li><a href="https://atcoder.jp/contests/abc312/tasks/abc312_d">AtCoder Count Bracket Sequences</a></li>
-<li><a href="https://atcoder.jp/contests/abc262/tasks/abc262_d">AtCoder I hate Non Integer Number</a></li>
-<li><a href="https://codeforces.com/contest/1627/problem/E">Not Escaping Codeforces</a></li>
-<li><a href="https://kilonova.ro/tags/275">Problemele cu DP de pe Kilonova</a></li>
-<li><a href="https://atcoder-tags.herokuapp.com/tag_search/Dynamic-Programming">Problemele intre rating 500 si 1400 de aici</a></li>
-<li><a href="https://infoarena.ro/cauta-probleme?tag_id[]=58">Problemele cu DP de pe infoarena</a></li>
-</ul>
-
-
-DP:
-Problema rucsacului(DP)
-
-<ul>
-<li><a href="https://atcoder.jp/contests/dp/tasks/dp_d">AtCoder Knapsack I</a></li>
-<li><a href="https://atcoder.jp/contests/dp/tasks/dp_e">AtCoder Knapsack II</a></li>
-<li><a href="https://cses.fi/problemset/task/1745/">CSES Money Sums</a></li>
-<li><a href="https://cses.fi/problemset/task/1635">CSES Coin Combinations I</a></li>
-<li><a href="https://cses.fi/problemset/task/1636">CSES Coin Combinations II</a></li>
-<li><a href="https://kilonova.ro/problems/1469">ONI 2015 Procente</a></li>
-<li><a href="https://cses.fi/problemset/task/1634">CSES Minimizing Coins</a></li>
-<li><a href="https://kilonova.ro/problems/684">RoAlgo Contest 2 strehaia</a></li>
-<li><a href="https://infoarena.ro/problema/triunghi">Infoarena Triunghi</a></li>
-<li><a href="https://kilonova.ro/problems/342">IIOT 2021 Castle</a></li>
-<li><a href="https://kilonova.ro/problems/1469">ONI 2015 Procente</a></li>
-<li><a href="https://kilonova.ro/problems/1902">RCPC 2023 Dragons</a></li>
-<li><a href="https://kilonova.ro/problems/274">ONI 2017 Baraj Seniori Cli</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=574">USACO Gold Fruit Feast</a></li>
-<li><a href="https://atcoder.jp/contests/abc321/tasks/abc321_f">Subset Sum Queries</a></li>
-<li><a href="https://kilonova.ro/tags/298">Probleme cu rucsac de pe Kilonova</a></li>
-<li><a href="https://infoarena.ro/cauta-probleme?tag_id[]=95">Probleme cu rucsac de pe Infoarena</a></li>
-</ul>
-
-Subsir comun maximal :
-
-<ul>
-<li><a href="https://www.infoarena.ro/problema/cmlsc">cmlsc infoarena</a></li>
-<li><a href="https://oj.uz/problem/view/eJOI20_exam">EJOI 2020 Exam</a></li>
-<li><a href="https://codeforces.com/contest/1488/problem/E">Palindromic Doubles</a></li>
-</ul>
-
-Subsir crescator maximal:
-
-<ul>
-<li><a href="https://codeforces.com/problemset/problem/1325/B">CopyCopyCopyCopyCopy Codeforces</a></li>
-<li><a href="https://infoarena.ro/problema/scmax">scmax infoarena</a></li>
-<li><a href="https://infoarena.ro/problema/subsiruri">subsiruri infoarena</a></li>
-<li><a href="https://codeforces.com/gym/102951/problem/C">LIS On Permutations - Codeforces</a></li>
-<li><a href="https://kilonova.ro/problems/2896/">IIOT 2018 UpDown</a></li>
-<li><a href="https://codeforces.com/contest/76/problem/F">Codeforces Tourist</a></li>
-<li><a href="https://infoarena.ro/problema/interclasare">interclasare infoarena</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=496">USACO Gold Cowjog</a></li>
-<li><a href="https://kilonova.ro/problems/2808?list_id=1104">Pokemoni - Lot 2024 Juniori</a></li>
-</ul>
-
-Dinamica pe stari exponentiale(bitmask DP) :
-
-<ul>
-<li><a href="https://infoarena.ro/problema/morcovi">infoarena morcovi</a></li>
-<li><a href="https://infoarena.ro/problema/poly">infoarena poly</a></li>
-<li><a href="https://www.infoarena.ro/problema/coins">infoarena coins</a></li>
-<li><a href="https://www.infoarena.ro/problema/zebughil">infoarena zebughil</a></li>
-<li><a href="https://kilonova.ro/problems/1885">RCPCamp 2023 Anton Would Approve this problem</a></li>
-<li><a href="https://kilonova.ro/problems/40">OJI 2011 Ubuntzei</a></li>
-<li><a href="https://kilonova.ro/problems/19/">OJI 2020 RecycleBin</a></li>
-<li><a href="https://kilonova.ro/problems/1756">Lot Juniori 2014 ssce</a></li>
-<li><a href="https://kilonova.ro/problems/2802/">Lot Juniori 2024 nooverlap</a></li>
-<li><a href="https://kilonova.ro/problems/1716">Lot Juniori 2016 ksiruri</a></li>
-<li><a href="https://kilonova.ro/problems/2839?list_id=1115">Lot Juniori 2024 numbers</a></li>
-<li><a href="https://kilonova.ro/problems/746">OJI 2005 scara</a></li>
-<li><a href="https://atcoder.jp/contests/dp/tasks/dp_o?lang=en">AtCoder Matching</a></li>
-<li><a href="https://codeforces.com/contest/895/problem/C">Codeforces Square Subsets</a></li>
-<li><a href="https://codeforces.com/contest/1340/problem/B">Nastya and Scoreboard</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1089">USACO Gold Uddered but not Heard</a></li>
-<li><a href="https://codeforces.com/contest/1316/problem/E">Codeforces Team Building</a></li>
-<li><a href="https://codeforces.com/contest/1288/problem/D">Codeforces Minimax Problem</a></li>
-<li><a href="https://oj.uz/problem/view/COCI16_burza">COCI 2016 Burza</a></li>
-<li><a href="https://kilonova.ro/problems/3247">permutare - InfoTeams #2</a></li>
-</ul>
-
-Teoria Graphurilor:
-
-
-Sortare Topologica(Graphuri):
-
-<ul>
-<li><a href="https://www.infoarena.ro/problema/sortaret">Infoarena - Sortare Topologica</a></li>
-<li><a href="https://cses.fi/problemset/task/1679">CSES Course Schedule</a></li>
-<li><a href="https://www.infoarena.ro/problema/path">Infoarena Path</a></li>
-<li><a href="https://kilonova.ro/problems/1016">RoAlgo Contest #4 Leximin</a></li>
-<li><a href="https://codeforces.com/problemset/problem/510/C">Codeforces Fox and Names</a></li>
-<li><a href="https://www.infoarena.ro/problema/easygraph">Infoarena easygraph</a></li>
-<li><a href="https://kilonova.ro/problems/2627">IATI Shumen 2024 xy</a></li>
-<li><a href="https://kilonova.ro/problems/677">RoAlgo Contest #2 somnoros</a></li>
-<li><a href="https://infoarena.ro/problema/alpin">Infoarena alpin</a></li>
-<li><a href="https://codeforces.com/gym/103741/problem/H">Codeforces Gym Permutation Counting</a></li>
-</ul>
-
-Cicluri în grafuri. Grafuri funcționale:
-
-<ul>
-<li><a href="https://cses.fi/problemset/task/1691">CSES Mail Delivery</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/579/drum-hamiltonian">pbinfo drum hamiltonian</a></li>
-<li><a href="https://codeforces.com/contest/1020/problem/B">Codeforces Badge</a></li>
-<li><a href="https://cses.fi/problemset/task/1693">CSES Teleporters Path</a></li>
-<li><a href="https://kilonova.ro/problems/33">OJI 2014 cartite</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1013">USACO Bronze Swapity Swap</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=764">USACO Silver Bovine Shuffle</a></li>
-<li><a href="https://cses.fi/problemset/task/1751">CSES Planets Cycles</a></li>
-<li><a href="https://codeforces.com/contest/1768/problem/D">Codeforces Lucky Permutation</a></li>
-<li><a href="https://www.infoarena.ro/problema/domino">infoarena domino</a></li>
-<li><a href="https://www.infoarena.ro/problema/johnie">infoarena johnie</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1206">USACO Silver Redistributing Gifts</a></li>
-<li><a href="https://codeforces.com/contest/1591/problem/D">Codeforces Yet Another Sorting Problem</a></li>
-<li><a href="https://codeforces.com/gym/104197/problem/J">Codeforces Jewel of Data Structure Problems</a></li>
-<li><a href="https://codeforces.com/contest/1690/problem/F">Codeforces Shifting String</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1230">USACO Silver Visits</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1014">USACO Silver Swapity Swapity Swap</a></li>
-<li><a href="https://codeforces.com/contest/612/problem/E">Codeforces Square Root of Permutation</a></li>
-<li><a href="https://codeforces.com/contest/911/problem/D">Codeforces Inversion Counting</a></li>
-<li><a href="https://cses.fi/191/list/">CEOI 2005 depot</a> - se intră în cont și se dă upsolving pentru a accesa problema</li>
-<li><a href="https://kilonova.ro/problems/1978">Lot Seniori 2014 Evacuare</a></li>
-<li><a href="https://kilonova.ro/problems/1924">Lot Seniori 2016 politic</a></li>
-<li><a href="https://infoarena.ro/problema/zaharel">infoarena zaharel</a></li>
-<li><a href="https://kilonova.ro/problems/2642">ONI 2024 sim</a></li>
-<li><a href="https://kilonova.ro/problems/2234">Lot Seniori 2011 amici</a></li>
-<li><a href="https://oj.uz/problem/view/IOI11_garden">IOI 2011 Tropical Garden</a></li>
-</ul>
-
-Paduri de multimi disjuncte(DSU):
-
-<ul>
-<li><a href="https://cses.fi/395/list/">Chemical table - EJOI 2018</a></li>
-<li><a href="https://kilonova.ro/problems/1785">MexC ONI 2008</a></li>
-<li><a href="https://codeforces.com/contest/1927/problem/F">Microcycles - Codeforces</a></li>
-<li><a href="https://codeforces.com/gym/102565/problem/D">Galleries - AGM 2020</a></li>
-<li><a href="https://kilonova.ro/problems/2013/">JBOI 2023 Frequencies</a></li>
-<li><a href="https://kilonova.ro/problems/1936">IIOT 2023-24 Binary Chess</a></li>
-<li><a href="https://kilonova.ro/tags/311">Probleme cu DSU de pe kilonova</a></li>
-<li><a href="https://dmoj.ca/problem/coci13c5p6">COCI 13-ladice</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=789">USACO MooTube</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=992">USACO Wormhole Sort</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/7/1/practice">DSU Step 1 - Codeforces EDU</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/7/2/practice">DSU Step 2 - Codeforces EDU</a></li>
-</ul>
-
-Arbore parțial de cost minim (Kruskal, Prim, Boruvka):
-
-<ul>
-<li><a href="https://cses.fi/problemset/task/1675/">Road Reparation</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=623">USACO Gold Fenced In</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1211">USACO Gold Moo Network</a></li>
-<li><a href="https://www.infoarena.ro/problema/cablaj">infoarena cablaj</a></li>
-<li><a href="https://kilonova.ro/problems/27">OJI 2017 Ninjago</a></li>
-<li><a href="https://codeforces.com/contest/1927/problem/F">Codeforces Microcycle</a></li>
-<li><a href="https://www.infoarena.ro/problema/desen">infoarena desen</a></li>
-<li><a href="https://kilonova.ro/problems/150">ONI 2018 Poligon</a></li>
-<li><a href="https://kilonova.ro/problems/10">ONI 2019 Oracol</a></li>
-<li><a href="https://codeforces.com/problemset/problem/196/E">Codeforces Opening Portals</a></li>
-<li><a href="https://codeforces.com/problemset/problem/888/G">Codeforces XOR-MST</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1211">USACO Gold Moo Network</a></li>
-<li><a href="https://kilonova.ro/tags/312">Problemele cu APM de pe kilonova</a></li>
-<li><a href="https://codeforces.com/gym/100238">Probleme educaționale cu APM</a></li>
-<li><a href="https://codeforces.com/problemset/problem/609/E">Minimum spanning tree for each edge</a></li>
-</ul>
-
-
-Algoritmi pentru drumuri minime (Dijkstra, Bellman-Ford, Floyd-Warshall):
-
-<ul>
-<li><a href="https://kilonova.ro/problems/2037/">Simple Shortest Path</a></li>
-<li><a href="https://cses.fi/problemset/task/1671/">Shortest Routes I</a></li>
-<li><a href="https://cses.fi/problemset/task/1672/">Shortest Routes II</a></li>
-<li><a href="https://www.infoarena.ro/problema/catun">catun infoarena</a></li>
-<li><a href="https://cses.fi/problemset/task/1673">High Score</a></li>
-<li><a href="https://cses.fi/problemset/task/1195">Flight Discount</a></li>
-<li><a href="https://kilonova.ro/problems/54">OJI 2004 Lanterna</a></li>
-<li><a href="https://codeforces.com/gym/104328/problem/C">FIICode John and Tractor</a></li>
-<li><a href="https://kilonova.ro/problems/888">OJI 2017 Rover</a></li>
-<li><a href="https://cses.fi/100/list/">Baltic Olympiad 2011 Switch</a></li>
-<li><a href="https://kilonova.ro/problems/1624/">Lot 2018 Juniori Road</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=861">USACO Gold Fine Dining</a></li>
-<li><a href="https://kilonova.ro/problems/532/">ONI 2023 Biom</a></li>
-<li><a href="https://cses.fi/problemset/task/1197">Cycle Finding</a></li>
-<li><a href="https://cses.fi/problemset/task/1202">Investigation</a></li>
-<li><a href="https://kilonova.ro/tags/296">Probleme cu drumul minim de pe Kilonova</a></li>
-<li><a href="https://infoarena.ro/cauta-probleme?tag_id[]=72">Probleme cu Dijkstra de pe Infoarena</a></li>
-<li><a href="https://infoarena.ro/cauta-probleme?tag_id[]=342">Probleme cu Bellman-Ford de pe Infoarena</a></li>
-<li><a href="https://www.infoarena.ro/problema/rfinv">rfinv infoarena</a></li>
-<li><a href="https://infoarena.ro/cauta-probleme?tag_id[]=92">Probleme cu Floyd-Warshall de pe Infoarena</a></li>
-</ul>
-
-
-Tehnica celor două DFS-uri (rerooting):
-
-<ul>
-<li><a href="https://www.infoarena.ro/problema/razboi">infoarena razboiul lumilor</a></li>
-<li><a href="https://codeforces.com/gym/105012/problem/J">Codeforces Jovial Jaunt</a></li>
-<li><a href="https://kilonova.ro/problems/119">ONI 2003 asmin</a></li>
-<li><a href="https://codeforces.com/contest/1092/problem/F">Codeforces Tree with Maximum Cost</a></li>
-<li><a href="https://www.infoarena.ro/problema/treesearch">infoarena treesearch</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=814">USACO Gold Directory Traversal</a></li>
-<li><a href="https://codeforces.com/contest/1000/problem/G">Codeforces Two Paths</a></li>
-<li><a href="https://kilonova.ro/problems/203/">ONI 2015 arbvalmax</a></li>
-<li><a href="https://atcoder.jp/contests/abc222/tasks/abc222_f">AtCoder Expensive Expense</a></li>
-<li><a href="https://www.acmicpc.net/problem/14875">BOI 2017 City Attractions</a></li>
-<li><a href="https://codeforces.com/contest/543/problem/D">Codeforces Road Improvement</a></li>
-<li><a href="https://dmoj.ca/problem/apio10p2">APIO 2010 Patrol</a></li>
-</ul>
-
-
-Matematica:
-
-Combinatorica:
-
-<ul>
-<li><a href="https://kilonova.ro/problems/1982">Combination</a></li>
-<li><a href="https://www.infoarena.ro/problema/pascal">pascal infoarena</a></li>
-<li><a href="https://infoarena.ro/problema/stirling">Stirling infoarena</a></li>
-<li><a href="https://kilonova.ro/problems/300">IIOT Dream</a></li>
-<li><a href="https://kilonova.ro/problems/2936">Polyglot Kilonova</a></li>
-<li><a href="https://kilonova.ro/tags/294">Problemele de combinatorică de pe Kilonova, în special cele de la loturile de juniori</a></li>
-<li><a href="https://kilonova.ro/problems/1604">RoAlgo Contest 4 - Ursul</a></li>
-<li><a href="https://kilonova.ro/problems/695">RoAlgo Contest 2 - munte</a></li>
-<li><a href="https://kilonova.ro/problems/1898">RCPC 2023 KsumT</a></li>
-<li><a href="https://kilonova.ro/problems/1443">ONI 2014 Spion</a></li>
-<li><a href="https://kilonova.ro/problems/1468">ONI 2015 Nmult</a></li>
-<li><a href="https://kilonova.ro/problems/287/">ONI 2015 Baraj Provocare</a></li>
-<li><a href="https://kilonova.ro/problems/220">ONI 2013 Xnumere</a></li>
-<li><a href="https://kilonova.ro/problems/2433/">IIOT 2024 Mermaid</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1018">USACO Gold Help Yourself</a></li>
-<li><a href="https://cppi.sync.ro/materia/combinatorica.html">Problemele de pe cppi.sync</a></li>
-<li><a href="https://cses.fi/problemset/task/2064">CSES Bracket Sequences I</a></li>
-<li><a href="https://cses.fi/problemset/task/2187">CSES Bracket Sequences II</a></li>
-<li><a href="https://cses.fi/problemset/task/1716">CSES Distributing Apples</a></li>
-<li><a href="https://codeforces.com/problemset/problem/1606/E">Codeforces Arena</a></li>
-<li><a href="https://codeforces.com/contest/1462/problem/E2">Codeforces Close Tuples (hard version)</a></li>
-<li><a href="https://codeforces.com/problemset/problem/888/D">Codeforces Almost Identity Permutations</a></li>
-<li><a href="https://codeforces.com/contest/2025/problem/E">Codeforces Card Game</a></li>
-<li><a href="https://codeforces.com/gym/104520/problem/K">Codeforces Med and Mex</a></li>
-<li><a href="https://codeforces.com/contest/660/problem/E">Codeforces Different Subsets For All Tuples</a></li>
-<li><a href="https://codeforces.com/problemset?tags=combinatorics">Probleme de combinatorică de pe Codeforces</a></li>
-</ul>
-
-
-Alte notiuni :
-
-
-Hashing:
-
-<ul>
-<li><a href="https://kilonova.ro/problems/36">subsecvente OJI 2013</a></li>
-<li><a href="https://kilonova.ro/problems/2165">Carry Bit IIOT 2023-24</a></li>
-<li><a href="https://kilonova.ro/problems/1702">sp Lot juniori 2021</a></li>
-<li><a href="https://kilonova.ro/problems/2836/">gimigpt Lot Juniori 2024</a></li>
-<li><a href="https://kilonova.ro/problems/1690">mixperm Lot juniori 2017</a></li>
-<li><a href="https://kilonova.ro/problems/1903">Palindrome String</a></li>
-<li><a href="https://kilonova.ro/problems/1802">sap RoAlgo Contest 6 - XOR Hashing</a></li>
-<li><a href="https://kilonova.ro/problems/2098/">toska Stelele Informaticii - XOR Hashing</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=741">Bovine Genomics USACO</a></li>
-<li><a href="https://csacademy.com/contest/rmi-2017-day-1/task/hangman2/">RMI 2017 Hangman 2</a></li>
-<li><a href="https://kilonova.ro/tags/322">Probleme cu hashing de pe kilonova</a></li>
-<li><a href="https://www.infoarena.ro/cauta-probleme?tag_id[]=432">Probleme cu hashing de pe infoarena</a></li>
-</ul>
-
-Meet in the Middle:
-<ul>
-<li><a href="https://kilonova.ro/problems/1691">Piese Lot Juniori 2017</a></li>
-<li><a href="https://www.infoarena.ro/problema/loto">Infoarena loto</a></li>
-<li><a href="https://kilonova.ro/problems/1613/">23 - IIOT 2019-20</a></li>
-<li><a href="https://kilonova.ro/problems/901">OJI 2018 eq4</a></li>
-<li><a href="https://www.infoarena.ro/problema/aiacubiti">Infoarena aiacubiti</a></li>
-<li><a href="https://infoarena.ro/problema/colectie">Infoarena colectie</a></li>
-<li><a href="https://codeforces.com/contest/1192/problem/C">CEOI 2019 cubeword</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1327">USACO Silver Field Day</a></li>
-<li><a href="https://kilonova.ro/problems/990">Cupa SEPI 2023 circles</a></li>
-<li><a href="https://codeforces.com/problemset?tags=meet-in-the-middle">Probleme cu meet in the middle de pe Codeforces</a></li>
-<li><a href="https://kilonova.ro/tags/348">Probleme cu meet in the middle de pe Kilonova</a></li>
-</ul>
-
-
-Structuri de date :
-
-
-Descompuneri în bucăți de radical (Square Root Decomposition)
-
-<ul>
-<li><a href="https://infoarena.ro/problema/mayonaka">infoarena mayonaka</a></li>
-<li><a href="https://kilonova.ro/problems/374">InfoOltenia 2020 Toorcmmdc</a></li>
-<li><a href="https://infoarena.ro/problema/aparate">Junior Challenge 2020 Aparate</a></li>
-<li><a href="https://www.infoarena.ro/problema/qxy">infoarena qxy</a></li>
-<li><a href="https://kilonova.ro/problems/1600">ONI 2022 subsir</a></li>
-<li><a href="https://infoarena.ro/problema/suma6">infoarena suma6</a></li>
-<li><a href="https://www.infoarena.ro/problema/numerex">infoarena numerex</a></li>
-<li><a href="https://kilonova.ro/problems/204/">ONI 2015 ksecv</a></li>
-<li><a href="https://kilonova.ro/problems/1521/">ONI 2018 Mexitate</a></li>
-<li><a href="https://kilonova.ro/problems/1683/">Lot Juniori 2019 dss</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1188">USACO Platinum Minimizing Haybales</a></li>
-<li><a href="https://kilonova.ro/problems/2427/">IIOT 2024 XYQueries</a></li>
-<li><a href="https://kilonova.ro/problems/142/">ONI 2022 Baraj Seniori Piezisa</a></li>
-<li><a href="https://www.infoarena.ro/problema/arbore">infoarena arbore</a></li>
-<li><a href="https://codeforces.com/contest/1921/problem/F">Codeforces Sum of Progression</a></li>
-<li><a href="https://codeforces.com/contest/797/problem/E">Codeforces Array Queries</a></li>
-<li><a href="https://codeforces.com/contest/2008/problem/H">Codeforces Sakurako's Test</a></li>
-<li><a href="https://codeforces.com/contest/1902/problem/D">Codeforces Robot Queries</a></li>
-<li><a href="https://codeforces.com/contest/1924/problem/B">Codeforces Space Harbour</a></li>
-<li><a href="https://codeforces.com/contest/877/problem/F">Codeforces Ann and Books</a></li>
-<li><a href="https://codeforces.com/contest/617/problem/E">Codeforces XOR and Favorite Number</a></li>
-</ul>
-
-
-Arbori de intervale(AINT) :
-
-<ul>
-<li><a href="https://cses.fi/problemset/task/1649">Dynamic Range Minimum Queries</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/4/1/practice/contest/273169/problem/C">Number of Minimums on a Segment</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/1591/intervalxy">Intervalxy</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/4/2/practice/contest/273278/problem/B">Kth one</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/4/2/practice/contest/273278/problem/C">First element at least X</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/4/4/practice/contest/274684/problem/A">Sign Alternation</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/4/4/practice/contest/274684/problem/C">Inversions</a></li>
-<li><a href="https://codeforces.com/contest/339/problem/D">Xenia and bit operations</a></li>
-<li><a href="https://codeforces.com/contest/1181/problem/D">Irrigation</a></li>
-<li><a href="https://cses.fi/problemset/task/1734">Distinct Value Queries</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1137">United Cows of Farmer John - USACO Gold</a></li>
-<li><a href="https://cses.fi/problemset/task/1748">Increasing Subsequence II</a></li>
-<li><a href="https://cses.fi/problemset/task/1144">Salary Queries</a></li>
-<li><a href="https://kilonova.ro/problems/542/">Kth - ONI 2023</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/2103/intersectie-segmente">Intersecție segmente</a> : baleiere</li>
-<li><a href="https://kilonova.ro/problems/133">Dulciuri - OJI 2021</a></li>
-<li><a href="https://infoarena.ro/problema/arraycounting">Array Counting - IIOT 2021-2022</a></li>
-<li><a href="https://kilonova.ro/problems/304/">Panama Sum - IIOT 2022-2023</a></li>
-<li><a href="https://codeforces.com/contest/121/problem/E">Lucky Array</a></li>
-</ul>
-
-Arbori indexati binar(AIB):
-
-<ul>
-<li><a href="https://www.infoarena.ro/problema/aib">infoarena aib</a></li>
-<li><a href="https://kilonova.ro/problems/2100">Kilonova Fenwick Tree</a></li>
-<li><a href="https://kilonova.ro/problems/960">IIOT Goal Statistics</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/4/3/practice/contest/274545/problem/A">Inversions - Codeforces Edu</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/4/3/practice/contest/274545/problem/B">Inversions 2 - Codeforces Edu</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/4/2/practice/contest/273278/problem/B">K-th one - Codeforces Edu</a></li>
-<li><a href="https://codeforces.com/edu/course/2/lesson/4/1/practice/contest/273169/problem/A">Segment Tree for the Sum - Codeforces Edu</a></li>
-<li><a href="https://infoarena.ro/problema/inv">infoarena inv</a></li>
-</ul>
-
-Sparse Table. Binary Lifting. Range Minimum Query (RMQ):
-
-<ul>
-<li><a href="https://kilonova.ro/problems/1096">ONI 2021 Baraj Juniori cartita</a></li>
-<li><a href="https://kilonova.ro/problems/3147">Info1Cup 2021 wonderland</a></li>
-<li><a href="https://codeforces.com/contest/1175/problem/E">CF 1175E</a></li>
-<li><a href="https://codeforces.com/problemset/problem/191/C">CF 191C</a></li>
-<li><a href="https://codeforces.com/contest/1328/problem/E">CF 1328E</a></li>
-<li><a href="https://codeforces.com/contest/1702/problem/G2">CF 1702G2</a></li>
-<li><a href="https://codeforces.com/problemset/problem/832/D">CF 832D</a></li>
-<li><a href="https://oj.uz/problem/view/RMI20_sumzero">RMI 2020 Sum Zero</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/3860/consecutive1">EJOI 2021 consecutive1</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/2865/minisecvente">PBinfo minisecvente</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/1735/divquery">PBinfo divquery</a></li>
-<li><a href="https://infoarena.ro/problema/euclid">infoarena euclid</a></li>
-<li><a href="https://infoarena.ro/problema/plantatie">infoarena plantatie</a></li>
-<li><a href="https://www.codechef.com/problems/KSIZEGCD">CodeChef Maximum of GCDs</a></li>
-<li><a href="https://csacademy.com/contest/round-15/task/substring-restrictions/">Substring Restrictions - CS Academy</a></li>
-<li><a href="https://cp-algorithms.com/data_structures/sparse-table.html#practice-problems">Problemele cu Sparse Table de la articolul de pe CP algorithms</a></li>
-<li><a href="https://kilonova.ro/tags/289">Probleme cu RMQ de pe kilonova</a></li>
-<li><a href="https://kilonova.ro/tags/708">Probleme cu Binary Lifting de pe kilonova</a></li>
-<li><a href="https://codeforces.com/blog/entry/55274">Problemele de RMQ din acest blog</a></li>
-<li><a href="https://codeforces.com/blog/entry/70418">Problemele din acest blog</a></li>
-</ul>
-
-
-Trie (arbore de prefixe):
-
-<ul>
-<li><a href="https://kilonova.ro/problems/456">intervalxor2</a> (Trie pe biți persistent. Puteți face queriurile și offline)</li>
-<li><a href="https://kilonova.ro/problems/361">xortree2</a> (Problemă ok cu trie pe biți)</li>
-<li><a href="https://kilonova.ro/problems/371">rps</a> (Alt exemplu de dp pe trie)</li>
-<li><a href="https://www.infoarena.ro/problema/ratina">ratina</a> (Lowest Common Ancestor pe trie)</li>
-<li><a href="https://www.infoarena.ro/problema/aiacupalindroame">aiacupalindroame</a></li>
-<li><a href="https://www.infoarena.ro/problema/fbsearch">Facebook Search</a></li>
-<li><a href="https://codeforces.com/contest/948/problem/D">Perfect Security</a></li>
-<li><a href="https://codeforces.com/contest/1902/problem/E">Collapsing Strings</a></li>
-</ul>
-
-
-
-Programare dinamică cu structuri de date(DP):
-
-<ul>
-<li><a href="https://kilonova.ro/problems/2287">IIOT 2024 Planning Excursions</a></li>
-<li><a href="https://kilonova.ro/problems/184">ONI 2010 Stalpi</a></li>
-<li><a href="https://kilonova.ro/problems/1888">RCPC 2023 Yet Another Colored Tree Problem</a></li>
-<li><a href="https://kilonova.ro/problems/2808">Lot 2024 Juniori Pokemoni</a></li>
-<li><a href="https://codeforces.com/problemset/problem/1216/F">Codeforces WI-FI</a></li>
-<li><a href="https://codeforces.com/contest/960/problem/F">Codeforces Pathwalks</a></li>
-<li><a href="https://kilonova.ro/problems/288/">ONI 2015 Baraj Seniori s2c</a></li>
-<li><a href="https://kilonova.ro/problems/1869">ONI 2005 Baraj Seniori Evantai</a></li>
-<li><a href="https://codeforces.com/problemset/problem/2009/G2">Codeforces Yunlin's Subarray Queries (hard)</a></li>
-<li><a href="https://codeforces.com/contest/1197/problem/E">Codeforces Culture Code</a></li>
-<li><a href="https://oj.uz/problem/view/JOI22_ho_t4">JOI 2022 Railway Trip 2</a></li>
-<li><a href="https://kilonova.ro/problems/2317">Lot 2008 Seniori turnuri</a></li>
-<li><a href="https://codeforces.com/problemset/page/1?tags=dp%2Cdata+structures">Probleme cu dinamici si structuri de date de pe Codeforces</a></li>
-<li><a href="https://kilonova.ro/problems?tags=275%2C409">Probleme cu dinamica si deque de pe kilonova</a></li>
-<li><a href="https://kilonova.ro/problems?tags=275%2C282">Alte probleme similare de pe kilonova</a></li>
-</ul>
-
-
-Lucrul cu arbori:
-
-Binary lifting. Lowest common ancestor (LCA):
-
-<ul>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=968">Milk Visits USACO Silver</a></li>
-<li><a href="https://cses.fi/problemset/task/1750">CSES Planet Queries I</a></li>
-<li><a href="https://cses.fi/problemset/task/1160">CSES Planet Queries II</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=576">USACO Platinum Max Flow</a></li>
-<li><a href="https://kilonova.ro/problems/1802">RoAlgo Contest #6 Sap</a></li>
-<li><a href="https://kilonova.ro/problems/305">IIOT 2022 Sum Tree</a></li>
-<li><a href="https://codeforces.com/contest/609/problem/E">MST for Each Edge - Codeforces</a></li>
-<li><a href="https://kilonova.ro/problems/1918">Lot 2016 Seniori maxdist</a></li>
-<li><a href="https://kilonova.ro/tags/285">Probleme cu LCA de pe Kilonova</a></li>
-</ul>
-
-
-
-Programare dinamică pe arbore:
-
-<ul>
-<li><a href="https://atcoder.jp/contests/dp/tasks/dp_p">AtCoder Independent Set</a></li>
-<li><a href="https://kilonova.ro/problems/22">OJI 2019 Tairos</a></li>
-<li><a href="https://kilonova.ro/problems/45">OJI 2008 Iepuri</a></li>
-<li><a href="https://codeforces.com/contest/1521/problem/D">Nastia Plays with a Tree Codeforces</a></li>
-<li><a href="https://kilonova.ro/problems/203/">ONI 2015 arbvalmax</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=766">USACO Gold Barn Painting</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1019">USACO Gold Delegation</a></li>
-<li><a href="https://kilonova.ro/problems/1834">RMI 2023 AAtree</a></li>
-<li><a href="https://kilonova.ro/problems/274">ONI 2017 Baraj Seniori Cli</a></li>
-<li><a href="https://kilonova.ro/problems/2568/">Moisil 2024 Arborele frumos</a></li>
-<li><a href="https://codeforces.com/problemset/problem/1856/E2">Permutree Codeforces</a></li>
-<li><a href="https://oj.uz/problem/view/JOI20_power">JOI 2020 Power</a></li>
-<li><a href="https://oj.uz/problem/view/IZhO17_road">IZhO 2017 Hard route</a></li>
-<li><a href="https://kilonova.ro/problems/151">ONI 2018 tricolor</a></li>
-<li><a href="https://kilonova.ro/problems/67/">ONI 2021 Baraj Seniori Arbsumpow</a></li>
-<li><a href="https://kilonova.ro/problems/409/">ONI 2019 Baraj Seniori Anarhie</a></li>
-<li><a href="https://cses.fi/problemset/task/1752">CSES Creating Offices</a></li>
-<li><a href="https://codeforces.com/contest/1280/problem/D">Miss Punyverse Codeforces</a></li>
-<li><a href="https://oj.uz/problem/view/IOI07_training">IOI 2007 Training</a></li>
-<li><a href="https://kilonova.ro/problems?tags=275%2C284">Probleme cu DP pe arbore de pe Kilonova</a></li>
-<li><a href="https://codeforces.com/problemset?tags=dp,trees">Probleme cu DP pe arbore de pe Codeforces</a></li>
-</ul>
-
-
-Small to large:
-
-<ul>
-<li><a href="https://kilonova.ro/problems/2098">Toska - Kilonova</a></li>
-<li><a href="https://codeforces.com/problemset/problem/600/E">Lomsat Gerlal - Codeforces</a></li>
-<li><a href="https://kilonova.ro/problems/2970">Arborel - Kilonova</a></li>
-<li><a href="https://codeforces.com/contest/1193/problem/B">Magic Tree - CEOI 2019</a></li>
-<li><a href="https://kilonova.ro/tags/317">Alte probleme cu small-to-large de pe Kilonova</a></li> </ul>
-
-
-Heavy light decomposition (HLD):
-
-<ul>
-<li><a href="https://cses.fi/problemset/task/2134/">Path Queries II</a></li>
-<li><a href="https://cses.fi/problemset/task/1688">Company Queries II</a></li>
-<li><a href="https://kilonova.ro/problems/217/">confuzie</a></li>
-<li><a href="https://www.infoarena.ro/problema/disconnect">Disconnect</a></li>
-<li><a href="https://www.infoarena.ro/problema/sever">Sever</a></li>
-<li><a href="https://www.infoarena.ro/problema/petarbore">Petarbore</a></li>
-<li><a href="https://kilonova.ro/problems/3182">mogger</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=921">Cow Land</a></li>
-<li><a href="https://www.spoj.com/problems/QTREE3/en/">QTREE3 - Query on a tree again!</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=970">Milk Visits</a></li>
-<li><a href="https://infoarena.ro/problema/delay">Delay</a></li>
-<li><a href="https://lightoj.com/problem/aladdin-and-the-return-journe">Aladdin and the Return Journey</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=842">Disruption</a></li>
-<li><a href="https://usaco.guide/plat/hld?lang=cpp">Subtrees And Paths</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=102">Grass Planting</a></li>
-<li><a href="https://judge.yosupo.jp/problem/vertex_set_path_composite">Vertex Set Path Composite</a></li>
-<li><a href="https://acm.timus.ru/problem.aspx?space=1&amp;num=1553">Caves and Tunnels</a></li>
-<li><a href="https://codeforces.com/contest/1254/problem/D">Tree Queries</a></li>
-<li><a href="https://codeforces.com/contest/1017/problem/G">The Tree</a></li>
-<li><a href="https://tlx.toki.id/problems/troc-14/H/">Tree Game</a></li>
-<li><a href="https://oj.uz/problem/view/JOI13_synchronization">Synchronization</a></li>
-<li><a href="https://oj.uz/problem/view/JOI18_catdog">Cats or Dogs</a></li>
-<li><a href="https://kilonova.ro/tags/295">Probleme cu HLD de pe Kilonova</a></li>
-</ul>
-
-
-
-Alte tehnici:
-
-
-Bitsets:
-<ul>
-<li><a href="https://atcoder.jp/contests/abc258/tasks/abc258_g">atcoder - Triangle</a></li>
-<li><a href="https://cses.fi/problemset/task/2138">cses - Reachable Nodes</a></li>
-<li><a href="https://atcoder.jp/contests/agc041/tasks/agc041_e">atcoder - Balancing Network (T=1)</a></li>
-<li><a href="https://tlx.toki.id/contests/troc-15-div-1/problems/E">Tzaph &amp; Number Line</a></li>
-<li><a href="https://oj.uz/problem/view/BOI19_nautilus">Baltic OI 2019 - Nautil</a></li>
-<li><a href="https://cses.fi/106/list/">Baltic OI 2010 - Candies</a></li>
-<li><a href="https://oj.uz/problem/view/COCI15_uzastopni">COCI 2015 - Uzastopni</a></li>
-<li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1021">Platinum - Equilateral Triangles</a></li>
-<li><a href="https://oj.uz/problem/view/IZhO17_bootfall">IZhO 2017 - Bootfall</a></li>
-<li><a href="https://oj.uz/problem/view/BOI15_tug">Baltic OI 2015 - Tug of War</a></li>
-<li><a href="https://codeforces.com/contest/1444/problem/D">codeforces - Rectangular Polyline</a></li>
-<li><a href="https://kilonova.ro/problems/210">Lot Seniori 2022 - erinaceida</a></li>
-<li><a href="https://kilonova.ro/problems/1980">Lot Seniori 2014 - Switch5</a></li>
-<li><a href="https://kilonova.ro/problems/2798">Lot Seniori 2024 - Matrice Palindrom</a></li>
-<li><a href="https://open.kattis.com/problems/holmes">holmesc</a></li>
-</ul>
-
-
-Cautarea ternara:
-
-<ul>
-<li><a href="https://codeforces.com/contest/439/problem/D">CF 439D</a></li>
-<li><a href="https://infoarena.ro/problema/copii3">copii3 infoarena</a></li>
-<li><a href="https://csacademy.com/contest/ceoi-2017-day-1/task/sure-bet/">CEOI 2017 - Sure Bet</a></li>
-<li><a href="https://codeforces.com/problemset/problem/1355/E">CF 1355 E</a></li>
-<li><a href="https://codeforces.com/contest/1848/problem/D">CF 1848 D</a></li>
-<li><a href="https://kilonova.ro/problems/1626">Lot Juniori 2018 cherhanale</a></li>
-<li><a href="https://dmoj.ca/problem/cco18p4">CCO 18-Gradient Descent</a></li>
-</ul>
-
-Functia Mobius :
-
-<ul>
-<li><a href="https://kilonova.ro/problems/69">ONI 2021 Baraj Seniori Pastile</a></li>
-<li><a href="https://kilonova.ro/problems/640">Lot 2023 Juniori countall</a></li>
-<li><a href="https://kilonova.ro/problems/2017">RoAlgo Contest #8 Gya-chan and the gcd operation</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=862">USACO Gold Cowpability</a></li>
-<li><a href="https://vjudge.net/contest/151569">Listă de probleme cu Mobius</a></li>
-<li><a href="https://atcoder.jp/contests/abc162/tasks/abc162_e">Sum of gcd of Tuples (Hard)</a></li>
-</ul>
-
-
-
-Dynamic Programming :
-
-Programare dinamică pe intervale (range DP):
-
-<ul>
-<li><a href="https://www.infoarena.ro/problema/podm">podm infoarena</a></li>
-<li><a href="https://atcoder.jp/contests/dp/tasks/dp_n">Slimes AtCoder DP</a></li>
-<li><a href="https://saco-evaluator.org.za/cms/sapo2015z/tasks/jazz/description">Space Jazz SAPO</a></li>
-<li><a href="https://oj.uz/problem/view/info1cup19_mean">Mean Info1Cup</a></li>
-<li><a href="https://www.infoarena.ro/problema/bmatrix">bmatrix infoarena</a></li>
-<li><a href="https://infoarena.ro/problema/redu">redu infoarena</a></li>
-<li><a href="https://kilonova.ro/problems/1353">ONI 2010 Triunghi</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=815">Taming the Herd USACO Gold</a></li>
-<li><a href="https://kilonova.ro/problems/1778/">ONI 2009 Baraj Seniori maxpal</a></li>
-<li><a href="https://kilonova.ro/problems/1789">ONI 2008 Baraj Seniori stiva</a></li>
-<li><a href="https://codeforces.com/problemset/problem/607/B">Zuma Codeforces</a></li>
-<li><a href="https://kilonova.ro/problems/557/">ONI 2023 Baraj Seniori bt</a></li>
-<li><a href="https://kilonova.ro/problems/1869/">ONI 2005 Baraj Seniori evantai</a></li>
-<li><a href="https://cses.fi/problemset/task/1080">Empty String CSES</a></li>
-<li><a href="https://codeforces.com/contest/245/problem/H">Queries for Number of Palindromes Codeforces</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=994">3SUM USACO Gold</a></li>
-<li><a href="https://codeforces.com/contest/1922/problem/F">Replace on Segment Codeforces</a></li>
-<li><a href="https://codeforces.com/contest/1987/problem/F2">Interesting Problem (Hard Version) Codeforces</a></li>
-<li><a href="https://kilonova.ro/tags/278">Probleme de pe kilonova cu Range DP</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/eticheta/121/programare-dinamica-metoda-mixta">Probleme de pe pbinfo cu Range DP</a></li>
-</ul>
-
-
-Programare dinamică pe cifre (digit DP):
-
-<ul>
-<li><a href="https://cses.fi/problemset/task/2220/">CSES Counting Numbers</a></li>
-<li><a href="https://kilonova.ro/problems/2800">Bug Lot Juniori 2024</a></li>
-<li><a href="https://atcoder.jp/contests/dp/tasks/dp_s">AtCoder Digit Sum</a></li>
-<li><a href="https://codeforces.com/contest/919/problem/B">Perfect Number</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=435">USACO Silver Odometer</a></li>
-<li><a href="https://www.spoj.com/problems/PR003004/">SPOJ Digit Sum</a></li>
-<li><a href="https://codeforces.com/contest/1073/problem/E">Codeforces Segment Sum</a></li>
-<li><a href="https://www.infoarena.ro/problema/simpla">Infoarena simpla</a></li>
-<li><a href="https://www.infoarena.ro/problema/peluzanord">Infoarena peluzanord</a></li>
-<li><a href="https://kilonova.ro/problems/1072/">ONI 2012 Baraj Juniori cifreco</a></li>
-<li><a href="https://codeforces.com/contest/628/problem/D">Codeforces Magic Numbers</a></li>
-<li><a href="https://kilonova.ro/tags/310">Probleme cu digit dp de pe kilonova</a></li>
-</ul>
-
-
-Programare dinamică pe permutări:
-
-<ul>
-<li><a href="https://infoarena.ro/problema/perm3">infoarena perm3</a></li>
-<li><a href="https://kilonova.ro/problems/164">ONI 2008 pviz</a></li>
-<li><a href="https://kilonova.ro/problems/180/">ONI 2010 kmax</a></li>
-<li><a href="https://codeforces.com/contest/295/problem/D">Codeforces Greg and Caves</a></li>
-<li><a href="https://codeforces.com/problemset/problem/285/E">Codeforces Positions in Permutations</a></li>
-<li><a href="https://infoarena.ro/problema/doipatru">Lot 2002 doipatru</a></li>
-<li><a href="https://infoarena.ro/problema/perm4">infoarena perm4</a></li>
-</ul>
-
-
-Teoria Graphurilor :
-
-
-Componente tare conexe:
-
-
-<ul>
-<li><a href="https://infoarena.ro/problema/ctc">ctc infoarena</a></li>
-<li><a href="https://codeforces.com/problemset/problem/427/C">Checkposts Codeforces</a></li>
-<li><a href="https://codeforces.com/contest/894/problem/E">Ralph and Mushrooms Codeforces</a></li>
-<li><a href="https://kilonova.ro/problems/2288/">IIOT 2023-24 Dogtrick 2</a></li>
-<li><a href="https://codeforces.com/contest/1900/problem/E">Transitive Graph Codeforces</a></li>
-<li><a href="https://cses.fi/problemset/task/1682">Flight Routes Check CSES</a></li>
-<li><a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=516">Grass Cownoisseur USACO Gold</a></li>
-<li><a href="https://infoarena.ro/problema/obiective">obiective infoarena</a></li>
-<li><a href="https://kilonova.ro/problems/1787/">dep Baraj Seniori 2008</a></li>
-<li><a href="https://kilonova.ro/problems/278">network Baraj Seniori 2016</a></li>
-<li><a href="https://kilonova.ro/tags/302">Probleme cu componente tare conexe de pe kilonova</a></li>
-</ul>
-
-Componente biconexe:
-
-<ul>
-<li><a href="https://www.infoarena.ro/problema/biconex">biconex infoarena</a></li>
-<li><a href="https://cses.fi/problemset/task/2177">Strongly Connected Edges - CSES</a></li>
-<li><a href="https://www.pbinfo.ro/probleme/1572/componentebiconexe">Componente biconexe - pbinfo</a></li>
-<li><a href="https://codeforces.com/contest/1986/problem/F">Non-academic problem - Codeforces</a></li>
-<li><a href="https://cses.fi/problemset/task/1705">CSES Forbidden Cities</a></li>
-<li><a href="https://kilonova.ro/problems/229">ONI 2014 clepsidra</a></li>
-<li><a href="https://kilonova.ro/problems/138">ONI 2022 regate</a></li>
-<li><a href="https://infoarena.ro/problema/santa">infoarena santa</a></li>
-<li><a href="https://codeforces.com/contest/1220/problem/E">Tourism - Codeforces</a></li>
-<li><a href="https://kilonova.ro/problems/14">ONI 2019 linegraph</a></li>
-<li><a href="http://codeforces.com/contest/732/problem/F">Tourist reform - Codeforces</a></li>
-<li><a href="https://codeforces.com/contest/652/problem/E">Pursuit for artifacts - Codeforces</a></li>
-<li><a href="https://oj.uz/problem/view/APIO18_duathlon">APIO 2018 Duathlon</a></li>
-<li><a href="https://dmoj.ca/problem/tle17c1p6">TLE 2017 Investment</a></li>
-<li><a href="https://kilonova.ro/tags/304">Probleme cu componente biconexe de pe Kilonova</a></li>
-</ul>
-`;
-
-    // Inițializare principală
     document.addEventListener('DOMContentLoaded', () => {
-        parseAndGenerateSections(problemDataText);
-        const localProgress = loadLocalProgress();
+        showLoading();
+        loadInitialProgress(); 
 
-        // Aplică progresul local la checkbox-uri
-        document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-            cb.checked = !!localProgress[cb.id];
-            cb.parentElement.classList.toggle('completed', cb.checked);
-        });
+        fetch('data/probleme.txt')
+            .then(response => {
+                if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
+                return response.text();
+            })
+            .then(problemDataText => {
+                parseAndGenerateUIData(problemDataText);
+                setupSearch();
+                updateStats(); 
+                collapseAll();
+                initializeFirebaseLogic(); 
+            })
+            .catch(error => {
+                console.error('Eroare la încărcarea listei de probleme:', error);
+                if (sectionsContainer) {
+                    sectionsContainer.innerHTML = '<p class="text-red-500 text-center py-8">Nu s-a putut încărca lista de probleme. Verificați consola.</p>';
+                }
+                hideLoading();
+            });
+    });
 
-        setupSearch();
-        updateStats();
-
+    function initializeFirebaseLogic() {
         onAuthStateChanged(auth, (user) => {
+            hideLoading(); 
             if (user) {
                 const uid = user.uid;
                 userDocRef = doc(db, 'userProgress', uid);
 
-                if (unsubscribeSnapshot) {
-                    unsubscribeSnapshot();
-                }
+                if (unsubscribeSnapshot) { unsubscribeSnapshot(); }
 
                 unsubscribeSnapshot = onSnapshot(userDocRef, (docSnap) => {
-                    hideLoading();
-                    const cloudData = docSnap.exists() ? docSnap.data().progress || {} : {};
-                    let cloudDataChanged = false;
+                    const cloudProgress = docSnap.exists() ? docSnap.data().progress || {} : {};
+                    checklistProgress = {...checklistProgress, ...cloudProgress}; 
+                    
+                    saveCurrentProgress(); 
 
-                    // Sincronizează starea checkbox-urilor cu datele din cloud
-                    // Doar dacă datele din cloud sunt diferite de cele deja aplicate (din local sau modificări)
-                    document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-                        const cloudValue = !!cloudData[cb.id];
-                        if (cb.checked !== cloudValue) {
-                            cb.checked = cloudValue;
-                            cb.parentElement.classList.toggle('completed', cb.checked);
-                            cloudDataChanged = true;
+                    document.querySelectorAll('.section').forEach(sectionElement => {
+                        if (sectionElement.dataset.contentRendered === 'true') {
+                            const sectionId = sectionElement.id;
+                            if (sectionProblemDataStore[sectionId]) {
+                                sectionProblemDataStore[sectionId].checkboxIds.forEach(checkboxId => {
+                                    const checkbox = document.getElementById(checkboxId);
+                                    if (checkbox && checkbox.parentElement) {
+                                         checkbox.checked = !!checklistProgress[checkboxId];
+                                         checkbox.parentElement.classList.toggle('completed', checkbox.checked);
+                                    }
+                                });
+                            }
                         }
                     });
-
-                    if (cloudDataChanged) {
+                    
+                    if (Object.keys(cloudProgress).length > 0 && docSnap.exists()) { 
                         showNotification('Progres sincronizat din cloud.', 'info');
                     }
                     updateStats();
-                    saveLocalProgress(cloudData); // Suprascrie local cu datele din cloud
                 }, (error) => {
                     console.error("Eroare Firestore onSnapshot:", error);
-                    hideLoading();
                     showNotification('Nu s-a putut sincroniza cu cloud. Se folosesc datele locale.', 'error');
-                    updateStats();
+                    updateStats(); 
                 });
             } else {
-                hideLoading();
                 console.log("Niciun utilizator autentificat. Progresul va fi doar local.");
-                updateStats(); // Asigură-te că statisticile sunt pe baza datelor locale
+                updateStats(); 
             }
         });
 
         signInAnonymously(auth).catch((error) => {
             console.error("Autentificare anonimă eșuată:", error);
-            hideLoading();
             showNotification('Autentificarea Firebase a eșuat. Progresul va fi doar local.', 'error');
+            hideLoading(); 
             updateStats();
         });
-
-        document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-          cb.addEventListener('change', async function() {
-            this.parentElement.classList.toggle('completed', this.checked);
-            if (this.checked) {
-              showNotification('Problemă completată! 🎉');
-            }
-            const currentProgress = {};
-            document.querySelectorAll('input[type=checkbox]').forEach(box => {
-                currentProgress[box.id] = box.checked;
-            });
-
-            saveLocalProgress(currentProgress); // Salvează imediat local
-            updateStats();
-
-            if (userDocRef) {
-                try {
-                    await setDoc(userDocRef, { progress: currentProgress }, { merge: true });
-                } catch (err) {
-                    showNotification('Salvarea în cloud a eșuat: ' + err.message, 'error');
-                    // Datele rămân salvate local
-                }
-            }
-          });
-        });
-
-        collapseAll();
-    });
+    }
   </script>
 </body>
 </html>
