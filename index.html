@@ -4,228 +4,152 @@
   <meta charset="UTF-8">
   <title>Competitive Programming Checklist</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Stiluri de Bază */
-    * { box-sizing: border-box; }
-    body { 
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-      line-height: 1.6; 
-      padding: 2rem; 
-      max-width: 900px; 
-      margin: auto; 
+    /* Stiluri de Bază Tailwind Customizate */
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      color: #333;
+      color: #1f2937; /* gray-800 */
     }
     .container {
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-      padding: 2rem;
-      margin-bottom: 2rem;
+      border-radius: 12px; /* rounded-xl */
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1); /* shadow-2xl */
     }
-    h1 { 
-      margin-bottom: 1.5rem; 
-      color: #333;
+    h1 {
+      color: #111827; /* gray-900 */
       text-align: center;
-      font-size: 2.5rem;
-      font-weight: 700;
     }
     .stats-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #f8f9fa;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .stat-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 120px;
+      background: #f9fafb; /* gray-50 */
+      border-radius: 8px; /* rounded-lg */
     }
     .stat-number {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #667eea;
+      color: #6366f1; /* indigo-600 */
     }
     .stat-label {
-      font-size: 0.9rem;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      color: #4b5563; /* gray-600 */
     }
     .progress-bar {
-      width: 100%;
-      height: 8px;
-      background: #e9ecef;
-      border-radius: 4px;
-      overflow: hidden;
+      background: #e5e7eb; /* gray-200 */
+      border-radius: 9999px; /* rounded-full */
     }
     .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #667eea, #764ba2);
-      transition: width 0.3s ease;
-    }
-    .controls {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-      align-items: center;
+      background: linear-gradient(90deg, #6366f1, #8b5cf6); /* indigo-600 to purple-500 */
+      border-radius: 9999px; /* rounded-full */
     }
     .btn {
-      padding: 0.6rem 1.2rem;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
+      border-radius: 6px; /* rounded-md */
       transition: all 0.2s;
       text-align: center;
+      font-weight: 500; /* font-medium */
     }
     .btn-primary {
-      background: #667eea;
+      background-color: #6366f1; /* indigo-600 */
       color: white;
     }
     .btn-primary:hover {
-      background: #5a6fd8;
+      background-color: #4f46e5; /* indigo-700 */
       transform: translateY(-1px);
     }
     .btn-secondary {
-      background: #6c757d;
+      background-color: #6b7280; /* gray-500 */
       color: white;
     }
     .btn-secondary:hover {
-      background: #5a6268;
-      transform: translateY(-1px);
-    }
-    .btn-gemini {
-      background: linear-gradient(45deg, #8e44ad, #9b59b6);
-      color: white;
-      padding: 0.4rem 0.8rem;
-      font-size: 0.8rem;
-      margin-left: 10px;
-    }
-    .btn-gemini:hover {
-      background: linear-gradient(45deg, #803aa0, #8c4da9);
+      background-color: #4b5563; /* gray-600 */
       transform: translateY(-1px);
     }
     .btn-theory {
-      background: #e0e0e0; 
-      color: #5a6fd8; 
-      padding: 0.2rem 0.6rem;
-      font-size: 0.75rem;
-      margin-left: 8px;
-      border: 1px solid #ccc;
+      background-color: #e5e7eb; /* gray-200 */
+      color: #4f46e5; /* indigo-700 */
+      border: 1px solid #d1d5db; /* gray-300 */
       text-decoration: none;
-      border-radius: 4px;
-      font-weight: 500;
-      white-space: nowrap;
+      border-radius: 4px; /* rounded-sm */
+      font-weight: 500; /* font-medium */
     }
     .btn-theory:hover {
-      background: #d0d0d0;
+      background-color: #d1d5db; /* gray-300 */
       text-decoration: none;
     }
     .search-box {
-      flex: 1;
-      min-width: 200px;
-      padding: 0.6rem 1rem;
-      border: 2px solid #e9ecef;
-      border-radius: 6px;
-      font-size: 0.9rem;
+      border: 2px solid #e5e7eb; /* gray-200 */
+      border-radius: 6px; /* rounded-md */
       transition: border-color 0.2s;
     }
     .search-box:focus {
       outline: none;
-      border-color: #667eea;
+      border-color: #6366f1; /* indigo-600 */
     }
-    .section { 
-      margin-top: 2rem; 
-      border: 2px solid #e9ecef;
-      border-radius: 8px;
+    .section {
+      border: 2px solid #e5e7eb; /* gray-200 */
+      border-radius: 8px; /* rounded-lg */
       overflow: hidden;
       transition: all 0.2s;
     }
     .section.collapsed .section-content { display: none; }
     .section.hidden { display: none; }
     .section-header {
-      background: #f8f9fa;
-      padding: 1rem;
-      display: flex; /* Changed to flex for better control */
-      justify-content: space-between;
-      align-items: center;
+      background: #f9fafb; /* gray-50 */
       user-select: none;
       transition: background 0.2s;
-      flex-wrap: wrap; 
     }
-    .section-header-main {
-        display: flex;
-        align-items: center;
-        flex-grow: 1; /* Allow title part to take space */
-        cursor: pointer; /* Make only this part clickable for toggle */
+    .section-header:hover { background: #f3f4f6; /* gray-100 */ }
+    .section-title {
+        font-weight: 600; /* font-semibold */
     }
-    .section-header-main > h2 { 
-        margin-right: 0; 
-        display: inline; /* Ensure title and theory button are on the same line if space allows */
+    .section-progress {
+        color: #4b5563; /* gray-600 */
+        font-weight: 500; /* font-medium */
     }
-    .section-header-controls {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem; 
-        margin-left: auto; /* Push to the right */
-    }
-    .section-header:hover { background: #e9ecef; }
-    .section-title { margin: 0; font-size: 1.3rem; font-weight: 600; /* margin-right: auto; removed */ }
-    .section-progress { font-size: 0.9rem; color: #666; font-weight: 500; margin-left: 1rem; }
-    .collapse-icon { margin-left: 0.5rem; transition: transform 0.2s; }
+    .collapse-icon { transition: transform 0.2s; }
     .section.collapsed .collapse-icon { transform: rotate(-90deg); }
-    .section-content { padding: 1rem; }
-    label { 
-      display: flex;
-      align-items: center;
-      margin: 0.6rem 0;
+    label {
       cursor: pointer;
-      padding: 0.5rem;
-      border-radius: 4px;
+      border-radius: 4px; /* rounded */
       transition: background 0.2s;
-      flex-wrap: wrap; 
     }
-    label:hover { background: #f8f9fa; }
+    label:hover { background: #f9fafb; /* gray-50 */ }
     label.completed {
-      background: #d4edda;
+      background: #d1fae5; /* green-100 */
       text-decoration: line-through;
       opacity: 0.7;
     }
-    input[type=checkbox] { margin-right: 0.8rem; transform: scale(1.3); accent-color: #667eea; }
-    a { text-decoration: none; color: #667eea; font-weight: 500; flex-grow: 1; }
-    a:hover { text-decoration: underline; }
-    .level-0 { border-left: 4px solid #28a745; } 
-    .level-1 { border-left: 4px solid #ffc107; } 
-    .level-2 { border-left: 4px solid #007bff; } 
-    .level-3 { border-left: 4px solid #dc3545; } 
-    .level-4 { border-left: 4px solid #6f42c1; } 
-    
+    input[type=checkbox] {
+        transform: scale(1.3);
+        accent-color: #6366f1; /* indigo-600 */
+    }
+    a.problem-link {
+        color: #6366f1; /* indigo-600 */
+        font-weight: 500; /* font-medium */
+        flex-grow: 1;
+    }
+    a.problem-link:hover { text-decoration: underline; }
+
+    .level-0 { border-left: 4px solid #22c55e; } /* green-500 */
+    .level-1 { border-left: 4px solid #f59e0b; } /* amber-500 */
+    .level-2 { border-left: 4px solid #3b82f6; } /* blue-500 */
+    .level-3 { border-left: 4px solid #ef4444; } /* red-500 */
+    .level-4 { border-left: 4px solid #8b5cf6; } /* purple-500 */
+
     .notification {
       position: fixed;
       top: 20px;
       right: 20px;
-      background: #28a745;
+      background: #22c55e; /* green-500 */
       color: white;
-      padding: 1rem;
-      border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transform: translateX(110%); 
+      padding: 1rem; /* p-4 */
+      border-radius: 6px; /* rounded-md */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* shadow-lg */
+      transform: translateX(110%);
       transition: transform 0.3s ease-in-out;
       z-index: 1000;
     }
     .notification.show { transform: translateX(0); }
-    .notification.error { background: #dc3545; }
-    .notification.info { background: #17a2b8; }
+    .notification.error { background: #ef4444; /* red-500 */ }
+    .notification.info { background: #0ea5e9; /* sky-500 */ }
 
     .loading {
       position: fixed;
@@ -237,11 +161,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 2000; 
+      z-index: 2000;
     }
     .spinner {
-      border: 8px solid #f3f3f3; 
-      border-top: 8px solid #667eea; 
+      border: 8px solid #f3f4f6; /* gray-100 */
+      border-top: 8px solid #6366f1; /* indigo-600 */
       border-radius: 50%;
       width: 60px;
       height: 60px;
@@ -259,17 +183,17 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.5);
-      display: none; 
+      display: none;
       justify-content: center;
       align-items: center;
-      z-index: 3000; 
-      padding: 1rem;
+      z-index: 3000;
+      padding: 1rem; /* p-4 */
     }
     .modal-content {
       background: white;
-      padding: 1.5rem 2rem;
-      border-radius: 8px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      padding: 1.5rem 2rem; /* p-6 md:p-8 */
+      border-radius: 8px; /* rounded-lg */
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* shadow-xl */
       text-align: left;
       max-width: 600px;
       width: 95%;
@@ -278,55 +202,43 @@
     }
     .modal-content h3 {
         margin-top: 0;
-        color: #667eea;
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
+        color: #6366f1; /* indigo-600 */
+        font-size: 1.5rem; /* text-2xl */
+        margin-bottom: 1rem; /* mb-4 */
     }
     .modal-content p, .modal-content pre {
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      color: #333;
-      white-space: pre-wrap; 
-      word-wrap: break-word; 
+      margin-bottom: 1rem; /* mb-4 */
+      font-size: 1rem; /* text-base */
+      color: #1f2937; /* gray-800 */
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
     .modal-buttons {
       display: flex;
-      justify-content: flex-end; 
-      margin-top: 1.5rem;
+      justify-content: flex-end;
+      margin-top: 1.5rem; /* mt-6 */
     }
     .modal-buttons .btn {
       min-width: 100px;
-      margin-left: 0.5rem;
-    }
-    
-    @media (max-width: 768px) {
-      body { padding: 1rem; }
-      .container { padding: 1.5rem; }
-      h1 { font-size: 2rem; }
-      .stats-bar { flex-direction: column; }
-      .controls { flex-direction: column; }
-      .btn { width: 100%; margin-bottom: 0.5rem; }
-      .btn:last-child { margin-bottom: 0; }
-      .search-box { width: 100%; }
-      .section-header { flex-direction: column; align-items: flex-start; }
-      .section-header-main { width: 100%; }
-      .section-header-controls { width: 100%; justify-content: space-between; margin-top: 0.5rem; } /* Ajustat pentru spațiere */
-      .btn-gemini { margin-left: 0; margin-top: 5px; flex-grow: 1; margin-right: 5px; /* Buton gemini mai lat */ }
-      label .btn-gemini { width: auto; padding: 0.4rem 0.8rem; flex-grow: 0;}
-      .btn-theory { margin-left: 0; margin-top: 5px; width: auto; }
-      .section-progress { margin-left: 0; margin-right: 10px;}
+      margin-left: 0.5rem; /* ml-2 */
     }
   </style>
-  <script src="https://www.googletagmanager.com/gtag/js?l=dataLayer&id=G-VS8NZFC0SE" async></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-VS8NZFC0SE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-VS8NZFC0SE');
+  </script>
 </head>
-<body>
-  <div class="loading" id="loading"> 
+<body class="min-h-screen p-4 md:p-8">
+  <div class="loading" id="loading">
     <div class="spinner"></div>
   </div>
 
   <div class="modal-overlay" id="custom-confirm-modal">
     <div class="modal-content">
-      <p id="custom-confirm-message">Sunteți sigur?</p>
+      <p id="custom-confirm-message" class="text-lg">Sunteți sigur?</p>
       <div class="modal-buttons">
         <button class="btn btn-secondary" id="custom-confirm-cancel">Anulează</button>
         <button class="btn btn-primary" id="custom-confirm-ok">OK</button>
@@ -334,47 +246,39 @@
     </div>
   </div>
 
-  <div class="modal-overlay" id="gemini-response-modal">
-    <div class="modal-content">
-      <h3 id="gemini-modal-title">Răspuns de la Gemini ✨</h3>
-      <pre id="gemini-modal-content">Se încarcă...</pre>
-      <div class="modal-buttons">
-        <button class="btn btn-primary" id="gemini-modal-close">Închide</button>
-      </div>
-    </div>
-  </div>
+  <div class="container max-w-4xl mx-auto p-4 sm:p-6 md:p-8 mb-8">
+    <h1 class="text-3xl sm:text-4xl font-bold mb-6">🚀 Competitive Programming Checklist</h1>
 
-  <div class="container">
-    <h1>🚀 Competitive Programming Checklist</h1>
-    
-    <div class="stats-bar">
-      <div class="stat-item">
-        <div class="stat-number" id="completed-count">0</div>
-        <div class="stat-label">Completate</div>
+    <div class="stats-bar flex flex-col sm:flex-row justify-between items-center p-4 mb-8 gap-4">
+      <div class="stat-item text-center">
+        <div class="stat-number text-2xl font-bold" id="completed-count">0</div>
+        <div class="stat-label text-sm uppercase tracking-wider">Completate</div>
       </div>
-      <div class="stat-item">
-        <div class="stat-number" id="total-count">0</div> 
-        <div class="stat-label">Total</div>
+      <div class="stat-item text-center">
+        <div class="stat-number text-2xl font-bold" id="total-count">0</div>
+        <div class="stat-label text-sm uppercase tracking-wider">Total</div>
       </div>
-      <div class="stat-item">
-        <div class="stat-number" id="progress-percent">0%</div>
-        <div class="stat-label">Progres</div>
+      <div class="stat-item text-center">
+        <div class="stat-number text-2xl font-bold" id="progress-percent">0%</div>
+        <div class="stat-label text-sm uppercase tracking-wider">Progres</div>
       </div>
-      <div class="stat-item" style="flex: 1; min-width: 200px;">
-        <div class="progress-bar">
-          <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+      <div class="stat-item w-full sm:flex-1 min-w-[150px] sm:min-w-[200px]">
+        <div class="progress-bar h-2 w-full">
+          <div class="progress-fill h-full" id="progress-fill" style="width: 0%;"></div>
         </div>
       </div>
     </div>
-    
-    <div class="controls">
-      <input type="text" class="search-box" id="search-box" placeholder="Caută probleme...">
-      <button class="btn btn-primary" onclick="expandAll()">Extinde Tot</button>
-      <button class="btn btn-secondary" onclick="collapseAll()">Restrânge Tot</button>
-      <button class="btn btn-secondary" onclick="handleResetProgress()">Resetează Tot</button> 
+
+    <div class="controls flex flex-col sm:flex-row gap-4 mb-8 items-center">
+      <input type="text" class="search-box p-2.5 text-sm w-full sm:flex-1" id="search-box" placeholder="Caută probleme...">
+      <div class="flex gap-2 w-full sm:w-auto">
+        <button class="btn btn-primary py-2 px-4 text-sm flex-1 sm:flex-initial" onclick="expandAll()">Extinde Tot</button>
+        <button class="btn btn-secondary py-2 px-4 text-sm flex-1 sm:flex-initial" onclick="collapseAll()">Restrânge Tot</button>
+      </div>
+      <button class="btn btn-secondary py-2 px-4 text-sm w-full sm:w-auto bg-red-500 hover:bg-red-600" onclick="handleResetProgress()">Resetează Tot</button>
     </div>
-    
-    <div id="sections-container">
+
+    <div id="sections-container" class="space-y-6">
         </div>
 
   </div>
@@ -382,14 +286,14 @@
 
   <script type="module">
     // Import SDK-urile necesare
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
-    import { getDatabase, ref, onValue, update, set } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
-    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+    import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     // Configurația proiectului Firebase
     const firebaseConfig = {
-      apiKey: "AIzaSyCKD_GIQ-WM-p92mlW2ixl5w2-pWxOFI6o", 
+      apiKey: "AIzaSyCKD_GIQ-WM-p92mlW2ixl5w2-pWxOFI6o",
       authDomain: "cp-checklist-sync.firebaseapp.com",
       databaseURL: "https://cp-checklist-sync-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "cp-checklist-sync",
@@ -401,11 +305,17 @@
 
     // Inițializare Firebase
     const appFirebase = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(appFirebase);
+    try {
+        const analytics = getAnalytics(appFirebase);
+    } catch (e) {
+        console.warn("Firebase Analytics nu a putut fi inițializat:", e.message);
+    }
     const auth = getAuth(appFirebase);
-    
-    let dbRef; 
+    const db = getFirestore(appFirebase);
+
+    let userDocRef = null;
     let currentConfirmCallback = null;
+    let unsubscribeSnapshot = null;
 
     // Elemente DOM
     const loadingIndicator = document.getElementById('loading');
@@ -415,86 +325,101 @@
     const confirmCancelButton = document.getElementById('custom-confirm-cancel');
     const sectionsContainer = document.getElementById('sections-container');
 
-    const geminiModal = document.getElementById('gemini-response-modal');
-    const geminiModalTitle = document.getElementById('gemini-modal-title');
-    const geminiModalContent = document.getElementById('gemini-modal-content');
-    const geminiModalCloseButton = document.getElementById('gemini-modal-close');
+    // Am eliminat elementele DOM și variabilele pentru Focus Timer
 
     // Mapping lecții RoAlgo
     const roAlgoLessons = {
         "operatii pe biti": "https://edu.roalgo.ro/mediu/bitwise-ops/",
         "greedy": "https://edu.roalgo.ro/usor/greedy/",
+        "greedy (introducere)": "https://edu.roalgo.ro/usor/greedy/",
         "cautare binara": "https://edu.roalgo.ro/usor/binary-search/",
+        "binary search": "https://edu.roalgo.ro/usor/binary-search/",
         "smenul lui mars": "https://edu.roalgo.ro/usor/partial-sums/",
         "sume partiale": "https://edu.roalgo.ro/usor/partial-sums/",
         "two pointers": "https://edu.roalgo.ro/mediu/two-pointers/",
         "sliding window": "https://edu.roalgo.ro/mediu/sliding-window/",
         "principiul lui dirichlet": "https://edu.roalgo.ro/usor/dirichlet/",
+        "principiul lui dirichlet (principiul cutiei)": "https://edu.roalgo.ro/usor/dirichlet/",
         "baze de numeratie": "https://edu.roalgo.ro/usor/bases/",
         "indicatorul lui euler": "https://edu.roalgo.ro/mediu/euler-totient/",
         "aritmetica modulara": "https://edu.roalgo.ro/mediu/pow-log/",
+        "aritmetica modulara. ridicare la putere in timp logaritmic": "https://edu.roalgo.ro/mediu/pow-log/",
         "ridicare la putere in timp logaritmic": "https://edu.roalgo.ro/mediu/pow-log/",
         "divide et impera": "https://edu.roalgo.ro/mediu/divide-et-impera/",
         "backtracking": "https://edu.roalgo.ro/mediu/backtracking/",
         "principiul includerii si al excluderii": "https://edu.roalgo.ro/mediu/pinex/",
+        "principiul includerii si al excluderii (pinex)": "https://edu.roalgo.ro/mediu/pinex/",
         "pinex": "https://edu.roalgo.ro/mediu/pinex/",
         "algoritmul lui lee": "https://edu.roalgo.ro/mediu/lee/",
+        "fill.algoritmul lui lee": "https://edu.roalgo.ro/mediu/lee/",
         "fill": "https://edu.roalgo.ro/mediu/lee/",
         "deque": "https://edu.roalgo.ro/mediu/deque/",
         "probleme ad-hoc": "https://edu.roalgo.ro/mediu/ad-hoc/",
         "probleme constructive": "https://edu.roalgo.ro/mediu/constructive/",
-        "graphuri introducere": "https://edu.roalgo.ro/usor/graphs/",
-        "grafuri introducere": "https://edu.roalgo.ro/usor/graphs/",
-        "arbori introducere": "https://edu.roalgo.ro/mediu/tree-1/",
-        "dynamic programming introducere": "https://edu.roalgo.ro/usor/intro-dp/",
-        "programare dinamica introducere": "https://edu.roalgo.ro/usor/intro-dp/",
-        "problema rucsacului": "https://edu.roalgo.ro/mediu/knapsack/",
+        "graphuri (introducere)": "https://edu.roalgo.ro/usor/graphs/",
+        "grafuri (introducere)": "https://edu.roalgo.ro/usor/graphs/",
+        "arbori(introducere)": "https://edu.roalgo.ro/mediu/tree-1/",
+        "dynamic programming (introducere)": "https://edu.roalgo.ro/usor/intro-dp/",
+        "programare dinamica (introducere)": "https://edu.roalgo.ro/usor/intro-dp/",
+        "dp:": "",
+        "problema rucsacului(dp)": "https://edu.roalgo.ro/mediu/knapsack/",
         "subsir comun maximal": "https://edu.roalgo.ro/mediu/lcs/",
         "lcs": "https://edu.roalgo.ro/mediu/lcs/",
         "subsir crescator maximal": "https://edu.roalgo.ro/mediu/lis/",
         "lis": "https://edu.roalgo.ro/mediu/lis/",
-        "dinamica pe stari exponentiale": "https://edu.roalgo.ro/mediu/bitmask-dp/",
+        "dinamica pe stari exponentiale(bitmask dp)": "https://edu.roalgo.ro/mediu/bitmask-dp/",
         "bitmask dp": "https://edu.roalgo.ro/mediu/bitmask-dp/",
-        "sortare topologica": "https://edu.roalgo.ro/mediu/toposort/",
-        "cicluri in grafuri": "https://edu.roalgo.ro/mediu/cycles/",
+        "teoria graphurilor:": "",
+        "sortare topologica(graphuri)": "https://edu.roalgo.ro/mediu/toposort/",
+        "cicluri in grafuri. grafuri functionale": "https://edu.roalgo.ro/mediu/cycles/",
         "grafuri functionale": "https://edu.roalgo.ro/mediu/cycles/",
-        "paduri de multimi disjuncte": "https://edu.roalgo.ro/mediu/dsu/",
+        "paduri de multimi disjuncte(dsu)": "https://edu.roalgo.ro/mediu/dsu/",
         "dsu": "https://edu.roalgo.ro/mediu/dsu/",
-        "arbore partial de cost minim": "https://edu.roalgo.ro/mediu/apcm/",
+        "arbore partial de cost minim (kruskal, prim, boruvka)": "https://edu.roalgo.ro/mediu/apcm/",
         "apm": "https://edu.roalgo.ro/mediu/apcm/",
-        "algoritmi pentru drumuri minime": "https://edu.roalgo.ro/mediu/shortest-path/",
+        "algoritmi pentru drumuri minime (dijkstra, bellman-ford, floyd-warshall)": "https://edu.roalgo.ro/mediu/shortest-path/",
         "dijkstra": "https://edu.roalgo.ro/mediu/shortest-path/",
-        "bellman ford": "https://edu.roalgo.ro/mediu/shortest-path/", // Am adăugat și "bellman ford"
-        "floyd warshall": "https://edu.roalgo.ro/mediu/shortest-path/", // Am adăugat și "floyd warshall"
-        "tehnica celor doua dfs-uri": "https://edu.roalgo.ro/mediu/rerooting/",
+        "bellman-ford": "https://edu.roalgo.ro/mediu/shortest-path/",
+        "floyd-warshall": "https://edu.roalgo.ro/mediu/shortest-path/",
+        "tehnica celor doua dfs-uri (rerooting)": "https://edu.roalgo.ro/mediu/rerooting/",
         "rerooting": "https://edu.roalgo.ro/mediu/rerooting/",
+        "matematica:": "",
         "combinatorica": "https://edu.roalgo.ro/mediu/intro-combinatorics/",
+        "alte notiuni :": "",
         "hashing": "https://edu.roalgo.ro/mediu/hashing/",
         "meet in the middle": "https://edu.roalgo.ro/mediu/mitm/",
+        "structuri de date :": "",
+        "descompuneri in bucati de radical (square root decomposition)": "https://edu.roalgo.ro/dificil/square-root-decomposition/",
         "square root decomposition": "https://edu.roalgo.ro/dificil/square-root-decomposition/",
-        "descompuneri in bucati de radical": "https://edu.roalgo.ro/dificil/square-root-decomposition/",
-        "arbori de intervale": "https://edu.roalgo.ro/dificil/segment-trees/",
+        "arbori de intervale(aint)": "https://edu.roalgo.ro/dificil/segment-trees/",
         "aint": "https://edu.roalgo.ro/dificil/segment-trees/",
-        "arbori indexati binar": "https://edu.roalgo.ro/dificil/fenwick-tree/",
+        "arbori indexati binar(aib)": "https://edu.roalgo.ro/dificil/fenwick-tree/",
         "aib": "https://edu.roalgo.ro/dificil/fenwick-tree/",
+        "sparse table. binary lifting. range minimum query (rmq)": "https://edu.roalgo.ro/dificil/rmq/",
         "sparse table": "https://edu.roalgo.ro/dificil/rmq/",
-        "binary lifting": "https://edu.roalgo.ro/dificil/lowest-common-ancestor/", 
+        "binary lifting": "https://edu.roalgo.ro/dificil/lowest-common-ancestor/",
+        "range minimum query (rmq)": "https://edu.roalgo.ro/dificil/rmq/",
         "rmq": "https://edu.roalgo.ro/dificil/rmq/",
-        "lowest common ancestor": "https://edu.roalgo.ro/dificil/lowest-common-ancestor/",
-        "lca": "https://edu.roalgo.ro/dificil/lowest-common-ancestor/",
+        "trie (arbore de prefixe)": "https://edu.roalgo.ro/dificil/trie/",
         "trie": "https://edu.roalgo.ro/dificil/trie/",
         "arbore de prefixe": "https://edu.roalgo.ro/dificil/trie/",
-        "programare dinamica cu structuri de date": "https://edu.roalgo.ro/dificil/data-structures-dp/",
+        "programare dinamica cu structuri de date(dp)": "https://edu.roalgo.ro/dificil/data-structures-dp/",
+        "lucrul cu arbori:": "",
+        "binary lifting. lowest common ancestor (lca)": "https://edu.roalgo.ro/dificil/lowest-common-ancestor/",
+        "lowest common ancestor (lca)": "https://edu.roalgo.ro/dificil/lowest-common-ancestor/",
+        "lca": "https://edu.roalgo.ro/dificil/lowest-common-ancestor/",
         "programare dinamica pe arbore": "https://edu.roalgo.ro/dificil/tree-dp/",
         "small to large": "https://edu.roalgo.ro/dificil/small-to-large/",
-        "heavy light decomposition": "https://edu.roalgo.ro/avansat/hld/",
+        "heavy light decomposition (hld)": "https://edu.roalgo.ro/avansat/hld/",
         "hld": "https://edu.roalgo.ro/avansat/hld/",
+        "alte tehnici:": "",
         "bitsets": "https://edu.roalgo.ro/dificil/bitsets/",
         "cautarea ternara": "https://edu.roalgo.ro/dificil/ternary-search/",
         "functia mobius": "https://edu.roalgo.ro/dificil/mobius/",
-        "programare dinamica pe intervale": "https://edu.roalgo.ro/dificil/range-dp/",
+        "dynamic programming :": "",
+        "programare dinamica pe intervale (range dp)": "https://edu.roalgo.ro/dificil/range-dp/",
         "range dp": "https://edu.roalgo.ro/dificil/range-dp/",
-        "programare dinamica pe cifre": "https://edu.roalgo.ro/dificil/digit-dp/",
+        "programare dinamica pe cifre (digit dp)": "https://edu.roalgo.ro/dificil/digit-dp/",
         "digit dp": "https://edu.roalgo.ro/dificil/digit-dp/",
         "programare dinamica pe permutari": "https://edu.roalgo.ro/dificil/permutations-dp/",
         "componente tare conexe": "https://edu.roalgo.ro/dificil/componente-tare-conexe/",
@@ -506,7 +431,7 @@
     function showLoading() { if (loadingIndicator) loadingIndicator.style.display = 'flex'; }
     function hideLoading() { if (loadingIndicator) loadingIndicator.style.display = 'none'; }
 
-    showLoading(); 
+    showLoading(); // Afișează indicatorul de încărcare la început
 
     function showCustomConfirm(message, onConfirm) {
       if (confirmModal && confirmMessageEl) {
@@ -531,20 +456,6 @@
       });
     }
 
-    function showGeminiModal(title, contentAsText) {
-        if(geminiModal && geminiModalTitle && geminiModalContent) {
-            geminiModalTitle.textContent = title;
-            geminiModalContent.textContent = contentAsText; 
-            geminiModal.style.display = 'flex';
-        }
-    }
-
-    if(geminiModalCloseButton) {
-        geminiModalCloseButton.addEventListener('click', () => {
-            if(geminiModal) geminiModal.style.display = 'none';
-        });
-    }
-    
     function loadLocalProgress() {
       const localData = localStorage.getItem('checklistProgress');
       if (localData) {
@@ -556,16 +467,12 @@
             });
         } catch (e) {
             console.error("Eroare la parsarea progresului local:", e);
-            localStorage.removeItem('checklistProgress');
+            localStorage.removeItem('checklistProgress'); // Elimină datele corupte
         }
       }
     }
-    function saveLocalProgress() {
-      const progress = {};
-      document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-        progress[cb.id] = cb.checked;
-      });
-      localStorage.setItem('checklistProgress', JSON.stringify(progress));
+    function saveLocalProgress(progressData) {
+      localStorage.setItem('checklistProgress', JSON.stringify(progressData));
     }
 
     window.toggleSection = function(sectionId) {
@@ -580,25 +487,27 @@
     };
 
     window.handleResetProgress = function() {
-      showCustomConfirm('Sunteți sigur că doriți să resetați tot progresul? Această acțiune nu poate fi anulată.', () => {
+      showCustomConfirm('Sunteți sigur că doriți să resetați tot progresul? Această acțiune nu poate fi anulată.', async () => {
         document.querySelectorAll('input[type=checkbox]').forEach(cb => {
           cb.checked = false;
           cb.parentElement.classList.remove('completed');
         });
-        if (dbRef) {
-            set(dbRef, {}).then(() => {
-              localStorage.removeItem('checklistProgress');
-              updateStats();
-              showNotification('Progres resetat cu succes!', 'info');
-            }).catch((error) => {
-              showNotification('Resetarea progresului în cloud a eșuat: ' + error.message, 'error');
-              localStorage.removeItem('checklistProgress'); 
-              updateStats();
-            });
-        } else {
-             localStorage.removeItem('checklistProgress');
+        const emptyProgress = {};
+        if (userDocRef) { // Dacă există o referință la documentul utilizatorului (Firebase autentificat)
+            try {
+                await setDoc(userDocRef, { progress: emptyProgress }); // Salvează un obiect gol în Firestore
+                saveLocalProgress(emptyProgress); // Actualizează și localStorage
+                updateStats();
+                showNotification('Progres resetat cu succes!', 'info');
+            } catch (error) {
+                showNotification('Resetarea progresului în cloud a eșuat: ' + error.message, 'error');
+                saveLocalProgress(emptyProgress); // Resetează local chiar dacă cloud eșuează
+                updateStats();
+            }
+        } else { // Dacă Firebase nu este autentificat, resetează doar local
+             saveLocalProgress(emptyProgress);
              updateStats();
-             showNotification('Progres resetat local. Firebase nu este disponibil.', 'info');
+             showNotification('Progres resetat local. Sincronizarea Firebase nu este activă.', 'info');
         }
       });
     };
@@ -607,10 +516,12 @@
       const notification = document.getElementById('notification');
       if (notification) {
         notification.textContent = message;
-        notification.className = 'notification show';
+        notification.className = 'notification show'; // Tailwind classes are managed by style block
         if (type === 'error') notification.classList.add('error');
         else if (type === 'info') notification.classList.add('info');
-        
+        else notification.classList.remove('error', 'info'); // Elimină clasele de eroare/info dacă nu sunt specificate
+
+
         setTimeout(() => { notification.classList.remove('show'); }, 3000);
       }
     }
@@ -620,7 +531,7 @@
       const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
       const total = checkboxes.length;
       const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
-      
+
       const completedCountEl = document.getElementById('completed-count');
       const totalCountEl = document.getElementById('total-count');
       const progressPercentEl = document.getElementById('progress-percent');
@@ -630,7 +541,8 @@
       if(totalCountEl) totalCountEl.textContent = total;
       if(progressPercentEl) progressPercentEl.textContent = percentage + '%';
       if(progressFillEl) progressFillEl.style.width = percentage + '%';
-      
+
+      // Actualizează progresul pentru fiecare secțiune
       document.querySelectorAll('.section').forEach(section => {
         const sectionCheckboxes = section.querySelectorAll('input[type=checkbox]');
         const sectionCompleted = Array.from(sectionCheckboxes).filter(cb => cb.checked).length;
@@ -653,88 +565,24 @@
             let textToSearch = '';
             if (sectionTitleEl) textToSearch += sectionTitleEl.textContent.toLowerCase();
             if (sectionContentEl) textToSearch += sectionContentEl.textContent.toLowerCase();
-            section.classList.toggle('hidden', !(query === '' || textToSearch.includes(query)));
+
+            const isMatch = query === '' || textToSearch.includes(query);
+            section.classList.toggle('hidden', !isMatch);
+            if (isMatch && query !== '') { // Extinde secțiunile care se potrivesc cu căutarea
+                 section.classList.remove('collapsed');
+            }
           });
         });
       }
     }
-    
-    const GEMINI_API_KEY = ""; 
 
-    async function callGeminiAPI(promptText) {
-        showLoading(); 
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
-        const payload = {
-            contents: [{ role: "user", parts: [{ text: promptText }] }]
-        };
-
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error("Eroare API Gemini:", errorData);
-                throw new Error(`Eroare API: ${response.status} ${response.statusText}. ${errorData?.error?.message || ''}`);
-            }
-            const result = await response.json();
-            hideLoading(); 
-
-            if (result.candidates && result.candidates.length > 0 &&
-                result.candidates[0].content && result.candidates[0].content.parts &&
-                result.candidates[0].content.parts.length > 0) {
-                return result.candidates[0].content.parts[0].text;
-            } else {
-                console.error("Răspuns neașteptat de la API:", result);
-                throw new Error("Răspunsul de la Gemini nu a putut fi procesat.");
-            }
-        } catch (error) {
-            hideLoading();
-            console.error("Eroare la apelul Gemini API:", error);
-            showNotification("Nu s-a putut obține răspuns de la Gemini: " + error.message, "error");
-            return null; 
-        }
-    }
-
-    window.fetchProblemExplanation = async function(problemName, problemUrl) {
-        const prompt = `Ești un tutore expert în programare competitivă. Oferă o scurtă explicație conceptuală a problemei "${problemName}" (disponibilă la ${problemUrl}) și un mic indiciu relevant pentru rezolvare. Nu oferi cod sau soluția directă. Fii concis și la obiect (maxim 100-150 cuvinte).`;
-        const explanation = await callGeminiAPI(prompt);
-        if (explanation) {
-            showGeminiModal(`✨ Ajutor pentru: ${problemName}`, explanation);
-        } else {
-            showGeminiModal(`✨ Ajutor pentru: ${problemName}`, "Ne pare rău, nu am putut obține o explicație în acest moment.");
-        }
-    }
-
-    window.fetchRelatedProblems = async function(sectionId, sectionTitle) {
-        const sectionElement = document.getElementById(sectionId);
-        let exampleProblems = [];
-        if (sectionElement) {
-            const problemLinks = sectionElement.querySelectorAll('.section-content a');
-            for(let i = 0; i < Math.min(problemLinks.length, 2); i++) { 
-                exampleProblems.push(problemLinks[i].textContent.trim());
-            }
-        }
-        
-        const prompt = `Ești un antrenor de programare competitivă. Pentru secțiunea "${sectionTitle}"${exampleProblems.length > 0 ? `, care conține probleme precum: ${exampleProblems.join(', ')}` : ''}, sugerează 3-4 probleme suplimentare similare ca dificultate și subiect, de pe platforme cunoscute (ex: Codeforces, CSES, AtCoder, InfoArena, Kilonova). Include numele problemei și un link direct dacă este posibil. Formatează răspunsul ca o listă punctuală (bullet points).`;
-        
-        const suggestions = await callGeminiAPI(prompt);
-        if (suggestions) {
-            showGeminiModal(`✨ Probleme similare pentru: ${sectionTitle}`, suggestions);
-        } else {
-            showGeminiModal(`✨ Probleme similare pentru: ${sectionTitle}`, "Ne pare rău, nu am putut obține sugestii în acest moment.");
-        }
-    }
-    
     function normalizeText(text) {
         if (!text) return "";
         return text.toLowerCase()
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
-            .replace(/\(.*\)/g, '') 
-            .replace(/[^a-z0-9\s]/gi, '') 
-            .replace(/\s+/g, ' ').trim();
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Elimină diacriticele
+            .replace(/\(.*\)/g, '') // Elimină textul din paranteze
+            .replace(/[^\w\s]/gi, '') // Elimină punctuația cu excepția spațiilor și caracterelor alfanumerice
+            .replace(/\s+/g, ' ').trim(); // Normalizează spațiile multiple
     }
 
 
@@ -744,34 +592,30 @@
         let problemsHtml = '';
         let sectionIndex = 0;
         let problemIndexInSection = 0;
-        const levelColors = ['level-0', 'level-1', 'level-2', 'level-3', 'level-4'];
+        const levelColors = ['level-0', 'level-1', 'level-2', 'level-3', 'level-4']; // Tailwind classes for border
         let problemCountInSection = 0;
 
         function finalizeSection() {
             if (currentSectionTitle && problemsHtml) {
                 const sectionId = `topic-${sectionIndex}`;
                 const levelClass = levelColors[sectionIndex % levelColors.length];
-                
+
                 let theoryLinkHTML = '';
                 const normalizedCurrentSectionTitle = normalizeText(currentSectionTitle);
                 let bestMatchUrl = null;
                 let bestMatchKeyLength = 0;
 
+                // Căutare exactă sau parțială a titlului normalizat în cheile normalizate din roAlgoLessons
                 for (const [key, url] of Object.entries(roAlgoLessons)) {
                     const normalizedKey = normalizeText(key);
-                    if (normalizedCurrentSectionTitle.includes(normalizedKey) && normalizedKey.length > 3) {
-                        if (normalizedKey.length > bestMatchKeyLength) {
-                            bestMatchUrl = url;
-                            bestMatchKeyLength = normalizedKey.length;
-                        }
-                    }
-                }
-                // Cazul în care titlul secțiunii este mai scurt și este conținut în cheia RoAlgo
-                if (!bestMatchUrl && normalizedCurrentSectionTitle.length > 3) {
-                    for (const [key, url] of Object.entries(roAlgoLessons)) {
-                        const normalizedKey = normalizeText(key);
-                        if (normalizedKey.includes(normalizedCurrentSectionTitle)) {
-                             if (normalizedCurrentSectionTitle.length > bestMatchKeyLength) { // Compară lungimea titlului secțiunii ca specificitate
+                    if (normalizedKey && url) { // Asigură-te că cheia și url-ul sunt valide
+                        if (normalizedCurrentSectionTitle.includes(normalizedKey) && normalizedKey.length > 3) {
+                            if (normalizedKey.length > bestMatchKeyLength) {
+                                bestMatchUrl = url;
+                                bestMatchKeyLength = normalizedKey.length;
+                            }
+                        } else if (normalizedKey.includes(normalizedCurrentSectionTitle) && normalizedCurrentSectionTitle.length > 3) {
+                             if (normalizedCurrentSectionTitle.length > bestMatchKeyLength) {
                                 bestMatchUrl = url;
                                 bestMatchKeyLength = normalizedCurrentSectionTitle.length;
                             }
@@ -781,72 +625,94 @@
 
 
                  if (bestMatchUrl) {
-                    theoryLinkHTML = `<a href="${bestMatchUrl}" target="_blank" class="btn btn-theory" title="Vezi teoria">📖 Teorie</a>`;
+                    theoryLinkHTML = `<a href="${bestMatchUrl}" target="_blank" class="btn btn-theory py-1 px-2 text-xs" title="Vezi teoria pe edu.roalgo.ro">📖 Teorie</a>`;
                 }
 
                 const sectionHeader = `
-                    <div class="section-header">
-                        <div class="section-header-main" onclick="toggleSection('${sectionId}')">
-                            <h2 class="section-title">${getEmojiForLevel(sectionIndex % levelColors.length)} ${currentSectionTitle}</h2>
+                    <div class="section-header p-3 flex flex-wrap justify-between items-center">
+                        <div class="section-header-main flex items-center flex-grow cursor-pointer mr-2" onclick="toggleSection('${sectionId}')">
+                            <h2 class="section-title text-lg md:text-xl mr-2">${getEmojiForLevel(sectionIndex % levelColors.length)} ${currentSectionTitle}</h2>
                             ${theoryLinkHTML}
                         </div>
-                        <div class="section-header-controls">
-                             <div class="section-progress" id="progress-${sectionId}">0/${problemCountInSection}</div>
-                            <button class="btn btn-gemini" onclick="fetchRelatedProblems('${sectionId}', '${currentSectionTitle.replace(/'/g, "\\'")}')">✨ Sugerează</button>
-                            <span class="collapse-icon">▼</span>
+                        <div class="section-header-controls flex items-center gap-2 mt-2 sm:mt-0">
+                             <div class="section-progress text-sm" id="progress-${sectionId}">0/${problemCountInSection}</div>
+                            <span class="collapse-icon text-gray-500">▼</span>
                         </div>
                     </div>`;
-                const sectionContent = `<div class="section-content">${problemsHtml}</div>`;
+                const sectionContent = `<div class="section-content p-3 space-y-2">${problemsHtml}</div>`;
                 sectionsContainer.innerHTML += `<div class="section ${levelClass} collapsed" id="${sectionId}">${sectionHeader}${sectionContent}</div>`;
-                
+
                 sectionIndex++;
                 problemsHtml = '';
                 problemCountInSection = 0;
             }
         }
-        
+
         function getEmojiForLevel(level) {
-            const emojis = ['🟩', '🟨', '🟦', '🟥', '🟪'];
+            const emojis = ['🟩', '🟨', '🟦', '🟥', '🟪']; // Green, Yellow, Blue, Red, Purple
             return emojis[level % emojis.length];
         }
+        let potentialTitleBuffer = "";
 
         for (const line of lines) {
             if (line.startsWith('<ul>')) {
-                problemIndexInSection = 0; 
+                 if (potentialTitleBuffer) { // Finalizează secțiunea dacă un titlu era în buffer
+                    finalizeSection();
+                    currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
+                    potentialTitleBuffer = "";
+                 }
+                problemIndexInSection = 0;
                 continue;
             } else if (line.startsWith('</ul>')) {
-                // Nu finaliza secțiunea aici dacă urmează imediat un alt titlu
-                // finalizeSection(); // Scoatem asta de aici pentru a gestiona titlurile multiple
-                // currentSectionTitle = null; // Scoatem și asta
                 continue;
             } else if (line.startsWith('<li><a href="')) {
-                const match = line.match(/<li><a href="([^"]+)">([^<]+)<\/a>(?:.*)<\/li>/); // Permite text după </a>
+                 if (potentialTitleBuffer && !currentSectionTitle) { // Dacă avem un titlu în buffer și nu e setat currentSectionTitle
+                    finalizeSection(); // Finalizează secțiunea anterioară dacă există
+                    currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
+                    potentialTitleBuffer = "";
+                 } else if (potentialTitleBuffer && currentSectionTitle && problemsHtml === '') {
+                    // Avem un titlu în buffer, un currentSectionTitle, dar încă nu am adăugat probleme la el
+                    finalizeSection(); // Finalizează secțiunea pentru currentSectionTitle (care va fi goală)
+                    currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim(); // Setează noul titlu
+                    potentialTitleBuffer = "";
+                 }
+
+
+                const match = line.match(/<li><a href="([^"]+)">([^<]+)<\/a>(?:.*?)<\/li>/i);
                 if (match) {
                     const url = match[1];
-                    const name = match[2].replace(/\s\s+/g, ' ').trim(); 
+                    const name = match[2].replace(/\s\s+/g, ' ').trim();
                     const checkboxId = `cb_${sectionIndex}_${problemIndexInSection}`;
                     problemsHtml += `
-                        <label>
-                            <input type="checkbox" id="${checkboxId}">
-                            <a href="${url}" target="_blank">${name}</a>
-                            <button class="btn btn-gemini" onclick="fetchProblemExplanation('${name.replace(/'/g, "\\'")}', '${url}')">✨ Ajutor</button>
+                        <label class="flex items-center p-2 hover:bg-gray-100 rounded-md">
+                            <input type="checkbox" id="${checkboxId}" class="mr-3">
+                            <a href="${url}" target="_blank" class="problem-link text-sm md:text-base">${name}</a>
                         </label>`;
                     problemIndexInSection++;
                     problemCountInSection++;
                 }
-            } else if (!line.startsWith('<') && line.length > 1 && (currentSectionTitle === null || !problemsHtml || (problemsHtml && line.endsWith(':')))) { 
-                // Condiție îmbunătățită pentru a detecta un nou titlu
-                // Dacă linia nu e tag HTML, e suficient de lungă, ȘI
-                // (nu avem titlu curent SAU nu am început problemele pentru titlul curent SAU (avem probleme ȘI linia se termină cu ':'))
-                finalizeSection(); 
-                currentSectionTitle = line.replace(/:$/, '').trim(); 
+            } else if (!line.startsWith('<') && line.length > 1) { // Linie de text, potențial titlu
+                if (currentSectionTitle && problemsHtml) { // Dacă avem o secțiune activă cu probleme
+                    finalizeSection(); // O finalizăm
+                }
+                 potentialTitleBuffer = line;
+                 if (line.endsWith(':')) {
+                    finalizeSection();
+                    currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
+                    potentialTitleBuffer = "";
+                 }
             }
         }
-        finalizeSection(); 
+        if (potentialTitleBuffer) { // Procesează orice titlu rămas în buffer la final
+            finalizeSection();
+            currentSectionTitle = potentialTitleBuffer.replace(/:$/, '').trim();
+        }
+        finalizeSection(); // Asigură-te că ultima secțiune este finalizată
     }
 
-    // Am extras conținutul din `Materie completa(exercitii).txt` și l-am pus aici
-    // Într-o aplicație reală, acest text ar putea fi încărcat dintr-un fișier separat.
+    // Am eliminat funcțiile pentru Focus Timer
+
+    // Conținutul din `Materie completa(exercitii).txt`
     const problemDataText = `
 Operatii pe biti :
 
@@ -870,7 +736,7 @@ Operatii pe biti :
 <li><a href="https://kilonova.ro/tags/439">Probleme cu operații pe biți de pe kilonova</a></li>
 <li><a href="https://codeforces.com/problemset?tags=bitmasks">Probleme cu operații pe biți de pe codeforces</a></li>
 </ul>
-  
+
 Greedy (Introducere) :
 
 <ul>
@@ -952,6 +818,7 @@ Smenu lu mars :
 <li><a href="https://codeforces.com/contest/1795/problem/C">Tea Tasting</a></li>
 <li><a href="https://codeforces.com/gym/104114/problem/N">Nusret Gokce</a></li>
 <li><a href="https://codeforces.com/contest/1343/problem/D">Constant Palindrome Sum</a></li>
+<li><a href="https://codeforces.com/edu/course/2/lesson/9/3/practice">Two Pointers Step 3 - Codeforces EDU</a></li>
 </ul>
 
 Two pointers:
@@ -982,7 +849,7 @@ Sliding Window:
 <li><a href="https://kilonova.ro/problems/2502">OJI 2024 Santinele</a></li>
 <li><a href="https://codeforces.com/contest/488/problem/D">Strip Codeforces</a></li>
 <li><a href="https://cses.fi/problemset/task/1077">Sliding Window Cost</a></li>
-<li><a href="hhttps://cses.fi/problemset/task/1644">Max Subarray Sum II</a></li>
+<li><a href="https://cses.fi/problemset/task/1644">Max Subarray Sum II</a></li>
 <li><a href="https://www.infoarena.ro/problema/slidingwindow">slidingwindow infoarena</a></li>
 <li><a href="https://codeforces.com/problemset/problem/363/B">Fence Codeforces</a></li>
 </ul>
@@ -1119,7 +986,7 @@ Fill.Algoritmul lui Lee :
 <li><a href="https://infoarena.ro/problema/muzeu">infoarena muzeu</a></li>
 <li><a href="https://infoarena.ro/problema/barbar">infoarena barbar</a></li>
 <li><a href="https://kilonova.ro/problems/664/">RoAlgo Contest #1 - Expansion</a></li>
-<li><a href="https://usaco.org/current/current/index.php?page=viewproblem2&amp;cpid=895">USACO Silver Icy Perimeter</a></li>
+<li><a href="https://usaco.org/current/index.php?page=viewproblem2&amp;cpid=895">USACO Silver Icy Perimeter</a></li>
 <li><a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=380">USACO Silver Cross Country Skiing</a></li>
 <li><a href="https://kilonova.ro/problems/938">OJI 2021 labirint</a></li>
 <li><a href="https://kilonova.ro/problems/398">OJI 2009 insule</a></li>
@@ -1312,7 +1179,7 @@ Dinamica pe stari exponentiale(bitmask DP) :
 <li><a href="https://www.infoarena.ro/problema/zebughil">infoarena zebughil</a></li>
 <li><a href="https://kilonova.ro/problems/1885">RCPCamp 2023 Anton Would Approve this problem</a></li>
 <li><a href="https://kilonova.ro/problems/40">OJI 2011 Ubuntzei</a></li>
-<li><a href="hhttps://kilonova.ro/problems/19/">OJI 2020 RecycleBin</a></li>
+<li><a href="https://kilonova.ro/problems/19/">OJI 2020 RecycleBin</a></li>
 <li><a href="https://kilonova.ro/problems/1756">Lot Juniori 2014 ssce</a></li>
 <li><a href="https://kilonova.ro/problems/2802/">Lot Juniori 2024 nooverlap</a></li>
 <li><a href="https://kilonova.ro/problems/1716">Lot Juniori 2016 ksiruri</a></li>
@@ -1710,8 +1577,7 @@ Small to large:
 <li><a href="https://codeforces.com/problemset/problem/600/E">Lomsat Gerlal - Codeforces</a></li>
 <li><a href="https://kilonova.ro/problems/2970">Arborel - Kilonova</a></li>
 <li><a href="https://codeforces.com/contest/1193/problem/B">Magic Tree - CEOI 2019</a></li>
-<li><a href="https://kilonova.ro/problems/2098">Alte probleme cu small-to-large de pe Kilonova</a></li>
-</ul>
+<li><a href="https://kilonova.ro/tags/317">Alte probleme cu small-to-large de pe Kilonova</a></li> </ul>
 
 
 Heavy light decomposition (HLD):
@@ -1891,80 +1757,94 @@ Componente biconexe:
 <li><a href="https://kilonova.ro/tags/304">Probleme cu componente biconexe de pe Kilonova</a></li>
 </ul>
 `;
-    
+
     // Inițializare principală
     document.addEventListener('DOMContentLoaded', () => {
-        parseAndGenerateSections(problemDataText); 
-        
-        loadLocalProgress(); 
+        parseAndGenerateSections(problemDataText);
+        loadLocalProgress(); // Încarcă progresul local înainte de a încerca Firebase
         setupSearch();
-        updateStats(); 
+        updateStats(); // Calculează statisticile inițiale pe baza datelor locale
 
-        signInAnonymously(auth)
-          .then((userCredential) => {
-            const user = userCredential.user;
-            const uid = user.uid;
-            const db = getDatabase(appFirebase);
-            dbRef = ref(db, 'users/' + uid + '/checklistProgress');
+        // Sincronizare cu Firebase
+        onAuthStateChanged(auth, (user) => {
+            if (user) { // Utilizator autentificat (anonim sau altfel)
+                const uid = user.uid;
+                userDocRef = doc(db, 'userProgress', uid); // Calea către documentul utilizatorului
 
-            onValue(dbRef, snapshot => {
-              hideLoading(); 
-              const data = snapshot.val() || {};
-              let cloudDataChanged = false;
-              document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-                const cloudValue = !!data[cb.id];
-                if (cb.checked !== cloudValue) {
-                    cb.checked = cloudValue; 
-                    cloudDataChanged = true;
+                // Curăță listener-ul anterior dacă există
+                if (unsubscribeSnapshot) {
+                    unsubscribeSnapshot();
                 }
-                cb.parentElement.classList.toggle('completed', cb.checked);
-              });
 
-              if (cloudDataChanged) {
-                 showNotification('Progres sincronizat din cloud.', 'info');
-              }
-              updateStats(); 
-              saveLocalProgress(); 
-            }, (error) => {
-                console.error("Eroare Firebase onValue:", error);
-                hideLoading();
-                showNotification('Nu s-a putut sincroniza cu cloud. Se folosesc datele locale.', 'error');
-                updateStats(); 
-            });
+                // Sincronizează cu Firestore
+                unsubscribeSnapshot = onSnapshot(userDocRef, (docSnap) => {
+                    hideLoading(); // Ascunde indicatorul de încărcare după ce datele (sau lipsa lor) sunt primite
+                    const cloudData = docSnap.exists() ? docSnap.data().progress || {} : {};
+                    let cloudDataChanged = false;
 
-            // Adaugă event listeners la checkbox-uri DUPĂ ce au fost generate
-            document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-              cb.addEventListener('change', function() {
-                this.parentElement.classList.toggle('completed', this.checked);
-                if (this.checked) {
-                  showNotification('Problemă completată! 🎉');  
-                }
-                if (dbRef) { 
-                    update(dbRef, { [this.id]: this.checked }).catch(err => {
-                        showNotification('Salvarea în cloud a eșuat: ' + err.message, 'error');
+                    document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+                        const cloudValue = !!cloudData[cb.id];
+                        if (cb.checked !== cloudValue) {
+                            cb.checked = cloudValue;
+                            cloudDataChanged = true;
+                        }
+                        cb.parentElement.classList.toggle('completed', cb.checked);
                     });
+
+                    if (cloudDataChanged) {
+                        showNotification('Progres sincronizat din cloud.', 'info');
+                    }
+                    updateStats();
+                    saveLocalProgress(cloudData); // Salvează datele din cloud și local
+                }, (error) => {
+                    console.error("Eroare Firestore onSnapshot:", error);
+                    hideLoading();
+                    showNotification('Nu s-a putut sincroniza cu cloud. Se folosesc datele locale.', 'error');
+                    updateStats(); // Asigură-te că statisticile sunt actualizate chiar dacă onSnapshot eșuează
+                });
+            } else { // Niciun utilizator autentificat
+                hideLoading();
+                console.log("Niciun utilizator autentificat. Progresul va fi doar local.");
+                updateStats();
+            }
+        });
+
+        // Încearcă autentificare anonimă
+        signInAnonymously(auth).catch((error) => {
+            console.error("Autentificare anonimă eșuată:", error);
+            hideLoading(); // Ascunde indicatorul de încărcare dacă autentificarea eșuează
+            showNotification('Autentificarea Firebase a eșuat. Progresul va fi doar local.', 'error');
+            updateStats(); // Asigură-te că statisticile sunt actualizate
+        });
+
+
+        // Adaugă event listeners la checkbox-uri DUPĂ ce au fost generate
+        document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+          cb.addEventListener('change', async function() {
+            this.parentElement.classList.toggle('completed', this.checked);
+            if (this.checked) {
+              showNotification('Problemă completată! 🎉');
+            }
+            const currentProgress = {};
+            document.querySelectorAll('input[type=checkbox]').forEach(box => {
+                currentProgress[box.id] = box.checked;
+            });
+
+            if (userDocRef) {
+                try {
+                    await setDoc(userDocRef, { progress: currentProgress }, { merge: true }); // Folosește merge: true pentru a nu suprascrie alte câmpuri
+                } catch (err) {
+                    showNotification('Salvarea în cloud a eșuat: ' + err.message, 'error');
                 }
-                updateStats();
-                saveLocalProgress();
-              });
-            });
-          })
-          .catch((error) => {
-            console.error("Autentificare eșuată:", error);
-            hideLoading();
-            showNotification('Autentificare Firebase eșuată. Progresul va fi doar local.', 'error');
-            // Permite funcționarea locală chiar dacă Firebase eșuează
-             document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-              cb.addEventListener('change', function() {
-                this.parentElement.classList.toggle('completed', this.checked);
-                updateStats();
-                saveLocalProgress();
-              });
-            });
-            updateStats(); 
+            }
+            updateStats();
+            saveLocalProgress(currentProgress);
           });
-          
-        collapseAll(); 
+        });
+
+        collapseAll(); // Restrânge toate secțiunile la încărcare
+        // Asigură-te că loading-ul este ascuns dacă nu există autentificare sau date inițiale
+        // Acest lucru este gestionat în callback-urile onAuthStateChanged și signInAnonymously
     });
   </script>
 </body>
