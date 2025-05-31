@@ -1,4 +1,6 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <title>Competitive Programming Checklist</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -155,11 +157,11 @@
     input[type=checkbox] { margin-right: 0.8rem; transform: scale(1.3); accent-color: #667eea; }
     a { text-decoration: none; color: #667eea; font-weight: 500; flex: 1; }
     a:hover { text-decoration: underline; }
-    .level-0 { border-left: 4px solid #28a745; }
-    .level-1 { border-left: 4px solid #ffc107; }
-    .level-2 { border-left: 4px solid #007bff; }
-    .level-3 { border-left: 4px solid #dc3545; }
-    .level-4 { border-left: 4px solid #6f42c1; }
+    .level-0 { border-left: 4px solid #28a745; } /* Green */
+    .level-1 { border-left: 4px solid #ffc107; } /* Yellow */
+    .level-2 { border-left: 4px solid #007bff; } /* Blue */
+    .level-3 { border-left: 4px solid #dc3545; } /* Red */
+    .level-4 { border-left: 4px solid #6f42c1; } /* Purple */
     @media (max-width: 768px) {
       body { padding: 1rem; }
       .container { padding: 1.5rem; }
@@ -177,11 +179,14 @@
       padding: 1rem;
       border-radius: 6px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transform: translateX(400px);
-      transition: transform 0.3s ease;
+      transform: translateX(110%); /* Start off-screen */
+      transition: transform 0.3s ease-in-out;
       z-index: 1000;
     }
     .notification.show { transform: translateX(0); }
+    .notification.error { background: #dc3545; }
+    .notification.info { background: #17a2b8; }
+
     /* Loading Spinner Styles */
     .loading {
       position: fixed;
@@ -193,11 +198,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 2000;
+      z-index: 2000; /* Ensure it's on top */
     }
     .spinner {
-      border: 8px solid #f3f3f3;
-      border-top: 8px solid #667eea;
+      border: 8px solid #f3f3f3; /* Light grey */
+      border-top: 8px solid #667eea; /* Blue */
       border-radius: 50%;
       width: 60px;
       height: 60px;
@@ -207,12 +212,56 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    /* Custom Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none; /* Hidden by default */
+      justify-content: center;
+      align-items: center;
+      z-index: 3000; /* Higher than loading spinner */
+    }
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+    .modal-content p {
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .modal-buttons {
+      display: flex;
+      justify-content: space-around;
+    }
+    .modal-buttons .btn {
+      min-width: 100px;
+    }
   </style>
-<script src="https://www.googletagmanager.com/gtag/js?l=dataLayer&amp;id=G-VS8NZFC0SE" async=""></script></head>
+  <script src="https://www.googletagmanager.com/gtag/js?l=dataLayer&id=G-VS8NZFC0SE" async=""></script>
+</head>
 <body>
-  <!-- Loading Indicator -->
-  <div class="loading" id="loading" style="display: none;">
-    <div class="spinner"></div>
+  <div class="loading" id="loading"> <div class="spinner"></div>
+  </div>
+
+  <div class="modal-overlay" id="custom-confirm-modal">
+    <div class="modal-content">
+      <p id="custom-confirm-message">Are you sure?</p>
+      <div class="modal-buttons">
+        <button class="btn btn-secondary" id="custom-confirm-cancel">Cancel</button>
+        <button class="btn btn-primary" id="custom-confirm-ok">OK</button>
+      </div>
+    </div>
   </div>
 
   <div class="container">
@@ -224,8 +273,7 @@
         <div class="stat-label">Completed</div>
       </div>
       <div class="stat-item">
-        <div class="stat-number" id="total-count">86</div>
-        <div class="stat-label">Total</div>
+        <div class="stat-number" id="total-count">0</div> <div class="stat-label">Total</div>
       </div>
       <div class="stat-item">
         <div class="stat-number" id="progress-percent">0%</div>
@@ -242,533 +290,3232 @@
       <input type="text" class="search-box" id="search-box" placeholder="Search problems...">
       <button class="btn btn-primary" onclick="expandAll()">Expand All</button>
       <button class="btn btn-secondary" onclick="collapseAll()">Collapse All</button>
-      <button class="btn btn-secondary" onclick="resetProgress()">Reset All</button>
-    </div>
-
-    <!-- Level 0 Sections -->
-    <div class="section level-0" id="level0-numtheory">
-      <div class="section-header" onclick="toggleSection('level0-numtheory')">
-        <h2 class="section-title">🟩 Level 0: Fundamentals – Number Theory Basics</h2>
-        <div class="section-progress" id="progress-level0-numtheory">0/3</div>
+      <button class="btn btn-secondary" onclick="handleResetProgress()">Reset All</button> </div>
+    <div class="section level-0" id="topic-0">
+      <div class="section-header" onclick="toggleSection('topic-0')">
+        <h2 class="section-title">🟩 Operatii pe biti</h2>
+        <div class="section-progress" id="progress-topic-0">0/18</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <label>
-          <input type="checkbox" id="cb_0_1">
-          <a href="https://cses.fi/problemset/task/1713/" target="_blank">CSES – Counting Divisors</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_0_2">
-          <a href="https://infoarena.ro/problema/factori2" target="_blank">Infoarena – factori2</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_0_3">
-          <a href="https://infoarena.ro/problema/euler" target="_blank">Infoarena – euler</a>
-        </label>
+            <label>
+              <input type="checkbox" id="cb_0_0">
+              <a href="https://kilonova.ro/problems/1242" target="_blank">morse ONI 2006</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_1">
+              <a href="https://kilonova.ro/problems/692" target="_blank">intervale RoAlgo Contest #3</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_2">
+              <a href="https://kilonova.ro/problems/2249" target="_blank">Bit Showdown RoAlgo Contest #9</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_3">
+              <a href="https://kilonova.ro/problems/944" target="_blank">patratele OJI 2022</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_4">
+              <a href="https://kilonova.ro/problems/2418" target="_blank">Matmare RoAlgo PreOJI 2024</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_5">
+              <a href="https://codeforces.com/contest/244/problem/C" target="_blank">The Brand New Function</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_6">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1182" target="_blank">Searching for Soulmates
+      USACO</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_7">
+              <a href="https://codeforces.com/contest/1338/problem/A" target="_blank">Powered Addition</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_8">
+              <a href="https://codeforces.com/contest/1872/problem/E" target="_blank">Data Structures Fan</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_9">
+              <a href="https://kilonova.ro/problems/900" target="_blank">castel OJI 2018</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_10">
+              <a href="https://codeforces.com/problemset/problem/1732/C1" target="_blank">Sheikh (Easy version)</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_11">
+              <a href="https://atcoder.jp/contests/abc295/tasks/abc295_d" target="_blank">Three Days Ago</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_12">
+              <a href="https://codeforces.com/contest/1715/problem/D" target="_blank">2+ Doors</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_13">
+              <a href="https://codeforces.com/problemset/problem/550/B" target="_blank">Preparing Olympiad</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_14">
+              <a href="https://codeforces.com/problemset/problem/1097/B" target="_blank">Petr and a Combination
+      Lock</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_15">
+              <a href="https://www.cses.fi/problemset/task/2419" target="_blank">CSES Xor Pyramid</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_16">
+              <a href="https://kilonova.ro/tags/439" target="_blank">Probleme cu operații pe biți de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_0_17">
+              <a href="https://codeforces.com/problemset?tags=bitmasks" target="_blank">Probleme cu operații pe biți de pe
+      codeforces</a>
+            </label>
       </div>
     </div>
-
-    <div class="section level-0" id="level0-dp1d">
-      <div class="section-header" onclick="toggleSection('level0-dp1d')">
-        <h2 class="section-title">🟩 Level 0: 1D Dynamic Programming</h2>
-        <div class="section-progress" id="progress-level0-dp1d">0/7</div>
+    
+    <div class="section level-1" id="topic-1">
+      <div class="section-header" onclick="toggleSection('topic-1')">
+        <h2 class="section-title">🟨 Greedy (Introducere)</h2>
+        <div class="section-progress" id="progress-topic-1">0/17</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <label>
-          <input type="checkbox" id="cb_0_4">
-          <a href="https://atcoder.jp/contests/dp/tasks/dp_a" target="_blank">AtCoder dp_a – Frog 1</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_0_5">
-          <a href="https://atcoder.jp/contests/dp/tasks/dp_b" target="_blank">AtCoder dp_b – Frog 2</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_0_6">
-          <a href="https://cses.fi/problemset/task/1634/" target="_blank">CSES – Minimizing Coins</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_0_7">
-          <a href="https://cses.fi/problemset/task/1635/" target="_blank">CSES – Coin Combinations I</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_0_8">
-          <a href="https://leetcode.com/problems/maximum-subarray/" target="_blank">Maximum Subarray Sum (Kadane)</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_0_9">
-          <a href="https://leetcode.com/problems/house-robber/" target="_blank">Leetcode – House Robber</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_0_10">
-          <a href="https://cses.fi/problemset/task/1637/" target="_blank">CSES – Staircase</a>
-        </label>
+            <label>
+              <input type="checkbox" id="cb_1_0">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1301" target="_blank">USACO Bronze Watching Mooloo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_1">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=689" target="_blank">USACO Bronze Cow Tipping</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_2">
+              <a href="https://www.pbinfo.ro/probleme/1877/kmax" target="_blank">pbinfo kmax</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_3">
+              <a href="https://www.pbinfo.ro/probleme/1004/eureni" target="_blank">pbinfo eureni</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_4">
+              <a href="https://www.pbinfo.ro/probleme/categorii/24/metoda-greedy-probleme-diverse-cu-metoda-greedy" target="_blank">Probleme cu greedy de pe pbinfo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_5">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=785" target="_blank">USACO Bronze Out of Place</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_6">
+              <a href="https://leetcode.com/problems/minimum-cost-to-move-chips-to-the-same-position/description/" target="_blank">Leetcode Minimum Cost to Move Chips to The Same Position</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_7">
+              <a href="https://kilonova.ro/problems/823" target="_blank">OJI 2012 Arme</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_8">
+              <a href="https://kilonova.ro/problems/2502" target="_blank">OJI 2024 Santinele</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_9">
+              <a href="https://kilonova.ro/problems/2659" target="_blank">ONI 2024 Soldati</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_10">
+              <a href="https://cses.fi/problemset/task/1630" target="_blank">CSES Tasks and Deadlines</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_11">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=573" target="_blank">USACO Gold High Card Low Card</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_12">
+              <a href="https://kilonova.ro/problems/2961" target="_blank">RoAlgo Contest #10 Paranteze</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_13">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=990" target="_blank">USACO Silver Berry Picking</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_14">
+              <a href="https://codeforces.com/contest/321/problem/B" target="_blank">Codeforces Ciel and Duel</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_15">
+              <a href="https://kilonova.ro/tags/299" target="_blank">Probleme cu greedy pe Kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_1_16">
+              <a href="https://infoarena.ro/cauta-probleme?tag_id[]=61" target="_blank">Probleme cu greedy pe Infoarena</a>
+            </label>
       </div>
     </div>
-
-    <div class="section level-0" id="level0-adhoc">
-      <div class="section-header" onclick="toggleSection('level0-adhoc')">
-        <h2 class="section-title">🟩 Level 0: Simple Implementation / Ad-Hoc</h2>
-        <div class="section-progress" id="progress-level0-adhoc">0/2</div>
+    
+    <div class="section level-2" id="topic-2">
+      <div class="section-header" onclick="toggleSection('topic-2')">
+        <h2 class="section-title">🟦 Binary search</h2>
+        <div class="section-progress" id="progress-topic-2">0/22</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <label>
-          <input type="checkbox" id="cb_0_11">
-          <a href="https://codeforces.com/problemset/problem/702/A" target="_blank">CF 702A – Maximum Increase</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_0_12">
-          <a href="https://codeforces.com/problemset/problem/1659/A" target="_blank">CF 1659A – Red Versus Blue</a>
-        </label>
+            <label>
+              <input type="checkbox" id="cb_2_0">
+              <a href="https://www.infoarena.ro/problema/cautbin" target="_blank">Problema cautbin - Infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_1">
+              <a href="https://www.infoarena.ro/problema/bete2" target="_blank">bete2 infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_2">
+              <a href="https://www.pbinfo.ro/probleme/2443/cb2" target="_blank">cb2 pbinfo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_3">
+              <a href="https://codeforces.com/edu/course/2/lesson/6/1/practice" target="_blank">Problemele din pasul 1 de la EDU</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_4">
+              <a href="https://www.infoarena.ro/problema/nrtri" target="_blank">nrtri infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_5">
+              <a href="https://codeforces.com/contest/702/problem/C" target="_blank">Codeforces Cellular Network</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_6">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1035" target="_blank">USACO Bronze Social Distancing I</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_7">
+              <a href="https://kilonova.ro/problems/865" target="_blank">OJI 2016 pic</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_8">
+              <a href="https://kilonova.ro/problems/1475" target="_blank">ONI 2016 dif2</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_9">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=858" target="_blank">USACO Silver Convention</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_10">
+              <a href="https://kilonova.ro/problems/905" target="_blank">OJI 2019 mostenire</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_11">
+              <a href="https://kilonova.ro/problems/1501" target="_blank">ONI 2017 orase</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_12">
+              <a href="https://kilonova.ro/problems/1501" target="_blank">ONI 2017 orase</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_13">
+              <a href="https://www.infoarena.ro/problema/zone" target="_blank">zone infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_14">
+              <a href="https://codeforces.com/edu/course/2/lesson/6/2/practice" target="_blank">Problemele din pasul 2 de la EDU</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_15">
+              <a href="https://www.pbinfo.ro/probleme/2789/cb3" target="_blank">cb3 pbinfo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_16">
+              <a href="https://kilonova.ro/problems/1098" target="_blank">Baraj Juniori 2021 intergalactic</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_17">
+              <a href="https://kilonova.ro/problems/1522/" target="_blank">ONI 2018 plaja</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_18">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=991" target="_blank">USACO Silver Loan Repayment</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_19">
+              <a href="https://kilonova.ro/tags/315" target="_blank">Problemele cu cautare binara de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_20">
+              <a href="https://codeforces.com/problemset?tags=binary+search" target="_blank">Problemele cu cautare binara de pe codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_2_21">
+              <a href="https://www.infoarena.ro/cauta-probleme?tag_id[]=49" target="_blank">Problemele cu cautare binara de pe infoarena</a>
+            </label>
       </div>
     </div>
-
-    <!-- Level 1 Sections -->
-    <div class="section level-1" id="level1-comb">
-      <div class="section-header" onclick="toggleSection('level1-comb')">
-        <h2 class="section-title">🟨 Level 1: GCD/LCM &amp; Combinatorics</h2>
-        <div class="section-progress" id="progress-level1-comb">0/6</div>
+    
+    <div class="section level-3" id="topic-3">
+      <div class="section-header" onclick="toggleSection('topic-3')">
+        <h2 class="section-title">🟥 Smenu lu mars</h2>
+        <div class="section-progress" id="progress-topic-3">0/27</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <label>
-          <input type="checkbox" id="cb_1_1">
-          <a href="https://kilonova.ro/problem/784" target="_blank">Kilonova 784 – divizor</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_2">
-          <a href="https://kilonova.ro/problem/772" target="_blank">Kilonova 772 – numere</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_3">
-          <a href="https://cses.fi/problemset/task/1717/" target="_blank">CSES – Binomial Coefficients II</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_4">
-          <a href="https://kilonova.ro/problem/1982" target="_blank">Kilonova 1982 – Combination</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_5">
-          <a href="https://kilonova.ro/problem/1981" target="_blank">Kilonova 1981 – divizibilitate</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_6">
-          <a href="https://kilonova.ro/problem/1983" target="_blank">Kilonova 1983 – Common divisors and multiples</a>
-        </label>
+            <label>
+              <input type="checkbox" id="cb_3_0">
+              <a href="https://kilonova.ro/problems/2129/" target="_blank">Prefix Sums 1D</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_1">
+              <a href="https://kilonova.ro/problems/1334" target="_blank">plaja ONI 2010</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_2">
+              <a href="https://kilonova.ro/problems/1401" target="_blank">gradina ONI 2013</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_3">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=572" target="_blank">Breed Counting USACO Silver</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_4">
+              <a href="https://kilonova.ro/problems/2379/" target="_blank">flip01 RoAlgo PreOJI 2024</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_5">
+              <a href="https://kilonova.ro/problems/2355/" target="_blank">sirpal RoAlgo PreOJI 2024</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_6">
+              <a href="https://kilonova.ro/problems/662" target="_blank">cdcq RoAlgo Contest #1</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_7">
+              <a href="https://infoarena.ro/problema/mostenire2" target="_blank">infoarena mostenire2</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_8">
+              <a href="https://www.infoarena.ro/problema/bmatrix" target="_blank">infoarena bmatrix</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_9">
+              <a href="https://kilonova.ro/problems/892" target="_blank">tnia OJI 2018</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_10">
+              <a href="https://kilonova.ro/problems/547" target="_blank">balon ONI 2023</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_11">
+              <a href="https://kilonova.ro/problems/1018" target="_blank">poseidon RoAlgo Contest #4</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_12">
+              <a href="https://kilonova.ro/problems/134" target="_blank">investiție OJI 2023</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_13">
+              <a href="https://kilonova.ro/tags/355" target="_blank">Probleme cu sume parțiale</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_14">
+              <a href="https://kilonova.ro/tags/375" target="_blank">Probleme cu șmenul lui Mars</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_15">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=595" target="_blank">Subsequences Summing to Sevens USACO Silver</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_16">
+              <a href="https://www.spoj.com/problems/HAYBALE/" target="_blank">Haybale Stacking USACO Bronze</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_17">
+              <a href="https://kilonova.ro/problems/2653/" target="_blank">ONI 2024 Eras</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_18">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=923" target="_blank">Painting the Barn USACO Gold</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_19">
+              <a href="https://codeforces.com/contest/1398/problem/C" target="_blank">Good Subarrays</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_20">
+              <a href="https://codeforces.com/contest/2014/problem/D" target="_blank">Robert Hood and Mrs Hood</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_21">
+              <a href="https://codeforces.com/contest/1826/problem/D" target="_blank">Running Miles</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_22">
+              <a href="https://codeforces.com/contest/1291/problem/D" target="_blank">Irreductible Anagrams</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_23">
+              <a href="https://codeforces.com/contest/2025/problem/D" target="_blank">Attribute Checks</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_24">
+              <a href="https://codeforces.com/contest/1795/problem/C" target="_blank">Tea Tasting</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_25">
+              <a href="https://codeforces.com/gym/104114/problem/N" target="_blank">Nusret Gokce</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_3_26">
+              <a href="https://codeforces.com/contest/1343/problem/D" target="_blank">Constant Palindrome Sum</a>
+            </label>
       </div>
     </div>
-
-    <div class="section level-1" id="level1-dp2d">
-      <div class="section-header" onclick="toggleSection('level1-dp2d')">
-        <h2 class="section-title">🟨 Level 1: 2D Dynamic Programming</h2>
-        <div class="section-progress" id="progress-level1-dp2d">0/8</div>
+    
+    <div class="section level-4" id="topic-4">
+      <div class="section-header" onclick="toggleSection('topic-4')">
+        <h2 class="section-title">🟪 Two pointers</h2>
+        <div class="section-progress" id="progress-topic-4">0/16</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <label>
-          <input type="checkbox" id="cb_1_7">
-          <a href="https://cses.fi/problemset/task/1638/" target="_blank">CSES – Grid Paths</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_8">
-          <a href="https://cses.fi/problemset/task/1733/" target="_blank">CSES – Grid Paths with Obstacles</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_9">
-          <a href="https://leetcode.com/problems/longest-common-substring/" target="_blank">Longest Common Substring</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_10">
-          <a href="https://atcoder.jp/contests/dp/tasks/dp_f" target="_blank">AtCoder dp_f – LCS</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_11">
-          <a href="https://atcoder.jp/contests/dp/tasks/dp_d" target="_blank">AtCoder dp_d – 0/1 Knapsack</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_12">
-          <a href="https://cses.fi/problemset/task/1745/" target="_blank">Subset Sum</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_13">
-          <a href="https://leetcode.com/problems/partition-equal-subset-sum/" target="_blank">Leetcode – Partition Equal Subset Sum</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_14">
-          <a href="https://cses.fi/problemset/task/1724/" target="_blank">CSES – Edit Distance</a>
-        </label>
+            <label>
+              <input type="checkbox" id="cb_4_0">
+              <a href="https://infoarena.ro/problema/3secv" target="_blank">Infoarena 3secv</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_1">
+              <a href="https://oj.uz/problem/view/JOI20_ho_t2" target="_blank">JOI JJOOII 2</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_2">
+              <a href="https://cses.fi/problemset/task/1084/" target="_blank">CSES Apartments</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_3">
+              <a href="https://www.pbinfo.ro/probleme/2943/maru" target="_blank">pbinfo maru</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_4">
+              <a href="https://oj.uz/problem/view/NOI13_gw" target="_blank">NOI Singapore Global Warming</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_5">
+              <a href="https://kilonova.ro/problems/556" target="_blank">Baraj Seniori 2023 sirbun</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_6">
+              <a href="https://infoarena.ro/problema/nane" target="_blank">Infoarena nane</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_7">
+              <a href="https://www.infoarena.ro/problema/teren" target="_blank">Infoarena teren</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_8">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=738" target="_blank">USACO Paired Up</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_9">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1038" target="_blank">USACO Social Distancing</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_10">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=789" target="_blank">USACO MooTube</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_11">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=992" target="_blank">USACO Wormhole Sort</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_12">
+              <a href="http://usaco.org/index.php?page=viewproblem2&amp;cpid=794" target="_blank">USACO Sprinklers</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_13">
+              <a href="http://usaco.org/index.php?page=viewproblem2&amp;cpid=924" target="_blank">USACO Cow Dating</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_14">
+              <a href="https://kilonova.ro/tags/291" target="_blank">Probleme cu two pointers de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_4_15">
+              <a href="https://www.pbinfo.ro/probleme/eticheta/144/two-pointers" target="_blank">Probleme cu two pointers de pe pbinfo</a>
+            </label>
       </div>
     </div>
-
-    <div class="section level-1" id="level1-cfcore">
-      <div class="section-header" onclick="toggleSection('level1-cfcore')">
-        <h2 class="section-title">🟨 Level 1: CF Practice – Core Patterns</h2>
-        <div class="section-progress" id="progress-level1-cfcore">0/3</div>
+    
+    <div class="section level-0" id="topic-5">
+      <div class="section-header" onclick="toggleSection('topic-5')">
+        <h2 class="section-title">🟩 Sliding Window</h2>
+        <div class="section-progress" id="progress-topic-5">0/6</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <label>
-          <input type="checkbox" id="cb_1_15">
-          <a href="https://codeforces.com/problemset/problem/1626/A" target="_blank">CF 1626A – Equidistant Letters</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_16">
-          <a href="https://codeforces.com/problemset/problem/1363/B" target="_blank">CF 1363B – Subsequence Hate</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_1_17">
-          <a href="https://codeforces.com/problemset/problem/1485/A" target="_blank">CF 1485A – Add and Divide</a>
-        </label>
+            <label>
+              <input type="checkbox" id="cb_5_0">
+              <a href="https://kilonova.ro/problems/2502" target="_blank">OJI 2024 Santinele</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_5_1">
+              <a href="https://codeforces.com/contest/488/problem/D" target="_blank">Strip Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_5_2">
+              <a href="https://cses.fi/problemset/task/1077" target="_blank">Sliding Window Cost</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_5_3">
+              <a href="hhttps://cses.fi/problemset/task/1644" target="_blank">Max Subarray Sum II</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_5_4">
+              <a href="https://www.infoarena.ro/problema/slidingwindow" target="_blank">slidingwindow infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_5_5">
+              <a href="https://codeforces.com/problemset/problem/363/B" target="_blank">Fence Codeforces</a>
+            </label>
       </div>
     </div>
-
-    <!-- Level 2 Sections -->
-    <div class="section level-2" id="level2-dpseq">
-      <div class="section-header" onclick="toggleSection('level2-dpseq')">
-        <h2 class="section-title">🟦 Level 2: Sequence &amp; Space-Optimized DP</h2>
-        <div class="section-progress" id="progress-level2-dpseq">0/4</div>
+    
+    <div class="section level-1" id="topic-6">
+      <div class="section-header" onclick="toggleSection('topic-6')">
+        <h2 class="section-title">🟨 Principiul lui Dirichlet (principiul cutiei)</h2>
+        <div class="section-progress" id="progress-topic-6">0/11</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <label>
-          <input type="checkbox" id="cb_2_1">
-          <a href="https://cses.fi/problemset/task/1144/" target="_blank">CSES – LIS O(n²)</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_2_2">
-          <a href="https://leetcode.com/problems/longest-increasing-subsequence/" target="_blank">Leetcode – LIS O(n log n)</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_2_3">
-          Optimized 0/1 Knapsack (1D DP)
-        </label>
-        <label>
-          <input type="checkbox" id="cb_2_4">
-          <a href="https://codeforces.com/edu/course/2/lesson/4/2" target="_blank">Codeforces EDU – Digit DP</a>
-        </label>
+            <label>
+              <input type="checkbox" id="cb_6_0">
+              <a href="https://codeforces.com/contest/1305/problem/C" target="_blank">Kuroni and Impossible Calculation - Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_6_1">
+              <a href="https://www.pbinfo.ro/probleme/2059/porumbei" target="_blank">Porumbei - pbinfo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_6_2">
+              <a href="https://codeforces.com/contest/1536/problem/B" target="_blank">Prinzessin der Verurteilung - Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_6_3">
+              <a href="https://www.infoarena.ro/problema/razboi2" target="_blank">Razboi2 - infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_6_4">
+              <a href="https://kilonova.ro/problems/1723" target="_blank">Lot Juniori 2013 Numere</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_6_5">
+              <a href="https://kilonova.ro/problems/543/" target="_blank">ONI 2023 Struguri</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_6_6">
+              <a href="https://www.pbinfo.ro/probleme/2105/moretime" target="_blank">OMI Iasi 2013 moretime</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_6_7">
+              <a href="https://kilonova.ro/problems/1476" target="_blank">ONI 2016 Leduri</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_6_8">
+              <a href="https://codeforces.com/contest/1501/problem/C" target="_blank">Going Home - Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_6_9">
+              <a href="https://codeforces.com/contest/1770/problem/C" target="_blank">Koxia and Number Theory - Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_6_10">
+              <a href="https://codeforces.com/contest/1994/problem/D" target="_blank">Funny Game - Codeforces</a>
+            </label>
       </div>
     </div>
-
-    <div class="section level-2" id="level2-graphs">
-      <div class="section-header" onclick="toggleSection('level2-graphs')">
-        <h2 class="section-title">🟦 Level 2: Graphs &amp; Trees Intro</h2>
-        <div class="section-progress" id="progress-level2-graphs">0/5</div>
+    
+    <div class="section level-2" id="topic-7">
+      <div class="section-header" onclick="toggleSection('topic-7')">
+        <h2 class="section-title">🟦 Baze de numeratie</h2>
+        <div class="section-progress" id="progress-topic-7">0/13</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <label>
-          <input type="checkbox" id="cb_2_5">
-          <a href="https://cses.fi/problemset/task/1193/" target="_blank">CSES – Labyrinth</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_2_6">
-          <a href="https://kilonova.ro/problem/parcurgeri" target="_blank">Kilonova – Parcurgeri</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_2_7">
-          <a href="https://kilonova.ro/problem/533" target="_blank">Kilonova 533 – keidei</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_2_8">
-          <a href="https://kilonova.ro/problem/1126" target="_blank">Kilonova 1126 – sumarb</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_2_9">
-          <a href="https://kilonova.ro/problem/1254" target="_blank">Kilonova 1254 – depth</a>
-        </label>
+            <label>
+              <input type="checkbox" id="cb_7_0">
+              <a href="https://www.pbinfo.ro/probleme/427/bazaminima" target="_blank">bazaminima pbinfo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_7_1">
+              <a href="https://www.nerdarena.ro/problema/ascunsa" target="_blank">ascunsa nerdarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_7_2">
+              <a href="https://www.pbinfo.ro/probleme/946/douabaze" target="_blank">douabaze pbinfo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_7_3">
+              <a href="https://www.nerdarena.ro/problema/criptic" target="_blank">criptic nerdarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_7_4">
+              <a href="https://kilonova.ro/problems/1444" target="_blank">ONI 2014 zimeria</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_7_5">
+              <a href="https://www.nerdarena.ro/problema/suc1" target="_blank">suc1 nerdarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_7_6">
+              <a href="https://www.infoarena.ro/problema/psychtraining" target="_blank">psychtraining infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_7_7">
+              <a href="https://www.infoarena.ro/problema/sticle" target="_blank">sticle infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_7_8">
+              <a href="https://kilonova.ro/problems/1636" target="_blank">Lot 2010 Juniori puteri35</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_7_9">
+              <a href="https://kilonova.ro/problems/912" target="_blank">OJI 2019 cate3cifre</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_7_10">
+              <a href="https://kilonova.ro/problems/420" target="_blank">ONI 2011 Baraj Seniori copii</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_7_11">
+              <a href="https://www.infoarena.ro/problema/nop" target="_blank">nop infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_7_12">
+              <a href="https://kilonova.ro/problems/534" target="_blank">ONI 2023 xidartros</a>
+            </label>
       </div>
     </div>
-
-    <div class="section level-2" id="level2-cfinter">
-      <div class="section-header" onclick="toggleSection('level2-cfinter')">
-        <h2 class="section-title">🟦 Level 2: CF Practice – Intermediate</h2>
-        <div class="section-progress" id="progress-level2-cfinter">0/3</div>
+    
+    <div class="section level-3" id="topic-8">
+      <div class="section-header" onclick="toggleSection('topic-8')">
+        <h2 class="section-title">🟥 Indicatorul lui Euler</h2>
+        <div class="section-progress" id="progress-topic-8">0/7</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <label>
-          <input type="checkbox" id="cb_2_10">
-          <a href="https://codeforces.com/problemset/problem/1399/C" target="_blank">CF 1399C – Boats Competition</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_2_11">
-          <a href="https://codeforces.com/problemset/problem/1473/B" target="_blank">CF 1473B – String LCM</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_2_12">
-          <a href="https://codeforces.com/problemset/problem/1500/C" target="_blank">CF 1500C – Matrix Sorting</a>
-        </label>
+            <label>
+              <input type="checkbox" id="cb_8_0">
+              <a href="https://www.infoarena.ro/problema/fractii" target="_blank">fractii infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_8_1">
+              <a href="https://www.spoj.com/problems/LCMSUM/" target="_blank">LCMSUM Spoj</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_8_2">
+              <a href="https://www.pbinfo.ro/probleme/3295/permeuler" target="_blank">Permeuler pbinfo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_8_3">
+              <a href="https://codeforces.com/problemset/problem/1203/C" target="_blank">Common Divisors Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_8_4">
+              <a href="https://cppi.sync.ro/materia/indicatorul_lui_euler.html" target="_blank">problemele de pe CPPI Sync</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_8_5">
+              <a href="https://www.pbinfo.ro/probleme/eticheta/57/indicatorul-lui-euler" target="_blank">problemele de pe pbinfo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_8_6">
+              <a href="https://vjudge.net/contest/561512" target="_blank">Problemele din această listă de pe Vjudge</a>
+            </label>
       </div>
     </div>
-
-    <!-- Level 3 Sections -->
-    <div class="section level-3" id="level3-adv">
-      <div class="section-header" onclick="toggleSection('level3-adv')">
-        <h2 class="section-title">🟥 Level 3: Advanced Topics</h2>
-        <div class="section-progress" id="progress-level3-adv">0/6</div>
+    
+    <div class="section level-4" id="topic-9">
+      <div class="section-header" onclick="toggleSection('topic-9')">
+        <h2 class="section-title">🟪 Aritmetică modulară. Ridicare la putere în timp logaritmic</h2>
+        <div class="section-progress" id="progress-topic-9">0/5</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <label>
-          <input type="checkbox" id="cb_3_1">
-          <a href="https://cses.fi/problemset/task/1139/" target="_blank">CSES – Subarray Divisors</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_2">
-          <a href="https://cses.fi/problemset/task/1097/" target="_blank">CSES – Removal Game</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_3">
-          <a href="https://leetcode.com/problems/longest-palindromic-subsequence/" target="_blank">Longest Palindromic Subsequence</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_4">
-          <a href="https://leetcode.com/problems/palindrome-partitioning-ii/" target="_blank">Palindrome Partitioning II</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_5">
-          <a href="https://atcoder.jp/contests/dp/tasks/dp_g" target="_blank">AtCoder dp_g – Longest Path in DAG</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_6">
-          <a href="https://infoarena.ro/problema/submultime" target="_blank">Infoarena – submultime</a>
-        </label>
+            <label>
+              <input type="checkbox" id="cb_9_0">
+              <a href="https://cses.fi/problemset/task/1712" target="_blank">CSES Exponentiation II</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_9_1">
+              <a href="https://events.info.uaic.ro/infogim/2015/lectii/6/614.pdf" target="_blank">Tema infogym</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_9_2">
+              <a href="https://www.infoarena.ro/problema/modulo" target="_blank">modulo infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_9_3">
+              <a href="https://www.pbinfo.ro/probleme/843/puteri2" target="_blank">puteri2 pbinfo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_9_4">
+              <a href="https://codeforces.com/contest/1279/problem/D" target="_blank">Santa's bot Codeforces</a>
+            </label>
       </div>
     </div>
-
-    <div class="section level-3" id="level3-cfadv">
-      <div class="section-header" onclick="toggleSection('level3-cfadv')">
-        <h2 class="section-title">🟥 Level 3: CF Practice – Advanced</h2>
-        <div class="section-progress" id="progress-level3-cfadv">0/21</div>
+    
+    <div class="section level-0" id="topic-10">
+      <div class="section-header" onclick="toggleSection('topic-10')">
+        <h2 class="section-title">🟩 Divide et Impera</h2>
+        <div class="section-progress" id="progress-topic-10">0/15</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <!-- Se includ aici etichete multiple (exemple din lista ta) -->
-        <label>
-          <input type="checkbox" id="cb_3_7">
-          <a href="https://codeforces.com/problemset/problem/1705/C" target="_blank">CF 1705C – Mark and His Unfinished Essay</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_8">
-          <a href="https://codeforces.com/problemset/problem/1132/G" target="_blank">CF 1132G – Greedy Merchants</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_9">
-          <a href="https://www.youtube.com/watch?v=s1OW3FK57os&amp;list=PLzDmwrrgE-UVKGwxoYao36BVTvBozwLoG" target="_blank">Exponential-state DP &amp; Bitmask (Video)</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_10">
-          <a href="https://codeforces.com/blog/entry/67679" target="_blank">Exponential-state DP &amp; Bitmask (Blog)</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_11">
-          <a href="https://codeforces.com/problemset/problem/2069/C" target="_blank">CF 2069C – Bitmask DP Example</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_12">
-          <a href="https://codeforces.com/problemset/problem/2053/C" target="_blank">CF 2053C – Common Divisors?</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_13">
-          <a href="https://codeforces.com/problemset/problem/2052/F" target="_blank">CF 2052F</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_14">
-          <a href="https://codeforces.com/problemset/problem/2050/E" target="_blank">CF 2050E</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_15">
-          <a href="https://codeforces.com/problemset/problem/2050/C" target="_blank">CF 2050C</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_16">
-          <a href="https://codeforces.com/problemset/problem/2033/D" target="_blank">CF 2033D</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_17">
-          <a href="https://codeforces.com/problemset/problem/2029/C" target="_blank">CF 2029C</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_18">
-          <a href="https://codeforces.com/problemset/problem/2028/C" target="_blank">CF 2028C</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_19">
-          <a href="https://codeforces.com/problemset/problem/2027/C" target="_blank">CF 2027C</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_20">
-          <a href="https://codeforces.com/problemset/problem/2008/E" target="_blank">CF 2008E</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_21">
-          <a href="https://codeforces.com/problemset/problem/2008/D" target="_blank">CF 2008D</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_22">
-          <a href="https://codeforces.com/problemset/problem/1999/E" target="_blank">CF 1999E</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_23">
-          <a href="https://codeforces.com/problemset/problem/1997/D" target="_blank">CF 1997D</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_24">
-          <a href="https://codeforces.com/problemset/problem/1994/C" target="_blank">CF 1994C</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_25">
-          <a href="https://codeforces.com/problemset/problem/1992/D" target="_blank">CF 1992D</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_26">
-          <a href="https://codeforces.com/problemset/problem/1987/C" target="_blank">CF 1987C</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_3_27">
-          <a href="https://codeforces.com/problemset/problem/1984/C1" target="_blank">CF 1984C1</a>
-        </label>
+            <label>
+              <input type="checkbox" id="cb_10_0">
+              <a href="https://www.pbinfo.ro/probleme/categorii/94/divide-et-impera" target="_blank">cât mai multe probleme din acest capitol pentru Divide et Impera</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_1">
+              <a href="https://kilonova.ro/problems/2504" target="_blank">OJI 2024 aprogressive</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_2">
+              <a href="https://kilonova.ro/problems/1419" target="_blank">ONI 2013 romb</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_3">
+              <a href="https://codeforces.com/contest/1385/problem/D" target="_blank">Codeforces a-good String</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_4">
+              <a href="https://www.infoarena.ro/problema/bitcost" target="_blank">infoarena bitcost</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_5">
+              <a href="https://codeforces.com/contest/1111/problem/C" target="_blank">Codeforces Creative Snap</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_6">
+              <a href="https://kilonova.ro/problems/887" target="_blank">OJI 2017 caps</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_7">
+              <a href="https://kilonova.ro/problems/1350" target="_blank">ONI 2010 xp</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_8">
+              <a href="https://codeforces.com/contest/1285/problem/D" target="_blank">Codeforces Dr. Evil Underscores</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_9">
+              <a href="https://kilonova.ro/problems/1993" target="_blank">ONI 2004 invsort</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_10">
+              <a href="https://codeforces.com/problemset/problem/1175/F" target="_blank">Codeforces The Number of Subpermutations</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_11">
+              <a href="https://kilonova.ro/problems/1543" target="_blank">ONI 2018 proiectoare</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_12">
+              <a href="https://kilonova.ro/problems/1894" target="_blank">RCPC 2023 blabla</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_13">
+              <a href="https://codeforces.com/problemset?tags=divide%20and%20conquer" target="_blank">probleme cu Divide et Impera de pe Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_10_14">
+              <a href="https://kilonova.ro/tags/280" target="_blank">probleme cu Divide et Impera de pe Kilonova</a>
+            </label>
       </div>
     </div>
-
-    <!-- Level 4 Sections -->
-    <div class="section level-4" id="level4-elite">
-      <div class="section-header" onclick="toggleSection('level4-elite')">
-        <h2 class="section-title">🟪 Level 4: Elite Challenges</h2>
-        <div class="section-progress" id="progress-level4-elite">0/3</div>
+    
+    <div class="section level-1" id="topic-11">
+      <div class="section-header" onclick="toggleSection('topic-11')">
+        <h2 class="section-title">🟨 Backtracking</h2>
+        <div class="section-progress" id="progress-topic-11">0/15</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <label>
-          <input type="checkbox" id="cb_4_1">
-          <a href="https://atcoder.jp/contests/dp/tasks/dp_h" target="_blank">AtCoder dp_h – TSP with Bitmask</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_2">
-          <a href="https://atcoder.jp/contests/dp/tasks/dp_o" target="_blank">AtCoder dp_o – Assignment Problem</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_3">
-          Sprague–Grundy / Grundy Numbers
-        </label>
+            <label>
+              <input type="checkbox" id="cb_11_0">
+              <a href="https://www.pbinfo.ro/probleme/196/aranjamente" target="_blank">pbinfo aranjamente</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_1">
+              <a href="https://www.pbinfo.ro/probleme/1277/produscartezian1" target="_blank">pbinfo produscartezian1</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_2">
+              <a href="https://www.pbinfo.ro/probleme/198/submultimi" target="_blank">pbinfo generarea submulțimilor</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_3">
+              <a href="https://www.pbinfo.ro/probleme/1281/regine1" target="_blank">pbinfo regine1</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_4">
+              <a href="https://www.pbinfo.ro/probleme/320/partitiinumar" target="_blank">pbinfo partitiinumar</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_5">
+              <a href="https://www.pbinfo.ro/probleme/344/paranteze" target="_blank">pbinfo paranteze</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_6">
+              <a href="https://www.pbinfo.ro/probleme/categorii/27/backtracking" target="_blank">Probleme cu backtracking de pe pbinfo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_7">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=963" target="_blank">USACO Bronze Cow Gymnastics</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_8">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=712" target="_blank">USACO Bronze Why Did The Cow Cross The Road II</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_9">
+              <a href="https://kilonova.ro/problems/41" target="_blank">OJI 2010 Immortal</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_10">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=965" target="_blank">USACO Bronze Livestock Lineup</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_11">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=857" target="_blank">USACO Bronze Back and Forth</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_12">
+              <a href="https://codeforces.com/problemset/problem/581/D" target="_blank">Codeforces Three logos</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_13">
+              <a href="https://kilonova.ro/tags/378" target="_blank">Probleme cu backtracking de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_11_14">
+              <a href="https://cses.fi/problemset/task/1625" target="_blank">CSES Grid Paths</a>
+            </label>
       </div>
     </div>
-
-    <div class="section level-4" id="level4-cfelite">
-      <div class="section-header" onclick="toggleSection('level4-cfelite')">
-        <h2 class="section-title">🟪 Level 4: CF Practice – Elite</h2>
-        <div class="section-progress" id="progress-level4-cfelite">0/15</div>
+    
+    <div class="section level-2" id="topic-12">
+      <div class="section-header" onclick="toggleSection('topic-12')">
+        <h2 class="section-title">🟦 Principiul Includerii si al excluderii (pinex)</h2>
+        <div class="section-progress" id="progress-topic-12">0/20</div>
         <span class="collapse-icon">▼</span>
       </div>
       <div class="section-content">
-        <label>
-          <input type="checkbox" id="cb_4_4">
-          <a href="https://codeforces.com/problemset/problem/1400/E" target="_blank">CF 1400E – Clear the Multiset</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_5">
-          <a href="https://codeforces.com/problemset/problem/1499/F" target="_blank">CF 1499F – Diameter Cuts</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_6">
-          <a href="https://codeforces.com/problemset/problem/2036/D" target="_blank">CF 2036D</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_7">
-          <a href="https://codeforces.com/problemset/problem/2036/C" target="_blank">CF 2036C</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_8">
-          <a href="https://codeforces.com/problemset/problem/2034/B" target="_blank">CF 2034B</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_9">
-          <a href="https://codeforces.com/problemset/problem/2026/C" target="_blank">CF 2026C</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_10">
-          <a href="https://codeforces.com/problemset/problem/2025/C" target="_blank">CF 2025C</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_11">
-          <a href="https://codeforces.com/problemset/problem/2020/C" target="_blank">CF 2020C</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_12">
-          <a href="https://codeforces.com/problemset/problem/2019/B" target="_blank">CF 2019B</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_13">
-          <a href="https://codeforces.com/problemset/problem/1999/D" target="_blank">CF 1999D</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_14">
-          <a href="https://codeforces.com/problemset/problem/1993/C" target="_blank">CF 1993C</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_15">
-          <a href="https://codeforces.com/problemset/problem/1984/B" target="_blank">CF 1984B</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_16">
-          <a href="https://codeforces.com/problemset/problem/1983/B" target="_blank">CF 1983B</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_17">
-          <a href="https://codeforces.com/problemset/problem/1980/D" target="_blank">CF 1980D</a>
-        </label>
-        <label>
-          <input type="checkbox" id="cb_4_18">
-          <a href="https://codeforces.com/problemset/problem/1978/C" target="_blank">CF 1978C</a>
-        </label>
+            <label>
+              <input type="checkbox" id="cb_12_0">
+              <a href="https://infoarena.ro/problema/frac" target="_blank">infoarena frac</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_1">
+              <a href="https://infoarena.ro/problema/reuniune" target="_blank">infoarena reuniune</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_2">
+              <a href="https://infoarena.ro/problema/pairs" target="_blank">infoarena pairs</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_3">
+              <a href="https://codeforces.com/contest/1349/problem/A" target="_blank">Codeforces Orac and LCM</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_4">
+              <a href="https://kilonova.ro/problems/2506/" target="_blank">OJI 2024 Poseidon</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_5">
+              <a href="https://codeforces.com/contest/1750/problem/D" target="_blank">Codeforces Count GCD</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_6">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=862" target="_blank">USACO Gold Cowpability</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_7">
+              <a href="https://codeforces.com/contest/1900/problem/D" target="_blank">Codeforces Small GCD</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_8">
+              <a href="https://kilonova.ro/problems/1639" target="_blank">Lot Juniori 2015 cardinal</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_9">
+              <a href="https://kilonova.ro/problems/1807" target="_blank">Lot Juniori 2019 divizori</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_10">
+              <a href="https://kilonova.ro/problems/640" target="_blank">Lot Juniori 2023 countall</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_11">
+              <a href="https://kilonova.ro/problems/536/" target="_blank">ONI 2023 Comun</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_12">
+              <a href="https://kilonova.ro/problems/652" target="_blank">RoAlgo Contest #1 Echipe</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_13">
+              <a href="https://infoarena.ro/problema/cowfood" target="_blank">infoarena cowfood</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_14">
+              <a href="https://kilonova.ro/problems/563" target="_blank">ONI 2023 Baraj Seniori Secvxor</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_15">
+              <a href="https://kilonova.ro/problems/11" target="_blank">ONI 2019 TreeGCD</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_16">
+              <a href="https://kilonova.ro/problems/220" target="_blank">ONI 2013 Xnumere</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_17">
+              <a href="https://kilonova.ro/problems/2936" target="_blank">kilonova polyglot</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_18">
+              <a href="https://atcoder.jp/contests/dp/tasks/dp_y" target="_blank">Atcoder DP Contest Grid 2</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_12_19">
+              <a href="https://kilonova.ro/tags/292" target="_blank">Probleme cu PINEX de pe Kilonova</a>
+            </label>
       </div>
     </div>
-  </div>
-
+    
+    <div class="section level-3" id="topic-13">
+      <div class="section-header" onclick="toggleSection('topic-13')">
+        <h2 class="section-title">🟥 Fill.Algoritmul lui Lee</h2>
+        <div class="section-progress" id="progress-topic-13">0/26</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_13_0">
+              <a href="https://kilonova.ro/problems/734" target="_blank">OJI 2004 rj</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_1">
+              <a href="https://kilonova.ro/problems/768" target="_blank">OJI 2007 alee</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_2">
+              <a href="https://infoarena.ro/problema/muzeu" target="_blank">infoarena muzeu</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_3">
+              <a href="https://infoarena.ro/problema/barbar" target="_blank">infoarena barbar</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_4">
+              <a href="https://kilonova.ro/problems/664/" target="_blank">RoAlgo Contest #1 - Expansion</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_5">
+              <a href="https://usaco.org/current/current/index.php?page=viewproblem2&amp;cpid=895" target="_blank">USACO Silver Icy Perimeter</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_6">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=380" target="_blank">USACO Silver Cross Country Skiing</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_7">
+              <a href="https://kilonova.ro/problems/938" target="_blank">OJI 2021 labirint</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_8">
+              <a href="https://kilonova.ro/problems/398" target="_blank">OJI 2009 insule</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_9">
+              <a href="https://www.infoarena.ro/problema/delfin" target="_blank">infoarena delfin</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_10">
+              <a href="https://infoarena.ro/problema/vila" target="_blank">infoarena vila</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_11">
+              <a href="https://www.infoarena.ro/problema/marceland" target="_blank">infoarena marceland</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_12">
+              <a href="https://codeforces.com/contest/510/problem/B" target="_blank">Codeforces Fox and Two Dots</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_13">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=740" target="_blank">USACO Silver Where's Bessie</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_14">
+              <a href="https://codeforces.com/contest/1365/problem/D" target="_blank">Codeforces Solve the Maze</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_15">
+              <a href="https://kilonova.ro/problems/900" target="_blank">OJI 2018 castel</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_16">
+              <a href="https://kilonova.ro/problems/1429" target="_blank">ONI 2014 traseu</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_17">
+              <a href="https://codeforces.com/contest/598/problem/D" target="_blank">Codeforces Igor in the Museum</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_18">
+              <a href="https://kilonova.ro/problems/1396" target="_blank">ONI 2012 gheizere</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_19">
+              <a href="https://codeforces.com/problemset/problem/877/D" target="_blank">Codeforces Olya and Energy Drinks</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_20">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1110" target="_blank">USACO Silver Comfortable Cows</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_21">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=811" target="_blank">USACO Silver Snow Boots</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_22">
+              <a href="https://kilonova.ro/problems/1700" target="_blank">Lot Juniori 2021 Fete si baieti</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_23">
+              <a href="https://kilonova.ro/problems/875" target="_blank">OJI 2016 miting</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_24">
+              <a href="https://www.pbinfo.ro/?pagina=probleme-lista&amp;disciplina=0&amp;clasa=10&amp;tag=85&amp;subtag=87&amp;dificultate=2&amp;folosesc_consola=-1&amp;eticheta=&amp;start=0" target="_blank">Probleme cu coada si lee de pe pbinfo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_13_25">
+              <a href="https://kilonova.ro/tags/356" target="_blank">Problemele cu flood fill de pe kilonova</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-4" id="topic-14">
+      <div class="section-header" onclick="toggleSection('topic-14')">
+        <h2 class="section-title">🟪 Deque</h2>
+        <div class="section-progress" id="progress-topic-14">0/8</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_14_0">
+              <a href="https://www.infoarena.ro/problema/vila2" target="_blank">infoarena vila2</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_14_1">
+              <a href="https://www.infoarena.ro/problema/knumere" target="_blank">infoarena knumere</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_14_2">
+              <a href="https://kilonova.ro/problems/2187" target="_blank">RoAlgo PreOJI 2024 pofta</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_14_3">
+              <a href="https://www.pbinfo.ro/probleme/4198/wall1" target="_blank">JBOI 2022 Wall</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_14_4">
+              <a href="https://kilonova.ro/problems/1715" target="_blank">Lot Juniori 2016 pofta</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_14_5">
+              <a href="https://kilonova.ro/problems/994" target="_blank">IIOT Discount Optimization</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_14_6">
+              <a href="https://kilonova.ro/tags/409" target="_blank">Problemele cu deque de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_14_7">
+              <a href="https://www.infoarena.ro/cauta-probleme?tag_id[]=94" target="_blank">Problemele cu deque de pe infoarena</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-0" id="topic-15">
+      <div class="section-header" onclick="toggleSection('topic-15')">
+        <h2 class="section-title">🟩 Probleme ad-hoc</h2>
+        <div class="section-progress" id="progress-topic-15">0/23</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_15_0">
+              <a href="https://kilonova.ro/problems/915" target="_blank">OJI 2019 traseu</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_1">
+              <a href="https://www.infoarena.ro/problema/palind" target="_blank">infoarena palind</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_2">
+              <a href="https://oj.uz/problem/view/COCI18_karte" target="_blank">COCI 2018 karte</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_3">
+              <a href="https://kilonova.ro/problems/1303" target="_blank">ONI 2008 aranjare</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_4">
+              <a href="https://codeforces.com/contest/1815/problem/A" target="_blank">CF 1815A</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_5">
+              <a href="https://codeforces.com/contest/1797/problem/C" target="_blank">CF 1797C</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_6">
+              <a href="https://codeforces.com/contest/1815/problem/B" target="_blank">CF 1815B</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_7">
+              <a href="https://kilonova.ro/problems/1084" target="_blank">Baraj juniori 2016 asort</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_8">
+              <a href="https://oj.uz/problem/view/IOI10_quality" target="_blank">IOI 2010 quality</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_9">
+              <a href="https://dmoj.ca/problem/coci13c1p5" target="_blank">COCI 2013 organizator</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_10">
+              <a href="https://codeforces.com/problemset/problem/1332/B" target="_blank">CF 1332B</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_11">
+              <a href="https://atcoder.jp/contests/abc134/tasks/abc134_d" target="_blank">ABC134 D</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_12">
+              <a href="https://codeforces.com/contest/1804/problem/B" target="_blank">CF 1804B</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_13">
+              <a href="https://atcoder.jp/contests/arc158/tasks/arc158_a" target="_blank">ARC158 A</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_14">
+              <a href="https://atcoder.jp/contests/arc153/tasks/arc153_b" target="_blank">ARC153 B</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_15">
+              <a href="https://atcoder.jp/contests/arc145/tasks/arc145_b" target="_blank">ARC145 B</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_16">
+              <a href="https://codeforces.com/problemset/problem/1407/C" target="_blank">CF 1407C</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_17">
+              <a href="https://codeforces.com/contest/1776/problem/F" target="_blank">CF 1776F</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_18">
+              <a href="https://atcoder.jp/contests/arc118/tasks/arc118_c" target="_blank">ARC118 C</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_19">
+              <a href="https://codeforces.com/contest/1776/problem/G" target="_blank">CF 1776G</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_20">
+              <a href="https://atcoder.jp/contests/arc159/tasks/arc159_c" target="_blank">ARC159 C</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_21">
+              <a href="https://codeforces.com/contest/1736/problem/D" target="_blank">CF 1736D</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_15_22">
+              <a href="https://kilonova.ro/tags/297" target="_blank">Probleme ad-hoc de pe kilonova</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-1" id="topic-16">
+      <div class="section-header" onclick="toggleSection('topic-16')">
+        <h2 class="section-title">🟨 Probleme Constructive</h2>
+        <div class="section-progress" id="progress-topic-16">0/12</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_16_0">
+              <a href="https://kilonova.ro/problems/1941" target="_blank">IIOT 2023 Ping Pong</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_16_1">
+              <a href="https://kilonova.ro/problems/878" target="_blank">OJI 2017 Roboti</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_16_2">
+              <a href="https://codeforces.com/contest/1028/problem/B" target="_blank">Codeforces Unnatural Conditions</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_16_3">
+              <a href="https://kilonova.ro/problems/3365/" target="_blank">IIOT 2024 Tetris Tiling</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_16_4">
+              <a href="https://kilonova.ro/problems/2961" target="_blank">RoAlgo Contest #10 Paranteze</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_16_5">
+              <a href="https://kilonova.ro/problems/23" target="_blank">OJI 2018 Galeti</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_16_6">
+              <a href="https://kilonova.ro/problems/1730" target="_blank">Lot Juniori 2011 domino</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_16_7">
+              <a href="https://kilonova.ro/problems/345" target="_blank">IIOT 2022 Pepi and his Friends</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_16_8">
+              <a href="https://codeforces.com/problemset/problem/763/B" target="_blank">Codeforces Timofey and Rectangles</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_16_9">
+              <a href="https://kilonova.ro/problems/170" target="_blank">ONI 2017 Tris</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_16_10">
+              <a href="https://kilonova.ro/tags/345" target="_blank">Probleme constructive de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_16_11">
+              <a href="https://codeforces.com/problemset?tags=constructive%20algorithms" target="_blank">Probleme constructive de pe Codeforces</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-2" id="topic-17">
+      <div class="section-header" onclick="toggleSection('topic-17')">
+        <h2 class="section-title">🟦 Graphuri (Introducere)</h2>
+        <div class="section-progress" id="progress-topic-17">0/13</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_17_0">
+              <a href="https://kilonova.ro/problems/1611" target="_blank">Kilonova unire</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_17_1">
+              <a href="https://www.pbinfo.ro/probleme/4290/gasesteciclu" target="_blank">GasesteCiclu pbinfo</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_17_2">
+              <a href="https://cses.fi/problemset/task/1667" target="_blank">CSES Message Route</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_17_3">
+              <a href="https://cses.fi/problemset/task/1668" target="_blank">CSES Building Teams</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_17_4">
+              <a href="https://cses.fi/problemset/task/1669" target="_blank">CSES Round Trip</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_17_5">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=940" target="_blank">USACO Bronze Milk Factory</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_17_6">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=916" target="_blank">USACO Bronze The Great Revegetation</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_17_7">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=644" target="_blank">USACO Silver Closing the Farm</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_17_8">
+              <a href="https://usaco.org/current/index.php?page=viewproblem2&amp;cpid=668" target="_blank">USACO Silver Moocast</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_17_9">
+              <a href="https://www.infoarena.ro/problema/multiplu" target="_blank">infoarena multiplu</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_17_10">
+              <a href="https://kilonova.ro/problems/117" target="_blank">ONI 2004 base3</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_17_11">
+              <a href="https://kilonova.ro/tags/300" target="_blank">Probleme cu grafuri de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_17_12">
+              <a href="https://codeforces.com/problemset?order=BY_RATING_ASC&amp;tags=combine-tags-by-or%2Cgraphs%2Cdfs+and+similar" target="_blank">Probleme cu grafuri de pe codeforces, ordonate după dificultate</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-3" id="topic-18">
+      <div class="section-header" onclick="toggleSection('topic-18')">
+        <h2 class="section-title">🟥 Arbori(Introducere)</h2>
+        <div class="section-progress" id="progress-topic-18">0/9</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_18_0">
+              <a href="https://cses.fi/problemset/task/1674" target="_blank">Subordinates</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_18_1">
+              <a href="https://www.infoarena.ro/problema/nivele2" target="_blank">nivele2 infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_18_2">
+              <a href="https://www.infoarena.ro/problema/grarb" target="_blank">Grarb infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_18_3">
+              <a href="https://codeforces.com/contest/1098/problem/A" target="_blank">Sum in the Tree</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_18_4">
+              <a href="https://kilonova.ro/problems/630" target="_blank">IIOT tourdetree</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_18_5">
+              <a href="https://kilonova.ro/problems/2188" target="_blank">Tree Diameter</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_18_6">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=788" target="_blank">Mootube USACO Silver</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_18_7">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=968" target="_blank">Milk Visits USACO Silver</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_18_8">
+              <a href="https://kilonova.ro/problems/1802" target="_blank">Sap</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-4" id="topic-19">
+      <div class="section-header" onclick="toggleSection('topic-19')">
+        <h2 class="section-title">🟪 Dynamic Programming (Introducere)</h2>
+        <div class="section-progress" id="progress-topic-19">0/17</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_19_0">
+              <a href="https://infoarena.ro/problema/custi" target="_blank">Infoarena custi</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_1">
+              <a href="https://codeforces.com/problemset/problem/455/A" target="_blank">Codeforces Boredom</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_2">
+              <a href="https://atcoder.jp/contests/abc232/tasks/abc232_d" target="_blank">AtCoder Weak Takahashi</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_3">
+              <a href="https://kilonova.ro/problems/1941" target="_blank">IIOT 2023-24 PingPong</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_4">
+              <a href="https://atcoder.jp/contests/abc242/tasks/abc242_c" target="_blank">AtCoder 1111gal password</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_5">
+              <a href="https://atcoder.jp/contests/abc291/tasks/abc291_d" target="_blank">AtCoder Flip Cards</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_6">
+              <a href="https://kilonova.ro/problems/967" target="_blank">IIOT Police</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_7">
+              <a href="https://cses.fi/problemset/task/2413" target="_blank">Counting Towers</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_8">
+              <a href="https://atcoder.jp/contests/abc267/tasks/abc267_d" target="_blank">AtCoder Index × A(Not Continuous ver.)</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_9">
+              <a href="https://atcoder.jp/contests/abc222/tasks/abc222_d" target="_blank">AtCoder Between Two Arrays</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_10">
+              <a href="https://kilonova.ro/problems/1743" target="_blank">Lot Juniori Minusk</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_11">
+              <a href="https://atcoder.jp/contests/abc312/tasks/abc312_d" target="_blank">AtCoder Count Bracket Sequences</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_12">
+              <a href="https://atcoder.jp/contests/abc262/tasks/abc262_d" target="_blank">AtCoder I hate Non Integer Number</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_13">
+              <a href="https://codeforces.com/contest/1627/problem/E" target="_blank">Not Escaping Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_14">
+              <a href="https://kilonova.ro/tags/275" target="_blank">Problemele cu DP de pe Kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_15">
+              <a href="https://atcoder-tags.herokuapp.com/tag_search/Dynamic-Programming" target="_blank">Problemele intre rating 500 si 1400 de aici</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_19_16">
+              <a href="https://infoarena.ro/cauta-probleme?tag_id[]=58" target="_blank">Problemele cu DP de pe infoarena</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-0" id="topic-20">
+      <div class="section-header" onclick="toggleSection('topic-20')">
+        <h2 class="section-title">🟩 Problema rucsacului(DP)</h2>
+        <div class="section-progress" id="progress-topic-20">0/17</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_20_0">
+              <a href="https://atcoder.jp/contests/dp/tasks/dp_d" target="_blank">AtCoder Knapsack I</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_1">
+              <a href="https://atcoder.jp/contests/dp/tasks/dp_e" target="_blank">AtCoder Knapsack II</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_2">
+              <a href="https://cses.fi/problemset/task/1745/" target="_blank">CSES Money Sums</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_3">
+              <a href="https://cses.fi/problemset/task/1635" target="_blank">CSES Coin Combinations I</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_4">
+              <a href="https://cses.fi/problemset/task/1636" target="_blank">CSES Coin Combinations II</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_5">
+              <a href="https://kilonova.ro/problems/1469" target="_blank">ONI 2015 Procente</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_6">
+              <a href="https://cses.fi/problemset/task/1634" target="_blank">CSES Minimizing Coins</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_7">
+              <a href="https://kilonova.ro/problems/684" target="_blank">RoAlgo Contest 2 strehaia</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_8">
+              <a href="https://infoarena.ro/problema/triunghi" target="_blank">Infoarena Triunghi</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_9">
+              <a href="https://kilonova.ro/problems/342" target="_blank">IIOT 2021 Castle</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_10">
+              <a href="https://kilonova.ro/problems/1469" target="_blank">ONI 2015 Procente</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_11">
+              <a href="https://kilonova.ro/problems/1902" target="_blank">RCPC 2023 Dragons</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_12">
+              <a href="https://kilonova.ro/problems/274" target="_blank">ONI 2017 Baraj Seniori Cli</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_13">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=574" target="_blank">USACO Gold Fruit Feast</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_14">
+              <a href="https://atcoder.jp/contests/abc321/tasks/abc321_f" target="_blank">Subset Sum Queries</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_15">
+              <a href="https://kilonova.ro/tags/298" target="_blank">Probleme cu rucsac de pe Kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_20_16">
+              <a href="https://infoarena.ro/cauta-probleme?tag_id[]=95" target="_blank">Probleme cu rucsac de pe Infoarena</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-1" id="topic-21">
+      <div class="section-header" onclick="toggleSection('topic-21')">
+        <h2 class="section-title">🟨 Subsir comun maximal</h2>
+        <div class="section-progress" id="progress-topic-21">0/3</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_21_0">
+              <a href="https://www.infoarena.ro/problema/cmlsc" target="_blank">cmlsc infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_21_1">
+              <a href="https://oj.uz/problem/view/eJOI20_exam" target="_blank">EJOI 2020 Exam</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_21_2">
+              <a href="https://codeforces.com/contest/1488/problem/E" target="_blank">Palindromic Doubles</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-2" id="topic-22">
+      <div class="section-header" onclick="toggleSection('topic-22')">
+        <h2 class="section-title">🟦 Subsir crescator maximal</h2>
+        <div class="section-progress" id="progress-topic-22">0/9</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_22_0">
+              <a href="https://codeforces.com/problemset/problem/1325/B" target="_blank">CopyCopyCopyCopyCopy Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_22_1">
+              <a href="https://infoarena.ro/problema/scmax" target="_blank">scmax infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_22_2">
+              <a href="https://infoarena.ro/problema/subsiruri" target="_blank">subsiruri infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_22_3">
+              <a href="https://codeforces.com/gym/102951/problem/C" target="_blank">LIS On Permutations - Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_22_4">
+              <a href="https://kilonova.ro/problems/2896/" target="_blank">IIOT 2018 UpDown</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_22_5">
+              <a href="https://codeforces.com/contest/76/problem/F" target="_blank">Codeforces Tourist</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_22_6">
+              <a href="https://infoarena.ro/problema/interclasare" target="_blank">interclasare infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_22_7">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=496" target="_blank">USACO Gold Cowjog</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_22_8">
+              <a href="https://kilonova.ro/problems/2808?list_id=1104" target="_blank">Pokemoni - Lot 2024 Juniori</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-3" id="topic-23">
+      <div class="section-header" onclick="toggleSection('topic-23')">
+        <h2 class="section-title">🟥 Dinamica pe stari exponentiale(bitmask DP)</h2>
+        <div class="section-progress" id="progress-topic-23">0/20</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_23_0">
+              <a href="https://infoarena.ro/problema/morcovi" target="_blank">infoarena morcovi</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_1">
+              <a href="https://infoarena.ro/problema/poly" target="_blank">infoarena poly</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_2">
+              <a href="https://www.infoarena.ro/problema/coins" target="_blank">infoarena coins</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_3">
+              <a href="https://www.infoarena.ro/problema/zebughil" target="_blank">infoarena zebughil</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_4">
+              <a href="https://kilonova.ro/problems/1885" target="_blank">RCPCamp 2023 Anton Would Approve this problem</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_5">
+              <a href="https://kilonova.ro/problems/40" target="_blank">OJI 2011 Ubuntzei</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_6">
+              <a href="hhttps://kilonova.ro/problems/19/" target="_blank">OJI 2020 RecycleBin</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_7">
+              <a href="https://kilonova.ro/problems/1756" target="_blank">Lot Juniori 2014 ssce</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_8">
+              <a href="https://kilonova.ro/problems/2802/" target="_blank">Lot Juniori 2024 nooverlap</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_9">
+              <a href="https://kilonova.ro/problems/1716" target="_blank">Lot Juniori 2016 ksiruri</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_10">
+              <a href="https://kilonova.ro/problems/2839?list_id=1115" target="_blank">Lot Juniori 2024 numbers</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_11">
+              <a href="https://kilonova.ro/problems/746" target="_blank">OJI 2005 scara</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_12">
+              <a href="https://atcoder.jp/contests/dp/tasks/dp_o?lang=en" target="_blank">AtCoder Matching</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_13">
+              <a href="https://codeforces.com/contest/895/problem/C" target="_blank">Codeforces Square Subsets</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_14">
+              <a href="https://codeforces.com/contest/1340/problem/B" target="_blank">Nastya and Scoreboard</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_15">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1089" target="_blank">USACO Gold Uddered but not Heard</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_16">
+              <a href="https://codeforces.com/contest/1316/problem/E" target="_blank">Codeforces Team Building</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_17">
+              <a href="https://codeforces.com/contest/1288/problem/D" target="_blank">Codeforces Minimax Problem</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_18">
+              <a href="https://oj.uz/problem/view/COCI16_burza" target="_blank">COCI 2016 Burza</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_23_19">
+              <a href="https://kilonova.ro/problems/3247" target="_blank">permutare - InfoTeams #2</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-4" id="topic-24">
+      <div class="section-header" onclick="toggleSection('topic-24')">
+        <h2 class="section-title">🟪 Sortare Topologica(Graphuri)</h2>
+        <div class="section-progress" id="progress-topic-24">0/10</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_24_0">
+              <a href="https://www.infoarena.ro/problema/sortaret" target="_blank">Infoarena - Sortare Topologica</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_24_1">
+              <a href="https://cses.fi/problemset/task/1679" target="_blank">CSES Course Schedule</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_24_2">
+              <a href="https://www.infoarena.ro/problema/path" target="_blank">Infoarena Path</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_24_3">
+              <a href="https://kilonova.ro/problems/1016" target="_blank">RoAlgo Contest #4 Leximin</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_24_4">
+              <a href="https://codeforces.com/problemset/problem/510/C" target="_blank">Codeforces Fox and Names</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_24_5">
+              <a href="https://www.infoarena.ro/problema/easygraph" target="_blank">Infoarena easygraph</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_24_6">
+              <a href="https://kilonova.ro/problems/2627" target="_blank">IATI Shumen 2024 xy</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_24_7">
+              <a href="https://kilonova.ro/problems/677" target="_blank">RoAlgo Contest #2 somnoros</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_24_8">
+              <a href="https://infoarena.ro/problema/alpin" target="_blank">Infoarena alpin</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_24_9">
+              <a href="https://codeforces.com/gym/103741/problem/H" target="_blank">Codeforces Gym Permutation Counting</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-0" id="topic-25">
+      <div class="section-header" onclick="toggleSection('topic-25')">
+        <h2 class="section-title">🟩 Cicluri în grafuri. Grafuri funcționale</h2>
+        <div class="section-progress" id="progress-topic-25">0/26</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_25_0">
+              <a href="https://cses.fi/problemset/task/1691" target="_blank">CSES Mail Delivery</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_1">
+              <a href="https://www.pbinfo.ro/probleme/579/drum-hamiltonian" target="_blank">pbinfo drum hamiltonian</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_2">
+              <a href="https://codeforces.com/contest/1020/problem/B" target="_blank">Codeforces Badge</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_3">
+              <a href="https://cses.fi/problemset/task/1693" target="_blank">CSES Teleporters Path</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_4">
+              <a href="https://kilonova.ro/problems/33" target="_blank">OJI 2014 cartite</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_5">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1013" target="_blank">USACO Bronze Swapity Swap</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_6">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=764" target="_blank">USACO Silver Bovine Shuffle</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_7">
+              <a href="https://cses.fi/problemset/task/1751" target="_blank">CSES Planets Cycles</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_8">
+              <a href="https://codeforces.com/contest/1768/problem/D" target="_blank">Codeforces Lucky Permutation</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_9">
+              <a href="https://www.infoarena.ro/problema/domino" target="_blank">infoarena domino</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_10">
+              <a href="https://www.infoarena.ro/problema/johnie" target="_blank">infoarena johnie</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_11">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1206" target="_blank">USACO Silver Redistributing Gifts</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_12">
+              <a href="https://codeforces.com/contest/1591/problem/D" target="_blank">Codeforces Yet Another Sorting Problem</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_13">
+              <a href="https://codeforces.com/gym/104197/problem/J" target="_blank">Codeforces Jewel of Data Structure Problems</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_14">
+              <a href="https://codeforces.com/contest/1690/problem/F" target="_blank">Codeforces Shifting String</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_15">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1230" target="_blank">USACO Silver Visits</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_16">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1014" target="_blank">USACO Silver Swapity Swapity Swap</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_17">
+              <a href="https://codeforces.com/contest/612/problem/E" target="_blank">Codeforces Square Root of Permutation</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_18">
+              <a href="https://codeforces.com/contest/911/problem/D" target="_blank">Codeforces Inversion Counting</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_19">
+              <a href="https://cses.fi/191/list/" target="_blank">CEOI 2005 depot</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_20">
+              <a href="https://kilonova.ro/problems/1978" target="_blank">Lot Seniori 2014 Evacuare</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_21">
+              <a href="https://kilonova.ro/problems/1924" target="_blank">Lot Seniori 2016 politic</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_22">
+              <a href="https://infoarena.ro/problema/zaharel" target="_blank">infoarena zaharel</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_23">
+              <a href="https://kilonova.ro/problems/2642" target="_blank">ONI 2024 sim</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_24">
+              <a href="https://kilonova.ro/problems/2234" target="_blank">Lot Seniori 2011 amici</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_25_25">
+              <a href="https://oj.uz/problem/view/IOI11_garden" target="_blank">IOI 2011 Tropical Garden</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-1" id="topic-26">
+      <div class="section-header" onclick="toggleSection('topic-26')">
+        <h2 class="section-title">🟨 Paduri de multimi disjuncte(DSU)</h2>
+        <div class="section-progress" id="progress-topic-26">0/12</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_26_0">
+              <a href="https://cses.fi/395/list/" target="_blank">Chemical table - EJOI 2018</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_26_1">
+              <a href="https://kilonova.ro/problems/1785" target="_blank">MexC ONI 2008</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_26_2">
+              <a href="https://codeforces.com/contest/1927/problem/F" target="_blank">Microcycles - Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_26_3">
+              <a href="https://codeforces.com/gym/102565/problem/D" target="_blank">Galleries - AGM 2020</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_26_4">
+              <a href="https://kilonova.ro/problems/2013/" target="_blank">JBOI 2023 Frequencies</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_26_5">
+              <a href="https://kilonova.ro/problems/1936" target="_blank">IIOT 2023-24 Binary Chess</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_26_6">
+              <a href="https://kilonova.ro/tags/311" target="_blank">Probleme cu DSU de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_26_7">
+              <a href="https://dmoj.ca/problem/coci13c5p6" target="_blank">COCI 13-ladice</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_26_8">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=789" target="_blank">USACO MooTube</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_26_9">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=992" target="_blank">USACO Wormhole Sort</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_26_10">
+              <a href="https://codeforces.com/edu/course/2/lesson/7/1/practice" target="_blank">DSU Step 1 - Codeforces EDU</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_26_11">
+              <a href="https://codeforces.com/edu/course/2/lesson/7/2/practice" target="_blank">DSU Step 2 - Codeforces EDU</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-2" id="topic-27">
+      <div class="section-header" onclick="toggleSection('topic-27')">
+        <h2 class="section-title">🟦 Arbore parțial de cost minim (Kruskal, Prim, Boruvka)</h2>
+        <div class="section-progress" id="progress-topic-27">0/15</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_27_0">
+              <a href="https://cses.fi/problemset/task/1675/" target="_blank">Road Reparation</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_1">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=623" target="_blank">USACO Gold Fenced In</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_2">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1211" target="_blank">USACO Gold Moo Network</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_3">
+              <a href="https://www.infoarena.ro/problema/cablaj" target="_blank">infoarena cablaj</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_4">
+              <a href="https://kilonova.ro/problems/27" target="_blank">OJI 2017 Ninjago</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_5">
+              <a href="https://codeforces.com/contest/1927/problem/F" target="_blank">Codeforces Microcycle</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_6">
+              <a href="https://www.infoarena.ro/problema/desen" target="_blank">infoarena desen</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_7">
+              <a href="https://kilonova.ro/problems/150" target="_blank">ONI 2018 Poligon</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_8">
+              <a href="https://kilonova.ro/problems/10" target="_blank">ONI 2019 Oracol</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_9">
+              <a href="https://codeforces.com/problemset/problem/196/E" target="_blank">Codeforces Opening Portals</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_10">
+              <a href="https://codeforces.com/problemset/problem/888/G" target="_blank">Codeforces XOR-MST</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_11">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1211" target="_blank">USACO Gold Moo Network</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_12">
+              <a href="https://kilonova.ro/tags/312" target="_blank">Problemele cu APM de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_13">
+              <a href="https://codeforces.com/gym/100238" target="_blank">Probleme educaționale cu APM</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_27_14">
+              <a href="https://codeforces.com/problemset/problem/609/E" target="_blank">Minimum spanning tree for each edge</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-3" id="topic-28">
+      <div class="section-header" onclick="toggleSection('topic-28')">
+        <h2 class="section-title">🟥 Algoritmi pentru drumuri minime (Dijkstra, Bellman-Ford, Floyd-Warshall)</h2>
+        <div class="section-progress" id="progress-topic-28">0/20</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_28_0">
+              <a href="https://kilonova.ro/problems/2037/" target="_blank">Simple Shortest Path</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_1">
+              <a href="https://cses.fi/problemset/task/1671/" target="_blank">Shortest Routes I</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_2">
+              <a href="https://cses.fi/problemset/task/1672/" target="_blank">Shortest Routes II</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_3">
+              <a href="https://www.infoarena.ro/problema/catun" target="_blank">catun infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_4">
+              <a href="https://cses.fi/problemset/task/1673" target="_blank">High Score</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_5">
+              <a href="https://cses.fi/problemset/task/1195" target="_blank">Flight Discount</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_6">
+              <a href="https://kilonova.ro/problems/54" target="_blank">OJI 2004 Lanterna</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_7">
+              <a href="https://codeforces.com/gym/104328/problem/C" target="_blank">FIICode John and Tractor</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_8">
+              <a href="https://kilonova.ro/problems/888" target="_blank">OJI 2017 Rover</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_9">
+              <a href="https://cses.fi/100/list/" target="_blank">Baltic Olympiad 2011 Switch</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_10">
+              <a href="https://kilonova.ro/problems/1624/" target="_blank">Lot 2018 Juniori Road</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_11">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=861" target="_blank">USACO Gold Fine Dining</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_12">
+              <a href="https://kilonova.ro/problems/532/" target="_blank">ONI 2023 Biom</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_13">
+              <a href="https://cses.fi/problemset/task/1197" target="_blank">Cycle Finding</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_14">
+              <a href="https://cses.fi/problemset/task/1202" target="_blank">Investigation</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_15">
+              <a href="https://kilonova.ro/tags/296" target="_blank">Probleme cu drumul minim de pe Kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_16">
+              <a href="https://infoarena.ro/cauta-probleme?tag_id[]=72" target="_blank">Probleme cu Dijkstra de pe Infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_17">
+              <a href="https://infoarena.ro/cauta-probleme?tag_id[]=342" target="_blank">Probleme cu Bellman-Ford de pe Infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_18">
+              <a href="https://www.infoarena.ro/problema/rfinv" target="_blank">rfinv infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_28_19">
+              <a href="https://infoarena.ro/cauta-probleme?tag_id[]=92" target="_blank">Probleme cu Floyd-Warshall de pe Infoarena</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-4" id="topic-29">
+      <div class="section-header" onclick="toggleSection('topic-29')">
+        <h2 class="section-title">🟪 Tehnica celor două DFS-uri (rerooting)</h2>
+        <div class="section-progress" id="progress-topic-29">0/12</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_29_0">
+              <a href="https://www.infoarena.ro/problema/razboi" target="_blank">infoarena razboiul lumilor</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_29_1">
+              <a href="https://codeforces.com/gym/105012/problem/J" target="_blank">Codeforces Jovial Jaunt</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_29_2">
+              <a href="https://kilonova.ro/problems/119" target="_blank">ONI 2003 asmin</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_29_3">
+              <a href="https://codeforces.com/contest/1092/problem/F" target="_blank">Codeforces Tree with Maximum Cost</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_29_4">
+              <a href="https://www.infoarena.ro/problema/treesearch" target="_blank">infoarena treesearch</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_29_5">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=814" target="_blank">USACO Gold Directory Traversal</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_29_6">
+              <a href="https://codeforces.com/contest/1000/problem/G" target="_blank">Codeforces Two Paths</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_29_7">
+              <a href="https://kilonova.ro/problems/203/" target="_blank">ONI 2015 arbvalmax</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_29_8">
+              <a href="https://atcoder.jp/contests/abc222/tasks/abc222_f" target="_blank">AtCoder Expensive Expense</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_29_9">
+              <a href="https://www.acmicpc.net/problem/14875" target="_blank">BOI 2017 City Attractions</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_29_10">
+              <a href="https://codeforces.com/contest/543/problem/D" target="_blank">Codeforces Road Improvement</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_29_11">
+              <a href="https://dmoj.ca/problem/apio10p2" target="_blank">APIO 2010 Patrol</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-0" id="topic-30">
+      <div class="section-header" onclick="toggleSection('topic-30')">
+        <h2 class="section-title">🟩 Combinatorica</h2>
+        <div class="section-progress" id="progress-topic-30">0/26</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_30_0">
+              <a href="https://kilonova.ro/problems/1982" target="_blank">Combination</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_1">
+              <a href="https://www.infoarena.ro/problema/pascal" target="_blank">pascal infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_2">
+              <a href="https://infoarena.ro/problema/stirling" target="_blank">Stirling infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_3">
+              <a href="https://kilonova.ro/problems/300" target="_blank">IIOT Dream</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_4">
+              <a href="https://kilonova.ro/problems/2936" target="_blank">Polyglot Kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_5">
+              <a href="https://kilonova.ro/tags/294" target="_blank">Problemele de combinatorică de pe Kilonova, în special cele de la loturile de juniori</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_6">
+              <a href="https://kilonova.ro/problems/1604" target="_blank">RoAlgo Contest 4 - Ursul</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_7">
+              <a href="https://kilonova.ro/problems/695" target="_blank">RoAlgo Contest 2 - munte</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_8">
+              <a href="https://kilonova.ro/problems/1898" target="_blank">RCPC 2023 KsumT</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_9">
+              <a href="https://kilonova.ro/problems/1443" target="_blank">ONI 2014 Spion</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_10">
+              <a href="https://kilonova.ro/problems/1468" target="_blank">ONI 2015 Nmult</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_11">
+              <a href="https://kilonova.ro/problems/287/" target="_blank">ONI 2015 Baraj Provocare</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_12">
+              <a href="https://kilonova.ro/problems/220" target="_blank">ONI 2013 Xnumere</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_13">
+              <a href="https://kilonova.ro/problems/2433/" target="_blank">IIOT 2024 Mermaid</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_14">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1018" target="_blank">USACO Gold Help Yourself</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_15">
+              <a href="https://cppi.sync.ro/materia/combinatorica.html" target="_blank">Problemele de pe cppi.sync</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_16">
+              <a href="https://cses.fi/problemset/task/2064" target="_blank">CSES Bracket Sequences I</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_17">
+              <a href="https://cses.fi/problemset/task/2187" target="_blank">CSES Bracket Sequences II</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_18">
+              <a href="https://cses.fi/problemset/task/1716" target="_blank">CSES Distributing Apples</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_19">
+              <a href="https://codeforces.com/problemset/problem/1606/E" target="_blank">Codeforces Arena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_20">
+              <a href="https://codeforces.com/contest/1462/problem/E2" target="_blank">Codeforces Close Tuples (hard version)</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_21">
+              <a href="https://codeforces.com/problemset/problem/888/D" target="_blank">Codeforces Almost Identity Permutations</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_22">
+              <a href="https://codeforces.com/contest/2025/problem/E" target="_blank">Codeforces Card Game</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_23">
+              <a href="https://codeforces.com/gym/104520/problem/K" target="_blank">Codeforces Med and Mex</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_24">
+              <a href="https://codeforces.com/contest/660/problem/E" target="_blank">Codeforces Different Subsets For All Tuples</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_30_25">
+              <a href="https://codeforces.com/problemset?tags=combinatorics" target="_blank">Probleme de combinatorică de pe Codeforces</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-1" id="topic-31">
+      <div class="section-header" onclick="toggleSection('topic-31')">
+        <h2 class="section-title">🟨 Hashing</h2>
+        <div class="section-progress" id="progress-topic-31">0/12</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_31_0">
+              <a href="https://kilonova.ro/problems/36" target="_blank">subsecvente OJI 2013</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_31_1">
+              <a href="https://kilonova.ro/problems/2165" target="_blank">Carry Bit IIOT 2023-24</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_31_2">
+              <a href="https://kilonova.ro/problems/1702" target="_blank">sp Lot juniori 2021</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_31_3">
+              <a href="https://kilonova.ro/problems/2836/" target="_blank">gimigpt Lot Juniori 2024</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_31_4">
+              <a href="https://kilonova.ro/problems/1690" target="_blank">mixperm Lot juniori 2017</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_31_5">
+              <a href="https://kilonova.ro/problems/1903" target="_blank">Palindrome String</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_31_6">
+              <a href="https://kilonova.ro/problems/1802" target="_blank">sap RoAlgo Contest 6 - XOR Hashing</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_31_7">
+              <a href="https://kilonova.ro/problems/2098/" target="_blank">toska Stelele Informaticii - XOR Hashing</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_31_8">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=741" target="_blank">Bovine Genomics USACO</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_31_9">
+              <a href="https://csacademy.com/contest/rmi-2017-day-1/task/hangman2/" target="_blank">RMI 2017 Hangman 2</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_31_10">
+              <a href="https://kilonova.ro/tags/322" target="_blank">Probleme cu hashing de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_31_11">
+              <a href="https://www.infoarena.ro/cauta-probleme?tag_id[]=432" target="_blank">Probleme cu hashing de pe infoarena</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-2" id="topic-32">
+      <div class="section-header" onclick="toggleSection('topic-32')">
+        <h2 class="section-title">🟦 Meet in the Middle</h2>
+        <div class="section-progress" id="progress-topic-32">0/11</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_32_0">
+              <a href="https://kilonova.ro/problems/1691" target="_blank">Piese Lot Juniori 2017</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_32_1">
+              <a href="https://www.infoarena.ro/problema/loto" target="_blank">Infoarena loto</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_32_2">
+              <a href="https://kilonova.ro/problems/1613/" target="_blank">23 - IIOT 2019-20</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_32_3">
+              <a href="https://kilonova.ro/problems/901" target="_blank">OJI 2018 eq4</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_32_4">
+              <a href="https://www.infoarena.ro/problema/aiacubiti" target="_blank">Infoarena aiacubiti</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_32_5">
+              <a href="https://infoarena.ro/problema/colectie" target="_blank">Infoarena colectie</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_32_6">
+              <a href="https://codeforces.com/contest/1192/problem/C" target="_blank">CEOI 2019 cubeword</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_32_7">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1327" target="_blank">USACO Silver Field Day</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_32_8">
+              <a href="https://kilonova.ro/problems/990" target="_blank">Cupa SEPI 2023 circles</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_32_9">
+              <a href="https://codeforces.com/problemset?tags=meet-in-the-middle" target="_blank">Probleme cu meet in the middle de pe Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_32_10">
+              <a href="https://kilonova.ro/tags/348" target="_blank">Probleme cu meet in the middle de pe Kilonova</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-3" id="topic-33">
+      <div class="section-header" onclick="toggleSection('topic-33')">
+        <h2 class="section-title">🟥 Descompuneri în bucăți de radical (Square Root Decomposition)</h2>
+        <div class="section-progress" id="progress-topic-33">0/21</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_33_0">
+              <a href="https://infoarena.ro/problema/mayonaka" target="_blank">infoarena mayonaka</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_1">
+              <a href="https://kilonova.ro/problems/374" target="_blank">InfoOltenia 2020 Toorcmmdc</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_2">
+              <a href="https://infoarena.ro/problema/aparate" target="_blank">Junior Challenge 2020 Aparate</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_3">
+              <a href="https://www.infoarena.ro/problema/qxy" target="_blank">infoarena qxy</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_4">
+              <a href="https://kilonova.ro/problems/1600" target="_blank">ONI 2022 subsir</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_5">
+              <a href="https://infoarena.ro/problema/suma6" target="_blank">infoarena suma6</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_6">
+              <a href="https://www.infoarena.ro/problema/numerex" target="_blank">infoarena numerex</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_7">
+              <a href="https://kilonova.ro/problems/204/" target="_blank">ONI 2015 ksecv</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_8">
+              <a href="https://kilonova.ro/problems/1521/" target="_blank">ONI 2018 Mexitate</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_9">
+              <a href="https://kilonova.ro/problems/1683/" target="_blank">Lot Juniori 2019 dss</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_10">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1188" target="_blank">USACO Platinum Minimizing Haybales</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_11">
+              <a href="https://kilonova.ro/problems/2427/" target="_blank">IIOT 2024 XYQueries</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_12">
+              <a href="https://kilonova.ro/problems/142/" target="_blank">ONI 2022 Baraj Seniori Piezisa</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_13">
+              <a href="https://www.infoarena.ro/problema/arbore" target="_blank">infoarena arbore</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_14">
+              <a href="https://codeforces.com/contest/1921/problem/F" target="_blank">Codeforces Sum of Progression</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_15">
+              <a href="https://codeforces.com/contest/797/problem/E" target="_blank">Codeforces Array Queries</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_16">
+              <a href="https://codeforces.com/contest/2008/problem/H" target="_blank">Codeforces Sakurako's Test</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_17">
+              <a href="https://codeforces.com/contest/1902/problem/D" target="_blank">Codeforces Robot Queries</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_18">
+              <a href="https://codeforces.com/contest/1924/problem/B" target="_blank">Codeforces Space Harbour</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_19">
+              <a href="https://codeforces.com/contest/877/problem/F" target="_blank">Codeforces Ann and Books</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_33_20">
+              <a href="https://codeforces.com/contest/617/problem/E" target="_blank">Codeforces XOR and Favorite Number</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-4" id="topic-34">
+      <div class="section-header" onclick="toggleSection('topic-34')">
+        <h2 class="section-title">🟪 Arbori de intervale(AINT)</h2>
+        <div class="section-progress" id="progress-topic-34">0/19</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_34_0">
+              <a href="https://cses.fi/problemset/task/1649" target="_blank">Dynamic Range Minimum Queries</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_1">
+              <a href="https://codeforces.com/edu/course/2/lesson/4/1/practice/contest/273169/problem/C" target="_blank">Number of Minimums on a Segment</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_2">
+              <a href="https://www.pbinfo.ro/probleme/1591/intervalxy" target="_blank">Intervalxy</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_3">
+              <a href="https://codeforces.com/edu/course/2/lesson/4/2/practice/contest/273278/problem/B" target="_blank">Kth one</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_4">
+              <a href="https://codeforces.com/edu/course/2/lesson/4/2/practice/contest/273278/problem/C" target="_blank">First element at least X</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_5">
+              <a href="https://codeforces.com/edu/course/2/lesson/4/4/practice/contest/274684/problem/A" target="_blank">Sign Alternation</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_6">
+              <a href="https://codeforces.com/edu/course/2/lesson/4/4/practice/contest/274684/problem/C" target="_blank">Inversions</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_7">
+              <a href="https://codeforces.com/contest/339/problem/D" target="_blank">Xenia and bit operations</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_8">
+              <a href="https://codeforces.com/contest/1181/problem/D" target="_blank">Irrigation</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_9">
+              <a href="https://cses.fi/problemset/task/1734" target="_blank">Distinct Value Queries</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_10">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=1137" target="_blank">United Cows of Farmer John - USACO Gold</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_11">
+              <a href="https://cses.fi/problemset/task/1748" target="_blank">Increasing Subsequence II</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_12">
+              <a href="https://cses.fi/problemset/task/1144" target="_blank">Salary Queries</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_13">
+              <a href="https://kilonova.ro/problems/542/" target="_blank">Kth - ONI 2023</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_14">
+              <a href="https://www.pbinfo.ro/probleme/2103/intersectie-segmente" target="_blank">Intersecție segmente</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_15">
+              <a href="https://kilonova.ro/problems/133" target="_blank">Dulciuri - OJI 2021</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_16">
+              <a href="https://infoarena.ro/problema/arraycounting" target="_blank">Array Counting - IIOT 2021-2022</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_17">
+              <a href="https://kilonova.ro/problems/304/" target="_blank">Panama Sum - IIOT 2022-2023</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_34_18">
+              <a href="https://codeforces.com/contest/121/problem/E" target="_blank">Lucky Array</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-0" id="topic-35">
+      <div class="section-header" onclick="toggleSection('topic-35')">
+        <h2 class="section-title">🟩 Arbori indexati binar(AIB)</h2>
+        <div class="section-progress" id="progress-topic-35">0/8</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_35_0">
+              <a href="https://www.infoarena.ro/problema/aib" target="_blank">infoarena aib</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_35_1">
+              <a href="https://kilonova.ro/problems/2100" target="_blank">Kilonova Fenwick Tree</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_35_2">
+              <a href="https://kilonova.ro/problems/960" target="_blank">IIOT Goal Statistics</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_35_3">
+              <a href="https://codeforces.com/edu/course/2/lesson/4/3/practice/contest/274545/problem/A" target="_blank">Inversions - Codeforces Edu</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_35_4">
+              <a href="https://codeforces.com/edu/course/2/lesson/4/3/practice/contest/274545/problem/B" target="_blank">Inversions 2 - Codeforces Edu</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_35_5">
+              <a href="https://codeforces.com/edu/course/2/lesson/4/2/practice/contest/273278/problem/B" target="_blank">K-th one - Codeforces Edu</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_35_6">
+              <a href="https://codeforces.com/edu/course/2/lesson/4/1/practice/contest/273169/problem/A" target="_blank">Segment Tree for the Sum - Codeforces Edu</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_35_7">
+              <a href="https://infoarena.ro/problema/inv" target="_blank">infoarena inv</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-1" id="topic-36">
+      <div class="section-header" onclick="toggleSection('topic-36')">
+        <h2 class="section-title">🟨 Sparse Table. Binary Lifting. Range Minimum Query (RMQ)</h2>
+        <div class="section-progress" id="progress-topic-36">0/20</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_36_0">
+              <a href="https://kilonova.ro/problems/1096" target="_blank">ONI 2021 Baraj Juniori cartita</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_1">
+              <a href="https://kilonova.ro/problems/3147" target="_blank">Info1Cup 2021 wonderland</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_2">
+              <a href="https://codeforces.com/contest/1175/problem/E" target="_blank">CF 1175E</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_3">
+              <a href="https://codeforces.com/problemset/problem/191/C" target="_blank">CF 191C</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_4">
+              <a href="https://codeforces.com/contest/1328/problem/E" target="_blank">CF 1328E</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_5">
+              <a href="https://codeforces.com/contest/1702/problem/G2" target="_blank">CF 1702G2</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_6">
+              <a href="https://codeforces.com/problemset/problem/832/D" target="_blank">CF 832D</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_7">
+              <a href="https://oj.uz/problem/view/RMI20_sumzero" target="_blank">RMI 2020 Sum Zero</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_8">
+              <a href="https://www.pbinfo.ro/probleme/3860/consecutive1" target="_blank">EJOI 2021 consecutive1</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_9">
+              <a href="https://www.pbinfo.ro/probleme/2865/minisecvente" target="_blank">PBinfo minisecvente</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_10">
+              <a href="https://www.pbinfo.ro/probleme/1735/divquery" target="_blank">PBinfo divquery</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_11">
+              <a href="https://infoarena.ro/problema/euclid" target="_blank">infoarena euclid</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_12">
+              <a href="https://infoarena.ro/problema/plantatie" target="_blank">infoarena plantatie</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_13">
+              <a href="https://www.codechef.com/problems/KSIZEGCD" target="_blank">CodeChef Maximum of GCDs</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_14">
+              <a href="https://csacademy.com/contest/round-15/task/substring-restrictions/" target="_blank">Substring Restrictions - CS Academy</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_15">
+              <a href="https://cp-algorithms.com/data_structures/sparse-table.html#practice-problems" target="_blank">Problemele cu Sparse Table de la articolul de pe CP algorithms</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_16">
+              <a href="https://kilonova.ro/tags/289" target="_blank">Probleme cu RMQ de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_17">
+              <a href="https://kilonova.ro/tags/708" target="_blank">Probleme cu Binary Lifting de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_18">
+              <a href="https://codeforces.com/blog/entry/55274" target="_blank">Problemele de RMQ din acest blog</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_36_19">
+              <a href="https://codeforces.com/blog/entry/70418" target="_blank">Problemele din acest blog</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-2" id="topic-37">
+      <div class="section-header" onclick="toggleSection('topic-37')">
+        <h2 class="section-title">🟦 Trie (arbore de prefixe)</h2>
+        <div class="section-progress" id="progress-topic-37">0/8</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_37_0">
+              <a href="https://kilonova.ro/problems/456" target="_blank">intervalxor2</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_37_1">
+              <a href="https://kilonova.ro/problems/361" target="_blank">xortree2</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_37_2">
+              <a href="https://kilonova.ro/problems/371" target="_blank">rps</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_37_3">
+              <a href="https://www.infoarena.ro/problema/ratina" target="_blank">ratina</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_37_4">
+              <a href="https://www.infoarena.ro/problema/aiacupalindroame" target="_blank">aiacupalindroame</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_37_5">
+              <a href="https://www.infoarena.ro/problema/fbsearch" target="_blank">Facebook Search</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_37_6">
+              <a href="https://codeforces.com/contest/948/problem/D" target="_blank">Perfect Security</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_37_7">
+              <a href="https://codeforces.com/contest/1902/problem/E" target="_blank">Collapsing Strings</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-3" id="topic-38">
+      <div class="section-header" onclick="toggleSection('topic-38')">
+        <h2 class="section-title">🟥 Programare dinamică cu structuri de date(DP)</h2>
+        <div class="section-progress" id="progress-topic-38">0/15</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_38_0">
+              <a href="https://kilonova.ro/problems/2287" target="_blank">IIOT 2024 Planning Excursions</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_1">
+              <a href="https://kilonova.ro/problems/184" target="_blank">ONI 2010 Stalpi</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_2">
+              <a href="https://kilonova.ro/problems/1888" target="_blank">RCPC 2023 Yet Another Colored Tree Problem</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_3">
+              <a href="https://kilonova.ro/problems/2808" target="_blank">Lot 2024 Juniori Pokemoni</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_4">
+              <a href="https://codeforces.com/problemset/problem/1216/F" target="_blank">Codeforces WI-FI</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_5">
+              <a href="https://codeforces.com/contest/960/problem/F" target="_blank">Codeforces Pathwalks</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_6">
+              <a href="https://kilonova.ro/problems/288/" target="_blank">ONI 2015 Baraj Seniori s2c</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_7">
+              <a href="https://kilonova.ro/problems/1869" target="_blank">ONI 2005 Baraj Seniori Evantai</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_8">
+              <a href="https://codeforces.com/problemset/problem/2009/G2" target="_blank">Codeforces Yunlin's Subarray Queries (hard)</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_9">
+              <a href="https://codeforces.com/contest/1197/problem/E" target="_blank">Codeforces Culture Code</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_10">
+              <a href="https://oj.uz/problem/view/JOI22_ho_t4" target="_blank">JOI 2022 Railway Trip 2</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_11">
+              <a href="https://kilonova.ro/problems/2317" target="_blank">Lot 2008 Seniori turnuri</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_12">
+              <a href="https://codeforces.com/problemset/page/1?tags=dp%2Cdata+structures" target="_blank">Probleme cu dinamici si structuri de date de pe Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_13">
+              <a href="https://kilonova.ro/problems?tags=275%2C409" target="_blank">Probleme cu dinamica si deque de pe kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_38_14">
+              <a href="https://kilonova.ro/problems?tags=275%2C282" target="_blank">Alte probleme similare de pe kilonova</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-4" id="topic-39">
+      <div class="section-header" onclick="toggleSection('topic-39')">
+        <h2 class="section-title">🟪 Binary lifting. Lowest common ancestor (LCA)</h2>
+        <div class="section-progress" id="progress-topic-39">0/9</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_39_0">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=968" target="_blank">Milk Visits USACO Silver</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_39_1">
+              <a href="https://cses.fi/problemset/task/1750" target="_blank">CSES Planet Queries I</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_39_2">
+              <a href="https://cses.fi/problemset/task/1160" target="_blank">CSES Planet Queries II</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_39_3">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=576" target="_blank">USACO Platinum Max Flow</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_39_4">
+              <a href="https://kilonova.ro/problems/1802" target="_blank">RoAlgo Contest #6 Sap</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_39_5">
+              <a href="https://kilonova.ro/problems/305" target="_blank">IIOT 2022 Sum Tree</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_39_6">
+              <a href="https://codeforces.com/contest/609/problem/E" target="_blank">MST for Each Edge - Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_39_7">
+              <a href="https://kilonova.ro/problems/1918" target="_blank">Lot 2016 Seniori maxdist</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_39_8">
+              <a href="https://kilonova.ro/tags/285" target="_blank">Probleme cu LCA de pe Kilonova</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-0" id="topic-40">
+      <div class="section-header" onclick="toggleSection('topic-40')">
+        <h2 class="section-title">🟩 Programare dinamică pe arbore</h2>
+        <div class="section-progress" id="progress-topic-40">0/21</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_40_0">
+              <a href="https://atcoder.jp/contests/dp/tasks/dp_p" target="_blank">AtCoder Independent Set</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_1">
+              <a href="https://kilonova.ro/problems/22" target="_blank">OJI 2019 Tairos</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_2">
+              <a href="https://kilonova.ro/problems/45" target="_blank">OJI 2008 Iepuri</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_3">
+              <a href="https://codeforces.com/contest/1521/problem/D" target="_blank">Nastia Plays with a Tree Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_4">
+              <a href="https://kilonova.ro/problems/203/" target="_blank">ONI 2015 arbvalmax</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_5">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=766" target="_blank">USACO Gold Barn Painting</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_6">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1019" target="_blank">USACO Gold Delegation</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_7">
+              <a href="https://kilonova.ro/problems/1834" target="_blank">RMI 2023 AAtree</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_8">
+              <a href="https://kilonova.ro/problems/274" target="_blank">ONI 2017 Baraj Seniori Cli</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_9">
+              <a href="https://kilonova.ro/problems/2568/" target="_blank">Moisil 2024 Arborele frumos</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_10">
+              <a href="https://codeforces.com/problemset/problem/1856/E2" target="_blank">Permutree Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_11">
+              <a href="https://oj.uz/problem/view/JOI20_power" target="_blank">JOI 2020 Power</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_12">
+              <a href="https://oj.uz/problem/view/IZhO17_road" target="_blank">IZhO 2017 Hard route</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_13">
+              <a href="https://kilonova.ro/problems/151" target="_blank">ONI 2018 tricolor</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_14">
+              <a href="https://kilonova.ro/problems/67/" target="_blank">ONI 2021 Baraj Seniori Arbsumpow</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_15">
+              <a href="https://kilonova.ro/problems/409/" target="_blank">ONI 2019 Baraj Seniori Anarhie</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_16">
+              <a href="https://cses.fi/problemset/task/1752" target="_blank">CSES Creating Offices</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_17">
+              <a href="https://codeforces.com/contest/1280/problem/D" target="_blank">Miss Punyverse Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_18">
+              <a href="https://oj.uz/problem/view/IOI07_training" target="_blank">IOI 2007 Training</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_19">
+              <a href="https://kilonova.ro/problems?tags=275%2C284" target="_blank">Probleme cu DP pe arbore de pe Kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_40_20">
+              <a href="https://codeforces.com/problemset?tags=dp,trees" target="_blank">Probleme cu DP pe arbore de pe Codeforces</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-1" id="topic-41">
+      <div class="section-header" onclick="toggleSection('topic-41')">
+        <h2 class="section-title">🟨 Small to large</h2>
+        <div class="section-progress" id="progress-topic-41">0/5</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_41_0">
+              <a href="https://kilonova.ro/problems/2098" target="_blank">Toska - Kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_41_1">
+              <a href="https://codeforces.com/problemset/problem/600/E" target="_blank">Lomsat Gerlal - Codeforces</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_41_2">
+              <a href="https://kilonova.ro/problems/2970" target="_blank">Arborel - Kilonova</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_41_3">
+              <a href="https://codeforces.com/contest/1193/problem/B" target="_blank">Magic Tree - CEOI 2019</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_41_4">
+              <a href="https://kilonova.ro/problems/2098" target="_blank">Alte probleme cu small-to-large de pe Kilonova</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-2" id="topic-42">
+      <div class="section-header" onclick="toggleSection('topic-42')">
+        <h2 class="section-title">🟦 Heavy light decomposition (HLD)</h2>
+        <div class="section-progress" id="progress-topic-42">0/22</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_42_0">
+              <a href="https://cses.fi/problemset/task/2134/" target="_blank">Path Queries II</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_1">
+              <a href="https://cses.fi/problemset/task/1688" target="_blank">Company Queries II</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_2">
+              <a href="https://kilonova.ro/problems/217/" target="_blank">confuzie</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_3">
+              <a href="https://www.infoarena.ro/problema/disconnect" target="_blank">Disconnect</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_4">
+              <a href="https://www.infoarena.ro/problema/sever" target="_blank">Sever</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_5">
+              <a href="https://www.infoarena.ro/problema/petarbore" target="_blank">Petarbore</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_6">
+              <a href="https://kilonova.ro/problems/3182" target="_blank">mogger</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_7">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=921" target="_blank">Cow Land</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_8">
+              <a href="https://www.spoj.com/problems/QTREE3/en/" target="_blank">QTREE3 - Query on a tree again!</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_9">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=970" target="_blank">Milk Visits</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_10">
+              <a href="https://infoarena.ro/problema/delay" target="_blank">Delay</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_11">
+              <a href="https://lightoj.com/problem/aladdin-and-the-return-journe" target="_blank">Aladdin and the Return Journey</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_12">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=842" target="_blank">Disruption</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_13">
+              <a href="https://usaco.guide/plat/hld?lang=cpp" target="_blank">Subtrees And Paths</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_14">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=102" target="_blank">Grass Planting</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_15">
+              <a href="https://judge.yosupo.jp/problem/vertex_set_path_composite" target="_blank">Vertex Set Path Composite</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_16">
+              <a href="https://acm.timus.ru/problem.aspx?space=1&amp;num=1553" target="_blank">Caves and Tunnels</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_17">
+              <a href="https://codeforces.com/contest/1254/problem/D" target="_blank">Tree Queries</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_18">
+              <a href="https://codeforces.com/contest/1017/problem/G" target="_blank">The Tree</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_19">
+              <a href="https://tlx.toki.id/problems/troc-14/H/" target="_blank">Tree Game</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_20">
+              <a href="https://oj.uz/problem/view/JOI13_synchronization" target="_blank">Synchronization</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_42_21">
+              <a href="https://oj.uz/problem/view/JOI18_catdog" target="_blank">Cats or Dogs</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-3" id="topic-43">
+      <div class="section-header" onclick="toggleSection('topic-43')">
+        <h2 class="section-title">🟥 Bitsets</h2>
+        <div class="section-progress" id="progress-topic-43">0/15</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_43_0">
+              <a href="https://atcoder.jp/contests/abc258/tasks/abc258_g" target="_blank">atcoder - Triangle</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_1">
+              <a href="https://cses.fi/problemset/task/2138" target="_blank">cses - Reachable Nodes</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_2">
+              <a href="https://atcoder.jp/contests/agc041/tasks/agc041_e" target="_blank">atcoder - Balancing Network (T=1)</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_3">
+              <a href="https://tlx.toki.id/contests/troc-15-div-1/problems/E" target="_blank">Tzaph &amp; Number Line</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_4">
+              <a href="https://oj.uz/problem/view/BOI19_nautilus" target="_blank">Baltic OI 2019 - Nautil</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_5">
+              <a href="https://cses.fi/106/list/" target="_blank">Baltic OI 2010 - Candies</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_6">
+              <a href="https://oj.uz/problem/view/COCI15_uzastopni" target="_blank">COCI 2015 - Uzastopni</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_7">
+              <a href="http://www.usaco.org/index.php?page=viewproblem2&amp;cpid=1021" target="_blank">Platinum - Equilateral Triangles</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_8">
+              <a href="https://oj.uz/problem/view/IZhO17_bootfall" target="_blank">IZhO 2017 - Bootfall</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_9">
+              <a href="https://oj.uz/problem/view/BOI15_tug" target="_blank">Baltic OI 2015 - Tug of War</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_10">
+              <a href="https://codeforces.com/contest/1444/problem/D" target="_blank">codeforces - Rectangular Polyline</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_11">
+              <a href="https://kilonova.ro/problems/210" target="_blank">Lot Seniori 2022 - erinaceida</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_12">
+              <a href="https://kilonova.ro/problems/1980" target="_blank">Lot Seniori 2014 - Switch5</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_13">
+              <a href="https://kilonova.ro/problems/2798" target="_blank">Lot Seniori 2024 - Matrice Palindrom</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_43_14">
+              <a href="https://open.kattis.com/problems/holmes" target="_blank">holmesc</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-4" id="topic-44">
+      <div class="section-header" onclick="toggleSection('topic-44')">
+        <h2 class="section-title">🟪 Cautarea ternara</h2>
+        <div class="section-progress" id="progress-topic-44">0/7</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_44_0">
+              <a href="https://codeforces.com/contest/439/problem/D" target="_blank">CF 439D</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_44_1">
+              <a href="https://infoarena.ro/problema/copii3" target="_blank">copii3 infoarena</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_44_2">
+              <a href="https://csacademy.com/contest/ceoi-2017-day-1/task/sure-bet/" target="_blank">CEOI 2017 - Sure Bet</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_44_3">
+              <a href="https://codeforces.com/problemset/problem/1355/E" target="_blank">CF 1355 E</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_44_4">
+              <a href="https://codeforces.com/contest/1848/problem/D" target="_blank">CF 1848 D</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_44_5">
+              <a href="https://kilonova.ro/problems/1626" target="_blank">Lot Juniori 2018 cherhanale</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_44_6">
+              <a href="https://dmoj.ca/problem/cco18p4" target="_blank">CCO 18-Gradient Descent</a>
+            </label>
+      </div>
+    </div>
+    
+    <div class="section level-0" id="topic-45">
+      <div class="section-header" onclick="toggleSection('topic-45')">
+        <h2 class="section-title">🟩 Functia Mobius</h2>
+        <div class="section-progress" id="progress-topic-45">0/6</div>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="section-content">
+            <label>
+              <input type="checkbox" id="cb_45_0">
+              <a href="https://kilonova.ro/problems/69" target="_blank">ONI 2021 Baraj Seniori Pastile</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_45_1">
+              <a href="https://kilonova.ro/problems/640" target="_blank">Lot 2023 Juniori countall</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_45_2">
+              <a href="https://kilonova.ro/problems/2017" target="_blank">RoAlgo Contest #8 Gya-chan and the gcd operation</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_45_3">
+              <a href="https://usaco.org/index.php?page=viewproblem2&amp;cpid=862" target="_blank">USACO Gold Cowpability</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_45_4">
+              <a href="https://vjudge.net/contest/151569" target="_blank">Listă de probleme cu Mobius</a>
+            </label>
+            <label>
+              <input type="checkbox" id="cb_45_5">
+              <a href="https://atcoder.jp/contests/abc162/tasks/abc162_e" target="_blank">Sum of gcd of Tuples (Hard)</a>
+            </label>
+      </div>
+    </div>
+    </div>
   <div class="notification" id="notification"></div>
-
-  <!-- Firebase & Scriptul principal -->
   <script type="module">
     // Import SDK-urile necesare
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
-    import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+    import { getDatabase, ref, onValue, update, set } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
     import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
-    // Configurația proiectului tău Firebase (folosind datele furnizate)
+    // Configurația proiectului Firebase
     const firebaseConfig = {
-      apiKey: "AIzaSyCKD_GIQ-WM-p92mlW2ixl5w2-pWxOFI6o",
+      apiKey: "AIzaSyCKD_GIQ-WM-p92mlW2ixl5w2-pWxOFI6o", // Atenție: Cheia API este vizibilă; pentru producție, securizați-o.
       authDomain: "cp-checklist-sync.firebaseapp.com",
       databaseURL: "https://cp-checklist-sync-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "cp-checklist-sync",
-      storageBucket: "cp-checklist-sync.firebasestorage.app",
+      storageBucket: "cp-checklist-sync.appspot.com", // Corectat .firebasestorage.app -> .appspot.com dacă e cazul, sau verificați configurația Firebase
       messagingSenderId: "794233613344",
       appId: "1:794233613344:web:11fcb7366748a72641e045",
       measurementId: "G-VS8NZFC0SE"
     };
 
-    // Initialize Firebase & Analytics
+    // Inițializare Firebase & Analytics
     const appFirebase = initializeApp(firebaseConfig);
     const analytics = getAnalytics(appFirebase);
-
-    // Initialize Authentication and Database
     const auth = getAuth(appFirebase);
+    
+    let dbRef; // Va fi inițializat după autentificare
+    let currentConfirmCallback = null; // Pentru modalul de confirmare
 
+    const loadingIndicator = document.getElementById('loading');
+    const confirmModal = document.getElementById('custom-confirm-modal');
+    const confirmMessageEl = document.getElementById('custom-confirm-message');
+    const confirmOkButton = document.getElementById('custom-confirm-ok');
+    const confirmCancelButton = document.getElementById('custom-confirm-cancel');
+
+    function showLoading() {
+      if (loadingIndicator) loadingIndicator.style.display = 'flex';
+    }
+    function hideLoading() {
+      if (loadingIndicator) loadingIndicator.style.display = 'none';
+    }
+
+    // Afișează indicatorul de încărcare la început
+    showLoading();
+
+    // Funcție pentru afișarea modalului de confirmare personalizat
+    function showCustomConfirm(message, onConfirm) {
+      if (confirmModal && confirmMessageEl) {
+        confirmMessageEl.textContent = message;
+        confirmModal.style.display = 'flex';
+        currentConfirmCallback = onConfirm; // Stochează callback-ul pentru acțiunea OK
+      }
+    }
+
+    // Handler pentru butonul OK al modalului
+    if (confirmOkButton) {
+      confirmOkButton.addEventListener('click', () => {
+        if (confirmModal) confirmModal.style.display = 'none';
+        if (typeof currentConfirmCallback === 'function') {
+          currentConfirmCallback(); // Execută acțiunea de confirmare
+        }
+        currentConfirmCallback = null; // Resetează callback-ul
+      });
+    }
+
+    // Handler pentru butonul Cancel al modalului
+    if (confirmCancelButton) {
+      confirmCancelButton.addEventListener('click', () => {
+        if (confirmModal) confirmModal.style.display = 'none';
+        currentConfirmCallback = null; // Resetează callback-ul
+      });
+    }
+    
     // Funcții pentru salvarea și încărcarea progresului din localStorage
     function loadLocalProgress() {
       const localData = localStorage.getItem('checklistProgress');
       if (localData) {
-        const data = JSON.parse(localData);
-        document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-          cb.checked = !!data[cb.id];
-          if (cb.checked) {
-            cb.parentElement.classList.add('completed');
-          } else {
-            cb.parentElement.classList.remove('completed');
-          }
-        });
-        updateStats();
+        try {
+            const data = JSON.parse(localData);
+            document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+              cb.checked = !!data[cb.id];
+              cb.parentElement.classList.toggle('completed', cb.checked);
+            });
+        } catch (e) {
+            console.error("Error parsing local progress:", e);
+            localStorage.removeItem('checklistProgress');
+        }
       }
     }
     function saveLocalProgress() {
@@ -779,52 +3526,74 @@
       localStorage.setItem('checklistProgress', JSON.stringify(progress));
     }
 
-    // Funcții globale pentru UI (toggle, expand/collapse, reset, notificare)
+    // Funcții globale pentru UI
     window.toggleSection = function(sectionId) {
       const section = document.getElementById(sectionId);
-      section.classList.toggle('collapsed');
+      if (section) section.classList.toggle('collapsed');
     };
     window.expandAll = function() {
-      document.querySelectorAll('.section').forEach(section => {
-        section.classList.remove('collapsed');
-      });
+      document.querySelectorAll('.section').forEach(section => section.classList.remove('collapsed'));
     };
     window.collapseAll = function() {
-      document.querySelectorAll('.section').forEach(section => {
-        section.classList.add('collapsed');
-      });
+      document.querySelectorAll('.section').forEach(section => section.classList.add('collapsed'));
     };
-    window.resetProgress = function() {
-      if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+
+    window.handleResetProgress = function() {
+      showCustomConfirm('Are you sure you want to reset all progress? This cannot be undone.', () => {
+        // Acțiunea de confirmare (ce se întâmplă dacă utilizatorul apasă OK)
         document.querySelectorAll('input[type=checkbox]').forEach(cb => {
           cb.checked = false;
           cb.parentElement.classList.remove('completed');
         });
-        // Resetăm datele în Firebase
-        update(dbRef, {});
-        saveLocalProgress();
-        updateStats();
-        showNotification('Progress reset successfully!', 'info');
-      }
+        if (dbRef) {
+            set(dbRef, {}).then(() => {
+              localStorage.removeItem('checklistProgress'); // Șterge și din local storage
+              updateStats();
+              showNotification('Progress reset successfully!', 'info');
+            }).catch((error) => {
+              showNotification('Failed to reset cloud progress: ' + error.message, 'error');
+              localStorage.removeItem('checklistProgress'); // Totuși șterge local
+              updateStats();
+            });
+        } else {
+             localStorage.removeItem('checklistProgress');
+             updateStats();
+             showNotification('Progress reset locally. Firebase not available.', 'info');
+        }
+      });
     };
+
     function showNotification(message, type = 'success') {
       const notification = document.getElementById('notification');
-      notification.textContent = message;
-      notification.className = `notification show ${type}`;
-      setTimeout(() => {
-        notification.classList.remove('show');
-      }, 3000);
+      if (notification) {
+        notification.textContent = message;
+        notification.className = 'notification show'; // Clasa de bază + show
+        if (type === 'error') notification.classList.add('error');
+        else if (type === 'info') notification.classList.add('info');
+        // Implicit este success (verde)
+        
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 3000);
+      }
     }
+
     function updateStats() {
       const checkboxes = document.querySelectorAll('input[type=checkbox]');
       const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
       const total = checkboxes.length;
       const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
-      document.getElementById('completed-count').textContent = completed;
-      document.getElementById('total-count').textContent = total;
-      document.getElementById('progress-percent').textContent = percentage + '%';
-      document.getElementById('progress-fill').style.width = percentage + '%';
-      // Actualizează progresul fiecărei secțiuni
+      
+      const completedCountEl = document.getElementById('completed-count');
+      const totalCountEl = document.getElementById('total-count');
+      const progressPercentEl = document.getElementById('progress-percent');
+      const progressFillEl = document.getElementById('progress-fill');
+
+      if (completedCountEl) completedCountEl.textContent = completed;
+      if (totalCountEl) totalCountEl.textContent = total; // Asigură-te că totalul este corect
+      if (progressPercentEl) progressPercentEl.textContent = percentage + '%';
+      if (progressFillEl) progressFillEl.style.width = percentage + '%';
+      
       document.querySelectorAll('.section').forEach(section => {
         const sectionCheckboxes = section.querySelectorAll('input[type=checkbox]');
         const sectionCompleted = Array.from(sectionCheckboxes).filter(cb => cb.checked).length;
@@ -835,74 +3604,95 @@
         }
       });
     }
+
     function setupSearch() {
       const searchBox = document.getElementById('search-box');
-      searchBox.addEventListener('input', function(e) {
-        const query = e.target.value.toLowerCase();
-        document.querySelectorAll('.section').forEach(section => {
-          const text = section.textContent.toLowerCase();
-          if (query === '' || text.includes(query)) {
-            section.classList.remove('hidden');
-          } else {
-            section.classList.add('hidden');
-          }
+      if (searchBox) {
+        searchBox.addEventListener('input', function(e) {
+          const query = e.target.value.toLowerCase().trim();
+          document.querySelectorAll('.section').forEach(section => {
+            const sectionTitle = section.querySelector('.section-title');
+            const sectionContent = section.querySelector('.section-content');
+            let textToSearch = '';
+            if (sectionTitle) textToSearch += sectionTitle.textContent.toLowerCase();
+            if (sectionContent) textToSearch += sectionContent.textContent.toLowerCase();
+
+            section.classList.toggle('hidden', !(query === '' || textToSearch.includes(query)));
+          });
         });
-      });
+      }
     }
+    
+    // Funcția principală de inițializare rulează după ce DOM-ul este gata
+    document.addEventListener('DOMContentLoaded', () => {
+        loadLocalProgress(); 
+        setupSearch();
+        updateStats(); 
 
-    // Încarcă progresul salvat local imediat
-    loadLocalProgress();
+        signInAnonymously(auth)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            const uid = user.uid;
+            const db = getDatabase(appFirebase);
+            dbRef = ref(db, 'users/' + uid + '/checklistProgress');
 
-    // Autentificare anonimă & folosirea UID pentru noduri separate în baza de date
-    signInAnonymously(auth)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        const uid = user.uid;
-        const db = getDatabase(appFirebase);
-        // Nodul de stocare pentru acest utilizator: /users/{uid}/checklistProgress
-        window.dbRef = ref(db, 'users/' + uid + '/checklistProgress');
+            onValue(dbRef, snapshot => {
+              hideLoading(); // Ascunde indicatorul după ce datele inițiale (sau lipsa lor) sunt primite
+              const data = snapshot.val() || {};
+              let cloudDataChanged = false;
+              document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+                const cloudValue = !!data[cb.id];
+                if (cb.checked !== cloudValue) { // Compara starea curentă cu cea din cloud
+                    cb.checked = cloudValue; 
+                    cloudDataChanged = true;
+                }
+                cb.parentElement.classList.toggle('completed', cb.checked);
+              });
 
-        // Sincronizare Firebase: când datele sunt primite de la server
-        onValue(dbRef, snapshot => {
-          // Ascunde indicatorul de încărcare
-          document.getElementById('loading').style.display = 'none';
-          const data = snapshot.val() || {};
-          document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-            cb.checked = !!data[cb.id];
-            if (cb.checked) {
-              cb.parentElement.classList.add('completed');
-            } else {
-              cb.parentElement.classList.remove('completed');
-            }
+              if (cloudDataChanged) {
+                 showNotification('Progress synced from cloud.', 'info');
+              }
+              updateStats();
+              saveLocalProgress(); 
+            }, (error) => {
+                console.error("Firebase onValue error:", error);
+                hideLoading();
+                showNotification('Could not sync with cloud. Using local data.', 'error');
+            });
+
+            document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+              cb.addEventListener('change', function() {
+                this.parentElement.classList.toggle('completed', this.checked);
+                if (this.checked) {
+                  showNotification('Problem completed! 🎉');  
+                }
+                if (dbRef) { 
+                    update(dbRef, { [this.id]: this.checked }).catch(err => {
+                        showNotification('Failed to save to cloud: ' + err.message, 'error');
+                    });
+                }
+                updateStats();
+                saveLocalProgress();
+              });
+            });
+          })
+          .catch((error) => {
+            console.error("Authentication failed:", error);
+            hideLoading();
+            showNotification('Firebase authentication failed. Progress will be local only.', 'error');
+            // Permite funcționarea locală chiar dacă Firebase eșuează
+            document.querySelectorAll('input[type=checkbox]').forEach(cb => {
+              cb.addEventListener('change', function() {
+                this.parentElement.classList.toggle('completed', this.checked);
+                updateStats();
+                saveLocalProgress();
+              });
+            });
           });
-          updateStats();
-          saveLocalProgress();
-        });
+          
+        collapseAll(); // Colapsează secțiunile inițial
+    });
 
-        // Adaugă handler pentru fiecare checkbox
-        document.querySelectorAll('input[type=checkbox]').forEach(cb => {
-          cb.addEventListener('change', function() {
-            if (this.checked) {
-              this.parentElement.classList.add('completed');
-              showNotification('Problem completed! 🎉');  
-            } else {
-              this.parentElement.classList.remove('completed');
-            }
-            update(dbRef, { [this.id]: this.checked });
-            updateStats();
-            saveLocalProgress();
-          });
-        });
-      })
-      .catch((error) => {
-        console.error("Authentication failed:", error);
-      });
-
-    // Inițializează funcționalitatea de căutare și actualizează statistici
-    setupSearch();
-    updateStats();
   </script>
-
-
-
-</body></html>
+</body>
+</html>
