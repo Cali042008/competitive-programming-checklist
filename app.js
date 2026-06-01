@@ -281,7 +281,7 @@ async function boot() {
   buildClassFilter();
   bindControls();
 
-  const raw = await fetch("../data/probleme.txt");
+  const raw = await fetch("./data/probleme.txt");
   const text = await raw.text();
   state.chapters = normalizeData(parseProblemText(text));
   render();
