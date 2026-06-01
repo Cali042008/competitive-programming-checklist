@@ -1,6 +1,27 @@
-# competitive-programming-checklist
-This list was made using Chat-GPT and the help of one of my friends from RoAlgo's discord server.It may help somebody so enjoy!
+# Competitive Programming Checklist
 
+A structured practice checklist for algorithms and competitive programming, ordered from fundamentals to more advanced topics.
+
+This list combines problems from CSES, AtCoder, Codeforces, Kilonova, Infoarena, and LeetCode. It is meant to help learners move through core patterns gradually instead of jumping randomly between topics.
+
+## How to use it
+
+- Start at Level 0 if you are building fundamentals.
+- Mark problems as you solve them.
+- Revisit each level after a few weeks and redo problems that were hard.
+- Use the topic headings to identify weak areas before contests.
+
+## Topics covered
+
+- Number theory
+- Dynamic programming
+- Implementation and ad-hoc problems
+- Graphs and trees
+- Combinatorics
+- Bitmask and exponential-state DP
+- Advanced Codeforces-style practice
+
+---
 
 # 📋 Unified Practice Checklist (Ordered by Difficulty & Recommended Order)
 
