@@ -125,6 +125,7 @@ function parseProblemText(rawText) {
   const topics = [];
   let currentTopic = null;
   let currentSection = null;
+  const seenItems = new Set();
 
   for (const rawLine of lines) {
     const line = rawLine.trim();
@@ -143,11 +144,15 @@ function parseProblemText(rawText) {
 
     if (line.startsWith("<li>")) {
       if (!currentTopic) continue;
+      const parsedItem = parseListItem(line);
+      const dedupeKey = `${parsedItem.url}__${parsedItem.label}`.toLowerCase();
+      if (seenItems.has(dedupeKey)) continue;
+      seenItems.add(dedupeKey);
       if (!currentSection) {
         currentSection = { heading: "Probleme", items: [] };
         currentTopic.sections.push(currentSection);
       }
-      currentSection.items.push(parseListItem(line));
+      currentSection.items.push(parsedItem);
       continue;
     }
 
