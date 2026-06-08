@@ -25,212 +25,23 @@ const classOptions = [
 
 const classOrder = ["V", "VI", "VII", "VIII", "IX", "X", "XI_XII", "BARAJ_JR", "BARAJ_SR"];
 
-const chapterTopicOrder = [
-  {
-    chapter: "Capitolul 1 - Noțiuni elementare",
-    topics: [
-      "Primul program în C++",
-      "Structura alternativă",
-      "Structura repetitivă",
-      "Prelucrarea cifrelor",
-      "Maxime și minime",
-      "Generarea șirurilor de numere",
-      "Divizibilitatea",
-      "Abordarea problemelor cu secvențe",
-    ],
-  },
-  {
-    chapter: "Capitolul 2 - Tablouri, tehnici introductive",
-    topics: [
-      "Vectori (tablouri unidimensionale)",
-      "Vectori de frecvență",
-      "Matrici (tablouri bidimensionale)",
-      "Simularea soluției",
-      "Algoritmi de sortare",
-      "Ciurul lui Eratostene",
-      "Sume parțiale. Șmenul lui Mars",
-    ],
-  },
-  {
-    chapter: "Capitolul 3 - Sortare, căutare, tehnici de limbaj",
-    topics: [
-      "Subprograme",
-      "Șiruri de caractere",
-      "Operații pe biți",
-      "Introducere în Metoda Greedy",
-      "Căutarea binară",
-      "Two pointers",
-      "Sliding window",
-      "Principiul lui Dirichlet (principiul cutiei)",
-      "Baze de numerație",
-      "Indicatorul lui Euler",
-      "Aritmetică modulară. Ridicare la putere în timp logaritmic",
-    ],
-  },
-  {
-    chapter: "Capitolul 4 - Structuri liniare, fundamente",
-    topics: [
-      "Tehnica divide et impera",
-      "Căutare completă. Tehnica Backtracking",
-      "Numere mari",
-      "Normalizarea datelor",
-      "Principiul includerii și excluderii (pinex)",
-      "Invers modular",
-      "Coada",
-      "Stiva",
-      "Analiza amortizată",
-      "Algoritmul lui Lee. Flood Fill",
-      "Evaluarea unei expresii",
-      "Deque",
-      "Abordarea problemelor ad-hoc",
-      "Abordarea problemelor constructive",
-      "Introducere în teoria grafurilor",
-      "Introducere în arbori. Diametrul unui arbore",
-      "Introducere în programarea dinamică",
-    ],
-  },
-  {
-    chapter: "Capitolul 5 - DP I, grafuri I, combinatorică",
-    topics: [
-      "Problema rucsacului",
-      "Subșir comun maximal",
-      "Subșir crescător maximal",
-      "Dinamică pe stări exponențiale (bitmask DP)",
-      "Sortare topologică",
-      "Cicluri în grafuri. Grafuri funcționale",
-      "Păduri de mulțimi disjuncte (DSU)",
-      "Arbore parțial de cost minim",
-      "Algoritmi pentru drumuri minime",
-      "Tehnica celor două DFS-uri (rerooting)",
-      "Introducere în combinatorică",
-      "Hashing",
-      "Meet in the Middle",
-    ],
-  },
-  {
-    chapter: "Capitolul 6 - Structuri, arbori, probleme speciale",
-    topics: [
-      "Descompuneri în bucăți de radical (Square Root Decomposition)",
-      "Arbori de intervale (segment trees)",
-      "Arbori indexați binar",
-      "Sparse Table. Binary Lifting. Range Minimum Query (RMQ)",
-      "Trie (arbore de prefixe)",
-      "Programare dinamică cu structuri de date",
-      "Binary lifting. Lowest common ancestor (LCA)",
-      "Programare dinamică pe arbore",
-      "Small to large",
-      "Heavy light decomposition (HLD)",
-      "Probleme interactive",
-      "Probleme output only",
-      "Bitsets",
-      "Căutare ternară",
-      "Funcția Möbius",
-    ],
-  },
-  {
-    chapter: "Capitolul 7 - DP II, grafuri II, matematică",
-    topics: [
-      "Programare dinamică pe intervale (range DP)",
-      "Programare dinamică pe cifre (digit DP)",
-      "Programare dinamică pe permutări",
-      "Componente tare conexe",
-      "Componente biconexe",
-      "Înfășurătoare convexă",
-    ],
-  },
-  {
-    chapter: "Capitolul 8 - Matematică avansată, stringuri",
-    topics: ["Rotație lexicografică minimă", "Tablou/arbore de sufixe"],
-  },
-  {
-    chapter: "Capitolul 9 - Structuri avansate, optimizări",
-    topics: ["D&C DP (optimizarea divide et impera)", "Aliens DP"],
-  },
-];
-
-const topicClassMap = {
-  "Primul program în C++": "V",
-  "Structura alternativă": "V",
-  "Structura repetitivă": "V",
-  "Prelucrarea cifrelor": "V",
-  "Maxime și minime": "V",
-  "Generarea șirurilor de numere": "V",
-  "Divizibilitatea": "V",
-  "Abordarea problemelor cu secvențe": "V",
-  "Vectori (tablouri unidimensionale)": "V",
-  "Vectori de frecvență": "V",
-  "Matrici (tablouri bidimensionale)": "VI",
-  "Simularea soluției": "VI",
-  "Algoritmi de sortare": "IX",
-  "Ciurul lui Eratostene": "VI",
-  "Sume parțiale. Șmenul lui Mars": "VI",
-  "Subprograme": "VII",
-  "Șiruri de caractere": "VIII",
-  "Operații pe biți": "IX",
-  "Introducere în Metoda Greedy": "VII",
-  "Căutarea binară": "VI",
-  "Two pointers": "VII",
-  "Sliding window": "VI",
-  "Principiul lui Dirichlet (principiul cutiei)": "IX",
-  "Baze de numerație": "VI",
-  "Indicatorul lui Euler": "IX",
-  "Aritmetică modulară. Ridicare la putere în timp logaritmic": "VII",
-  "Tehnica divide et impera": "X",
-  "Căutare completă. Tehnica Backtracking": "X",
-  "Numere mari": "VII",
-  "Normalizarea datelor": "VIII",
-  "Principiul includerii și excluderii (pinex)": "XI_XII",
-  "Invers modular": "X",
-  "Coada": "VIII",
-  "Stiva": "VII",
-  "Analiza amortizată": "XI_XII",
-  "Algoritmul lui Lee. Flood Fill": "BARAJ_JR",
-  "Evaluarea unei expresii": "BARAJ_JR",
-  "Deque": "VIII",
-  "Abordarea problemelor ad-hoc": "IX",
-  "Abordarea problemelor constructive": "IX",
-  "Introducere în teoria grafurilor": "XI_XII",
-  "Introducere în arbori. Diametrul unui arbore": "XI_XII",
-  "Introducere în programarea dinamică": "X",
-  "Problema rucsacului": "X",
-  "Subșir comun maximal": "X",
-  "Subșir crescător maximal": "X",
-  "Dinamică pe stări exponențiale (bitmask DP)": "XI_XII",
-  "Sortare topologică": "XI_XII",
-  "Cicluri în grafuri. Grafuri funcționale": "XI_XII",
-  "Păduri de mulțimi disjuncte (DSU)": "XI_XII",
-  "Arbore parțial de cost minim": "XI_XII",
-  "Algoritmi pentru drumuri minime": "XI_XII",
-  "Tehnica celor două DFS-uri (rerooting)": "BARAJ_JR",
-  "Introducere în combinatorică": "X",
-  "Hashing": "XI_XII",
-  "Meet in the Middle": "XI_XII",
-  "Descompuneri în bucăți de radical (Square Root Decomposition)": "BARAJ_JR",
-  "Arbori de intervale (segment trees)": "XI_XII",
-  "Arbori indexați binar": "XI_XII",
-  "Sparse Table. Binary Lifting. Range Minimum Query (RMQ)": "XI_XII",
-  "Trie (arbore de prefixe)": "XI_XII",
-  "Programare dinamică cu structuri de date": "BARAJ_JR",
-  "Binary lifting. Lowest common ancestor (LCA)": "XI_XII",
-  "Programare dinamică pe arbore": "XI_XII",
-  "Small to large": "BARAJ_JR",
-  "Heavy light decomposition (HLD)": "BARAJ_SR",
-  "Probleme interactive": "BARAJ_JR",
-  "Probleme output only": "BARAJ_JR",
-  Bitsets: "BARAJ_SR",
-  "Căutare ternară": "BARAJ_SR",
-  "Funcția Möbius": "BARAJ_SR",
-  "Programare dinamică pe intervale (range DP)": "BARAJ_JR",
-  "Programare dinamică pe cifre (digit DP)": "BARAJ_JR",
-  "Programare dinamică pe permutări": "BARAJ_JR",
-  "Componente tare conexe": "XI_XII",
-  "Componente biconexe": "XI_XII",
-  "Înfășurătoare convexă": "X",
-  "Rotație lexicografică minimă": "BARAJ_SR",
-  "Tablou/arbore de sufixe": "BARAJ_SR",
-  "D&C DP (optimizarea divide et impera)": "BARAJ_SR",
-  "Aliens DP": "BARAJ_SR",
+const sortModes = {
+  roadmap: "roadmap",
+  unsolvedFirst: "unsolved-first",
 };
+
+const urlStateKeys = {
+  source: "source",
+  class: "class",
+  search: "q",
+  sort: "sort",
+  collection: "collection",
+};
+
+const roadmapMeta = window.ROADMAP_META || {};
+const chapterTopicOrder = roadmapMeta.chapterTopicOrder || [];
+const topicClassMap = roadmapMeta.topicClassMap || {};
+const collectionOptions = roadmapMeta.collections || [];
 
 const topicAliases = {
   "Operatii pe biti": "Operații pe biți",
@@ -257,7 +68,10 @@ const state = {
   completed: loadCompleted(),
   sourceFilter: "all",
   classFilter: "all",
-  searchQuery: "",
+  searchQuery: [],
+  sortMode: sortModes.roadmap,
+  collectionFilter: "roadmap",
+  openChapters: new Set(),
 };
 
 const filteredSolvedEl = document.getElementById("filteredSolved");
@@ -269,21 +83,40 @@ const milestoneTextEl = document.getElementById("milestoneText");
 const sourceFiltersEl = document.getElementById("sourceFilters");
 const classFilterEl = document.getElementById("classFilter");
 const searchInputEl = document.getElementById("searchInput");
+const collectionFiltersEl = document.getElementById("collectionFilters");
 const chaptersContainerEl = document.getElementById("chaptersContainer");
 const chapterCountTextEl = document.getElementById("chapterCountText");
 const expandAllButtonEl = document.getElementById("expandAllButton");
 const collapseAllButtonEl = document.getElementById("collapseAllButton");
+const sortUnsolvedButtonEl = document.getElementById("sortUnsolvedButton");
+const nextUnsolvedButtonEl = document.getElementById("nextUnsolvedButton");
+const exportProgressButtonEl = document.getElementById("exportProgressButton");
+const importProgressButtonEl = document.getElementById("importProgressButton");
+const resetProgressButtonEl = document.getElementById("resetProgressButton");
+const resetModalEl = document.getElementById("resetModal");
+const cancelResetButtonEl = document.getElementById("cancelResetButton");
+const confirmResetButtonEl = document.getElementById("confirmResetButton");
 
 boot();
 
 async function boot() {
+  applyUrlState();
   buildSourceFilters();
+  buildCollectionFilters();
   buildClassFilter();
   bindControls();
+  searchInputEl.value = state.searchQuery;
+  classFilterEl.value = state.classFilter;
 
   const raw = await fetch("./data/probleme.txt");
   const text = await raw.text();
   state.chapters = normalizeData(parseProblemText(text));
+  if (!state.openChapters.size) {
+    const firstChapter = state.chapters[0];
+    if (firstChapter) {
+      state.openChapters.add(firstChapter.id);
+    }
+  }
   render();
 }
 
@@ -440,6 +273,62 @@ function loadCompleted() {
   }
 }
 
+function applyUrlState() {
+  const params = new URLSearchParams(window.location.search);
+  const sourceFilter = params.get(urlStateKeys.source);
+  const classFilter = params.get(urlStateKeys.class);
+  const searchQuery = params.get(urlStateKeys.search);
+  const sortMode = params.get(urlStateKeys.sort);
+  const collectionFilter = params.get(urlStateKeys.collection);
+
+  if (sourceFilter && sourceOptions.some((option) => option.id === sourceFilter)) {
+    state.sourceFilter = sourceFilter;
+  }
+
+  if (classFilter && classOptions.some((option) => option.id === classFilter)) {
+    state.classFilter = classFilter;
+  }
+
+  if (searchQuery) {
+    state.searchQuery = searchQuery.trim().toLowerCase();
+  }
+
+  if (sortMode === sortModes.unsolvedFirst) {
+    state.sortMode = sortModes.unsolvedFirst;
+  }
+
+  if (collectionFilter && collectionOptions.some((option) => option.id === collectionFilter)) {
+    state.collectionFilter = collectionFilter;
+  }
+}
+
+function syncUrlState() {
+  const params = new URLSearchParams();
+
+  if (state.sourceFilter !== "all") {
+    params.set(urlStateKeys.source, state.sourceFilter);
+  }
+
+  if (state.classFilter !== "all") {
+    params.set(urlStateKeys.class, state.classFilter);
+  }
+
+  if (state.searchQuery) {
+    params.set(urlStateKeys.search, state.searchQuery);
+  }
+
+  if (state.sortMode !== sortModes.roadmap) {
+    params.set(urlStateKeys.sort, state.sortMode);
+  }
+
+  if (state.collectionFilter !== "roadmap") {
+    params.set(urlStateKeys.collection, state.collectionFilter);
+  }
+
+  const nextUrl = `${window.location.pathname}${params.toString() ? `?${params.toString()}` : ""}`;
+  window.history.replaceState({}, "", nextUrl);
+}
+
 function persistCompleted() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state.completed));
 }
@@ -450,6 +339,18 @@ function buildSourceFilters() {
       (option) => `
     <button type="button" class="chip" data-source-filter="${option.id}" aria-pressed="${
       option.id === state.sourceFilter ? "true" : "false"
+    }">${option.label}</button>
+  `,
+    )
+    .join("");
+}
+
+function buildCollectionFilters() {
+  collectionFiltersEl.innerHTML = collectionOptions
+    .map(
+      (option) => `
+    <button type="button" class="chip ${option.id === state.collectionFilter ? "is-active" : ""}" data-collection-filter="${option.id}" aria-pressed="${
+      option.id === state.collectionFilter ? "true" : "false"
     }">${option.label}</button>
   `,
     )
@@ -475,6 +376,14 @@ function bindControls() {
     render();
   });
 
+  collectionFiltersEl.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-collection-filter]");
+    if (!button) return;
+    state.collectionFilter = button.dataset.collectionFilter;
+    buildCollectionFilters();
+    render();
+  });
+
   classFilterEl.addEventListener("change", (event) => {
     state.classFilter = event.target.value;
     render();
@@ -486,22 +395,64 @@ function bindControls() {
   });
 
   expandAllButtonEl.addEventListener("click", () => {
-    document.querySelectorAll(".chapter").forEach((chapterEl) => {
-      chapterEl.dataset.open = "true";
-    });
+    state.openChapters = new Set(state.chapters.map((chapter) => chapter.id));
+    renderChapters(getVisibleChapters());
   });
 
   collapseAllButtonEl.addEventListener("click", () => {
-    document.querySelectorAll(".chapter").forEach((chapterEl) => {
-      chapterEl.dataset.open = "false";
-    });
+    state.openChapters = new Set();
+    renderChapters(getVisibleChapters());
+  });
+
+  sortUnsolvedButtonEl.addEventListener("click", () => {
+    state.sortMode = state.sortMode === sortModes.unsolvedFirst ? sortModes.roadmap : sortModes.unsolvedFirst;
+    render();
+  });
+
+  nextUnsolvedButtonEl.addEventListener("click", () => {
+    focusNextUnsolvedProblem();
+  });
+
+  exportProgressButtonEl.addEventListener("click", () => {
+    downloadProgress();
+  });
+
+  importProgressButtonEl.addEventListener("click", () => {
+    importProgress();
+  });
+
+  resetProgressButtonEl.addEventListener("click", () => {
+    openResetModal();
+  });
+
+  cancelResetButtonEl.addEventListener("click", closeResetModal);
+  confirmResetButtonEl.addEventListener("click", () => {
+    closeResetModal();
+    resetProgress();
+  });
+
+  resetModalEl.addEventListener("click", (event) => {
+    if (event.target === resetModalEl) {
+      closeResetModal();
+    }
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !resetModalEl.hidden) {
+      closeResetModal();
+    }
   });
 }
 
 function render() {
-  const visibleChapters = state.chapters.map(filterChapter).filter(Boolean);
+  const visibleChapters = getVisibleChapters();
   renderStats(visibleChapters);
   renderChapters(visibleChapters);
+  syncUrlState();
+}
+
+function getVisibleChapters() {
+  return state.chapters.map(filterChapter).filter(Boolean);
 }
 
 function filterChapter(chapter) {
@@ -516,7 +467,10 @@ function filterTopic(topic) {
     .map((section) => {
       const visibleItems = section.items.filter(matchesFilters);
       if (!visibleItems.length) return null;
-      return { ...section, items: visibleItems };
+      return {
+        ...section,
+        items: sortProblemItems(visibleItems),
+      };
     })
     .filter(Boolean);
   if (!visibleSections.length) return null;
@@ -528,7 +482,16 @@ function matchesFilters(problem) {
   const sourceMatches = state.sourceFilter === "all" || problem.source === state.sourceFilter;
   const classMatches = state.classFilter === "all" || problem.classes.includes(state.classFilter);
   const searchMatches = !state.searchQuery || problem.search.includes(state.searchQuery);
-  return sourceMatches && classMatches && searchMatches;
+  const collectionMatches = matchesCollection(problem);
+  return sourceMatches && classMatches && searchMatches && collectionMatches;
+}
+
+function matchesCollection(problem) {
+  if (state.collectionFilter === "roadmap") return true;
+  const collection = collectionOptions.find((option) => option.id === state.collectionFilter);
+  if (!collection) return true;
+  const haystack = `${problem.label} ${problem.url} ${problem.search}`.toLowerCase();
+  return (collection.keywords || []).some((keyword) => haystack.includes(keyword.toLowerCase()));
 }
 
 function collectTotals(topics) {
@@ -555,6 +518,16 @@ function collectTotalsFromSections(sections) {
   );
 }
 
+function sortProblemItems(items) {
+  if (state.sortMode !== sortModes.unsolvedFirst) return items;
+  return [...items].sort((a, b) => {
+    const aSolved = Boolean(state.completed[a.id]);
+    const bSolved = Boolean(state.completed[b.id]);
+    if (aSolved !== bSolved) return Number(aSolved) - Number(bSolved);
+    return a.label.localeCompare(b.label, "ro");
+  });
+}
+
 function renderStats(visibleChapters) {
   const filteredTotals = visibleChapters.reduce(
     (acc, chapter) => {
@@ -575,6 +548,8 @@ function renderStats(visibleChapters) {
   progressFillEl.style.width = `${percent}%`;
   milestoneTextEl.textContent = buildMilestoneCopy(filteredTotals);
   chapterCountTextEl.textContent = `${visibleChapters.length} capitole vizibile`;
+  sortUnsolvedButtonEl.textContent =
+    state.sortMode === sortModes.unsolvedFirst ? "Sortare: nerezolvate prime" : "Sortare: roadmap";
 }
 
 function buildMilestoneCopy({ solved, total }) {
@@ -599,8 +574,9 @@ function renderChapters(visibleChapters) {
   chaptersContainerEl.innerHTML = visibleChapters
     .map((chapter, index) => {
       const percent = chapter.totals.total ? Math.round((chapter.totals.solved / chapter.totals.total) * 100) : 0;
+      const isOpen = state.openChapters.has(chapter.id);
       return `
-      <article class="chapter" data-open="${index === 0 ? "true" : "false"}" id="${chapter.id}">
+      <article class="chapter" data-open="${isOpen ? "true" : "false"}" id="${chapter.id}">
         <button type="button" class="chapter-header" data-chapter-toggle="${chapter.id}">
           <div>
             <p class="chapter-label">Capitol roadmap</p>
@@ -623,7 +599,14 @@ function renderChapters(visibleChapters) {
   chaptersContainerEl.querySelectorAll("[data-chapter-toggle]").forEach((button) => {
     button.addEventListener("click", () => {
       const chapterEl = document.getElementById(button.dataset.chapterToggle);
-      chapterEl.dataset.open = chapterEl.dataset.open === "true" ? "false" : "true";
+      const chapterId = button.dataset.chapterToggle;
+      if (state.openChapters.has(chapterId)) {
+        state.openChapters.delete(chapterId);
+        chapterEl.dataset.open = "false";
+      } else {
+        state.openChapters.add(chapterId);
+        chapterEl.dataset.open = "true";
+      }
     });
   });
 
@@ -686,6 +669,76 @@ function handleToggleProblem(event) {
   state.completed[checkbox.dataset.problemId] = checkbox.checked;
   persistCompleted();
   render();
+}
+
+function focusNextUnsolvedProblem() {
+  const nextProblem = chaptersContainerEl.querySelector(".problem-row[data-completed='false']");
+  if (!nextProblem) return;
+  nextProblem.scrollIntoView({ behavior: "smooth", block: "center" });
+  nextProblem.classList.add("pulse-focus");
+  window.setTimeout(() => nextProblem.classList.remove("pulse-focus"), 900);
+}
+
+function downloadProgress() {
+  const payload = {
+    version: 1,
+    savedAt: new Date().toISOString(),
+    completed: state.completed,
+  };
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "competitive-programming-checklist-progress.json";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
+function importProgress() {
+  const raw = window.prompt("Lipește JSON-ul exportat pentru progres:");
+  if (!raw) return;
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    window.alert("JSON-ul nu pare valid.");
+    return;
+  }
+
+  const completed = parsed && typeof parsed === "object" && parsed.completed && typeof parsed.completed === "object"
+    ? parsed.completed
+    : parsed;
+
+  if (!completed || typeof completed !== "object") {
+    window.alert("Nu am găsit progres valid în conținutul introdus.");
+    return;
+  }
+
+  if (!window.confirm("Vrei să înlocuiești progresul curent cu progresul importat?")) return;
+  state.completed = { ...completed };
+  persistCompleted();
+  render();
+}
+
+function resetProgress() {
+  state.completed = {};
+  persistCompleted();
+  render();
+}
+
+function openResetModal() {
+  resetModalEl.hidden = false;
+  document.body.style.overflow = "hidden";
+  cancelResetButtonEl.focus();
+}
+
+function closeResetModal() {
+  resetModalEl.hidden = true;
+  document.body.style.overflow = "";
 }
 
 function formatSourceLabel(source) {
